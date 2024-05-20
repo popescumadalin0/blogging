@@ -1,0 +1,77 @@
+@page "/explore"
+@inherits ComponentBase
+
+<Div class="explore-background">
+    <Div class="explore container">
+        <Heading Size="HeadingSize.Is2" Margin="Margin.Is3.FromBottom" TextAlignment="TextAlignment.Center">
+            Explore a new word!
+        </Heading>
+
+        <Div class="row">
+            <Div Class="col-md-4">
+                <Form>
+                    <Field>
+                        <FieldLabel><h2>Where?</h2></FieldLabel>
+                        <FieldBody>
+                            <Paragraph><Blazorise.Icon Name="@FontAwesomeIcons.PlaneDeparture" IconStyle="IconStyle.Solid" /></Paragraph>
+                            <Select @bind-SelectedValue="@_filter.Leaving" Style="border-radius: 50px" TValue="LocationModel">
+                                @foreach (var from in FromLocations)
+                                {
+                                    <SelectItem Value="@from">@from.City, @from.Country</SelectItem>
+                                }
+                            </Select>
+                            <Paragraph><Blazorise.Icon Name="@FontAwesomeIcons.PlaneArrival" IconStyle="IconStyle.Solid" /></Paragraph>
+                            <Select @bind-SelectedValue="@_filter.Going" Style="border-radius: 50px" TValue="LocationModel">
+                                @foreach (var going in ToLocations)
+                                {
+                                    <SelectItem Value="@going">@going.City, @going.Country</SelectItem>
+                                }
+                            </Select>
+                        </FieldBody>
+                    </Field>
+                </Form>
+            </Div>
+            <Div Class="col-md-4">
+                <Form>
+                    <Field>
+                        <FieldLabel><h2>When?</h2></FieldLabel>
+                        <FieldBody>
+                            <Paragraph><Blazorise.Icon Name="@FontAwesomeIcons.CalendarCheck" IconStyle="IconStyle.Solid" /></Paragraph>
+                            <DatePicker TValue="DateTime" @bind-Date="@_filter.Departing" />
+                            <Paragraph><Blazorise.Icon Name="@FontAwesomeIcons.CalendarTimes" IconStyle="IconStyle.Solid" /></Paragraph>
+                            <DatePicker TValue="DateTime" @bind-Date="@_filter.Arriving" />
+                        </FieldBody>
+                    </Field>
+                </Form>
+            </Div>
+            <Div Class="col-md-4">
+                <Form>
+                    <Field>
+                        <FieldLabel><h2>Who?</h2></FieldLabel>
+                        <FieldBody>
+                            <Paragraph><Blazorise.Icon Name="@FontAwesomeIcons.Person" IconStyle="IconStyle.Solid" /></Paragraph>
+                            <NumericEdit @bind-Value="@_filter.NoChildren" />
+                            <Paragraph><Blazorise.Icon Name="@FontAwesomeIcons.ChildReaching" IconStyle="IconStyle.Solid" /></Paragraph>
+                            <NumericEdit @bind-Value="@_filter.NoAdults" />
+                        </FieldBody>
+                    </Field>
+                </Form>
+            </Div>
+        </Div>
+        <Div Class="row gap-2">
+            @foreach (var flight in _filteredFlights)
+            {
+                <Flight FlightInfo="@flight"></Flight>
+            }
+        </Div>
+    </Div>
+    <AuthorizeView Roles="@Roles.Employee">
+        <Authorized>
+            <Div Style="position: fixed; right: 25px; bottom: 25px;">
+                <Anchor To="/add-ticket" Class="btn btn-success">
+                    Add New Ticket
+                </Anchor>
+            </Div>
+        </Authorized>
+    </AuthorizeView>
+</Div>

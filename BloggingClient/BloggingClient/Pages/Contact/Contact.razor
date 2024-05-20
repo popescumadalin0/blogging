@@ -1,0 +1,96 @@
+@page "/contact"
+
+<PageTitle>Contact</PageTitle>
+
+<Div Margin="Margin.IsAuto.OnX" Padding="Padding.Is5.OnX" Width="Width.Is75" Class="container contact">
+    <Heading Size="HeadingSize.Is2" Margin="Margin.Is5.FromBottom" TextAlignment="TextAlignment.Center">
+        Contact us
+    </Heading>
+
+    <Div Class="row">
+        <Div Class="col-md-4 col-sm-6">
+            <Div class="container">
+                <Blazorise.Icon Name="@FontAwesomeIcons.LocationPin" IconStyle="IconStyle.Solid" Style="margin-left: 50px" IconSize="IconSize.x3" />
+                <h2><a href="https://maps.app.goo.gl/45hs82rFB4r14iLR8" Style="margin-left: 35px"> Address</a></h2>
+                <Paragraph>
+                    198 West 21th Street
+                </Paragraph>
+            </Div>
+        </Div>
+        <Div Class="col-md-4 col-sm-6">
+            <Div class="container">
+                <Blazorise.Icon Name="@FontAwesomeIcons.Phone" IconStyle="IconStyle.Solid" Style="margin-left: 165px" IconSize="IconSize.x2" />
+                <h2><a href="#" Style="margin-left: 160px">Phone</a></h2>
+                <p Style="margin-left: 130px">
+                    +40 756 653 221
+                </p>
+            </Div>
+        </Div>
+        <Div Class="col-md-4 col-sm-6">
+            <Div class="container">
+                <Blazorise.Icon Name="@FontAwesomeIcons.MailBulk" IconStyle="IconStyle.Solid" Style="margin-left: 210px" IconSize="IconSize.x3" />
+                <h2><a href="#" Style="margin-left: 210px">Email</a></h2>
+                <Paragraph Style="margin-left: 170px">
+                    airflights@yahoo.com
+                </Paragraph>
+            </Div>
+        </Div>
+    </Div>
+    <Heading Size="HeadingSize.Is3" Margin="Margin.Is4.FromBottom" TextAlignment="TextAlignment.Center"> Get in touch with us</Heading>
+    <Div Class="col-sm-6">
+        <Card Shadow="Shadow.Default">
+            <CardBody>
+                <Form>
+                    <Field ColumnSize="ColumnSize.IsFull.OnTablet.IsHalf.OnDesktop">
+                        <FieldLabel>
+                            <i Class="fa fa-user"></i>
+                            Name
+                        </FieldLabel>
+                        <FieldBody>
+                            <TextEdit Placeholder="Blazories" />
+                        </FieldBody>
+                    </Field>
+                    <Field ColumnSize="ColumnSize.IsFull.OnTablet.IsHalf.OnDesktop">
+                        <FieldLabel>
+                            <i Class="fa fa-envelope"></i>
+                            Email
+                        </FieldLabel>
+                        <FieldBody>
+                            <TextEdit Placeholder="name@blazorise.com" />
+                        </FieldBody>
+                    </Field>
+                    <Field ColumnSize="ColumnSize.IsFull.OnTablet.IsHalf.OnDesktop">
+                        <FieldLabel>
+                            <i Class="fa fa-phone"></i>
+                            Phone
+                        </FieldLabel>
+                        <FieldBody>
+                            <TextEdit Placeholder="Phone" />
+                        </FieldBody>
+                    </Field>
+                    <Field ColumnSize="ColumnSize.IsFull.OnTablet.IsHalf.OnDesktop">
+                        <FieldLabel>
+                            <i Class="fa fa-message"></i>
+                            Message
+                        </FieldLabel>
+                        <FieldBody>
+                            <MemoEdit Placeholder="Leave a message..." Rows="4" />
+                        </FieldBody>
+                    </Field>
+                    <Field>
+                        <Button Color="Color.Danger">
+                            Send Message
+                            <i Class="fa fa-paper-plane"></i>
+                        </Button>
+                    </Field>
+                </Form>
+            </CardBody>
+        </Card>
+    </Div>
+    <Div Class="col-sm-6">
+        <Image src="../images/blog/login.jpg" alt="placeholder" Style="height: 300px; width: 700px; align-content: center"></Image>
+    </Div>
+</Div>
+
+
+

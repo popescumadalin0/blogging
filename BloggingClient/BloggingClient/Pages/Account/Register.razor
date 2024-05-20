@@ -1,0 +1,166 @@
+@page "/register"
+@inherits ComponentBase
+@implements IDisposable
+
+<PageTitle>Register</PageTitle>
+
+
+<Div Margin="Margin.IsAuto.OnX" class="register container">
+    <Heading Size="HeadingSize.Is2" Margin="Margin.Is3.FromBottom" TextAlignment="TextAlignment.Center">
+        Sign up to your account
+    </Heading>
+    <br />
+    <Div class="row">
+        <Div class="col-sm-6">
+            <Card Shadow="Shadow.Default">
+                <CardBody>
+                    <Form @ref="form">
+                        <Validations Mode="ValidationMode.Auto" Model="@_registerModel">
+                            <Validation>
+                                <Field>
+                                    <FieldLabel>
+                                        FirstName
+                                    </FieldLabel>
+                                    <FieldBody>
+                                        <TextEdit Placeholder="Enter the first name" Role="TextRole.Text" @bind-Text="_registerModel.FirstName">
+                                            <Feedback>
+                                                <ValidationError />
+                                            </Feedback>
+                                        </TextEdit>
+                                    </FieldBody>
+                                </Field>
+                            </Validation>
+                            <Validation>
+                                <Field>
+                                    <FieldLabel>
+                                        LastName
+                                    </FieldLabel>
+                                    <FieldBody>
+                                        <TextEdit Placeholder="Enter the last name" Role="TextRole.Text" @bind-Text="_registerModel.LastName">
+                                            <Feedback>
+                                                <ValidationError />
+                                            </Feedback>
+                                        </TextEdit>
+                                    </FieldBody>
+                                </Field>
+                            </Validation>
+                            <Validation>
+                                <Field>
+                                    <FieldLabel>
+                                        CNP
+                                    </FieldLabel>
+                                    <FieldBody>
+                                        <TextEdit Placeholder="Enter the first name" Role="TextRole.Text" @bind-Text="_registerModel.CNP">
+                                            <Feedback>
+                                                <ValidationError />
+                                            </Feedback>
+                                        </TextEdit>
+                                    </FieldBody>
+                                </Field>
+                            </Validation>
+                            <Validation>
+                                <Field>
+                                    <FieldLabel>
+                                        Username
+                                    </FieldLabel>
+                                    <FieldBody>
+                                        <TextEdit Placeholder="Enter the first name" Role="TextRole.Text" @bind-Text="_registerModel.UserName">
+                                            <Feedback>
+                                                <ValidationError />
+                                            </Feedback>
+                                        </TextEdit>
+                                    </FieldBody>
+                                </Field>
+                            </Validation>
+                            <Validation>
+                                <Field>
+                                    <FieldLabel>
+                                        Email
+                                    </FieldLabel>
+                                    <FieldBody>
+                                        <TextEdit Placeholder="Enter your e-mail" Role="TextRole.Email" @bind-Text="_registerModel.Email">
+                                            <Feedback>
+                                                <ValidationError />
+                                            </Feedback>
+                                        </TextEdit>
+                                    </FieldBody>
+                                </Field>
+                            </Validation>
+                            <Validation>
+                                <Field>
+                                    <FieldLabel>
+                                        Phone
+                                    </FieldLabel>
+                                    <FieldBody>
+                                        <TextEdit Placeholder="Enter your phone number" Role="TextRole.Telephone" @bind-Text="_registerModel.PhoneNumber">
+                                            <Feedback>
+                                                <ValidationError />
+                                            </Feedback>
+                                        </TextEdit>
+                                    </FieldBody>
+                                </Field>
+                            </Validation>
+                            <Validation>
+                                <Field>
+                                    <FieldLabel>
+                                        Password
+                                    </FieldLabel>
+                                    <FieldBody>
+                                        <TextEdit Placeholder="********" Role="TextRole.Password" @bind-Text="_registerModel.Password" autocomplete="new-password">
+                                            <Feedback>
+                                                <ValidationError />
+                                            </Feedback>
+                                        </TextEdit>
+                                    </FieldBody>
+                                </Field>
+                            </Validation>
+                            <Validation>
+                                <Field>
+                                    <FieldLabel>
+                                        Confirm Password
+                                    </FieldLabel>
+                                    <FieldBody>
+                                        <TextEdit Placeholder="********" Role="TextRole.Password" @bind-Text="_registerModel.ConfirmPassword" autocomplete="confirm-password">
+                                            <Feedback>
+                                                <ValidationError />
+                                            </Feedback>
+                                        </TextEdit>
+                                    </FieldBody>
+                                </Field>
+                            </Validation>
+
+                            <Field>
+                                <FieldLabel>
+                                    Upload your document
+                                </FieldLabel>
+                                <FieldBody>
+                                    <FilePicker Upload="@OnDocumentUploaded" ShowMode="FilePickerShowMode.List" />
+                                </FieldBody>
+                            </Field>
+
+                            <Field>
+                                <FieldLabel>
+                                    Upload your profile image
+                                </FieldLabel>
+                                <FieldBody>
+                                    <FilePicker Upload="@OnImageUploaded" ShowMode="FilePickerShowMode.List" Filter="image/*" />
+                                </FieldBody>
+                            </Field>
+                            <Field>
+                                <Button Color="Color.Primary" Block Clicked="@RegisterAsync">
+                                    Sign up
+                                </Button>
+                            </Field>
+                            <Field>
+                                Do you have already an account? <Anchor To="/login" TextColor="TextColor.Primary">Sign in</Anchor>
+                            </Field>
+                        </Validations>
+                    </Form>
+                </CardBody>
+            </Card>
+        </Div>
+        <Div class="col-sm-6">
+            <Image src="../images/blog/contact1.jpg" alt="placeholder" Style="height: 500px; width: 500px; align-content: center"></Image>
+        </Div>
+    </Div>
+</Div>

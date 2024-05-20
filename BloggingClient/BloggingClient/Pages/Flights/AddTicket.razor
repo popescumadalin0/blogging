@@ -1,0 +1,124 @@
+@page "/add-ticket"
+@inherits ComponentBase
+
+@attribute [Authorize(Roles = Roles.Employee)]
+
+<PageTitle>Add New Ticket</PageTitle>
+<Div Class="container-fluid">
+    <Heading Size="HeadingSize.Is2" Margin="Margin.Is3.FromBottom" TextAlignment="TextAlignment.Center">
+        Add New Ticket
+    </Heading>
+    <Card Shadow="Shadow.Default">
+        <CardBody>
+            <Form>
+                <Validations Mode="ValidationMode.Auto" Model="@_ticket">
+                    <Validation>
+                        <Field>
+                            <FieldLabel>
+                                Price
+                            </FieldLabel>
+                            <FieldBody>
+                                <NumericEdit Placeholder="Enter the price" @bind-Value="@_ticket.Price">
+                                    <Feedback>
+                                        <ValidationError />
+                                    </Feedback>
+                                </NumericEdit>
+                            </FieldBody>
+                        </Field>
+                    </Validation>
+                    <Validation>
+                        <Field>
+                            <FieldLabel>
+                                Currency
+                            </FieldLabel>
+                            <FieldBody>
+                                <TextEdit Placeholder="Enter the currency" Role="TextRole.Text" @bind-Text="@_ticket.Currency">
+                                    <Feedback>
+                                        <ValidationError />
+                                    </Feedback>
+                                </TextEdit>
+                            </FieldBody>
+                        </Field>
+                    </Validation>
+                    <Field>
+                        <FieldLabel>
+                            Image
+                        </FieldLabel>
+                        <FieldBody>
+                            <FilePicker Upload="@OnImageUploaded" ShowMode="FilePickerShowMode.List" Filter="image/*" />
+                        </FieldBody>
+                    </Field>
+                    <Field>
+                        <FieldLabel>
+                            Layovers
+                        </FieldLabel>
+                        <FieldBody>
+                            <Card Shadow="Shadow.Default">
+                                <CardBody>
+                                    <DataGrid TItem="AddLayoverModel"
+                                              Data="@_ticket.Layovers"
+                                              SelectionMode="DataGridSelectionMode.Single"
+                                              Editable
+                                              Style="margin-left: 10px; margin-right: 10px;"
+                                              Narrow
+                                              Responsive>
+                                        <DataGridCommandColumn />
+                                        <DataGridColumn Field="@nameof(AddLayoverModel.Order)" Caption="Order" Editable>
+                                            <EditTemplate>
+                                                <NumericEdit TValue="int" Value="@((int)context.CellValue)" ValueChanged="@(v => context.CellValue = v)" />
+                                            </EditTemplate>
+                                        </DataGridColumn>
+                                        <DataGridColumn Field="@nameof(AddLayoverModel.StartPointCountry)" Caption="Start Point Country" Editable />
+                                        <DataGridColumn Field="@nameof(AddLayoverModel.StartPointCity)" Caption="Start Point City" Editable />
+                                        <DataGridColumn Field="@nameof(AddLayoverModel.StartPointAirport)" Caption="Start Point Airport" Editable />
+                                        <DataGridColumn Field="@nameof(AddLayoverModel.DepartureTime)" Caption="Departure Time" Editable />
+                                        <DataGridColumn Field="@nameof(AddLayoverModel.DestinationCountry)" Caption="Destination Country" Editable />
+                                        <DataGridColumn Field="@nameof(AddLayoverModel.DestinationCity)" Caption="Destination City" Editable />
+                                        <DataGridColumn Field="@nameof(AddLayoverModel.DestinationAirport)" Caption="Destination Airport" Editable />
+                                        <DataGridColumn Field="@nameof(AddLayoverModel.ArrivalDuration)" Caption="Arrival Duration" Editable />
+                                        <DataGridColumn Field="@nameof(AddLayoverModel.CompanyName)" Caption="Company" Editable />
+                                        <DataGridColumn Field="@nameof(AddLayoverModel.PlaneFacilities)" Caption="Plane Facilities" Editable>
+                                            <DisplayTemplate>
+                                                @{
+                                                    var planeFacilities = (context as AddLayoverModel)?.PlaneFacilities;
+                                                }
+                                                <ListView TItem="AddPlaneFacilityModel"
+                                                          Data="@planeFacilities"
+                                                          TextField="(item) => item.Name.ToString()"
+                                                          ValueField="(item) => item.Id.ToString()"
+                                                          Mode="ListGroupMode.Static"
+                                                          MaxHeight="300px">
+                                                </ListView>
+                                            </DisplayTemplate>
+                                            <EditTemplate>
+                                                <DataGrid TItem="AddPlaneFacilityModel"
+                                                          Data="@((List<AddPlaneFacilityModel>)context.CellValue)"
+                                                          SelectionMode="DataGridSelectionMode.Single"
+                                                          Editable
+                                                          Style="margin-left: 10px; margin-right: 10px;"
+                                                          Narrow>
+                                                    <DataGridCommandColumn />
+                                                    <DataGridColumn Field="@nameof(AddPlaneFacilityModel.Name)" Caption="Facility Name" Editable />
+                                                </DataGrid>
+                                            </EditTemplate>
+                                        </DataGridColumn>
+                                        <DataGridColumn Field="@nameof(AddLayoverModel.PlaneSeats)" Caption="Plane Seats" Editable>
+                                            <EditTemplate>
+                                                <NumericEdit TValue="int" Value="@((int)context.CellValue)" ValueChanged="@(v => context.CellValue = v)" />
+                                            </EditTemplate>
+                                        </DataGridColumn>
+                                    </DataGrid>
+                                </CardBody>
+                            </Card>
+                        </FieldBody>
+                    </Field>
+                    <Field>
+                        <Button Color="Color.Primary" Block Clicked="@AddTicketAsync">
+                            Add ticket
+                        </Button>
+                    </Field>
+                </Validations>
+            </Form>
+        </CardBody>
+    </Card>
+</Div>

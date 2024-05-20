@@ -1,0 +1,51 @@
+@page "/login"
+@inherits ComponentBase
+@implements IDisposable
+
+<PageTitle>Login</PageTitle>
+
+<Div Margin="Margin.IsAuto.OnX" class="login container ">
+    <Heading Size="HeadingSize.Is2" Margin="Margin.Is3.FromBottom" TextAlignment="TextAlignment.Center">
+        Sign into your account
+    </Heading>
+    <br/>
+    <Div class="row">
+        <Div class="col-sm-6">
+            <Image src="../images/blog/contact1.jpg" alt="placeholder" Style="height: 300px; width: 700px; align-content: center"></Image>
+        </Div>
+        <Div class="col-sm-6">
+            <Card Shadow="Shadow.Default">
+                <CardBody>
+                    <Form>
+                        <Field>
+                            <FieldLabel>
+                        Username
+                            </FieldLabel>
+                            <FieldBody>
+                        <TextEdit Placeholder="Enter your username" Role="TextRole.Text" @bind-Text="_loginModel.Username" />
+                            </FieldBody>
+                        </Field>
+                        <Field>
+                            <FieldLabel>
+                                Password
+                            </FieldLabel>
+                            <FieldBody>
+                                <TextEdit Placeholder="********" Role="TextRole.Password" @bind-Text="_loginModel.Password" autocomplete="new-password"/>
+                            </FieldBody>
+                        </Field>
+                        <Field>
+                            <Button Color="Color.Primary" Block Clicked="@SignInAsync">
+                                Sign in
+                            </Button>
+                        </Field>
+                        <Field>
+                            Don’t have an account yet? <Anchor To="/register" TextColor="TextColor.Primary">Sign up</Anchor>
+                        </Field>
+                    </Form>
+                </CardBody>
+            </Card>
+        </Div>
+    </Div>
+</Div>
+
+

@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RunSettings>
+  <RunConfiguration>
+    <MaxCpuCount>1</MaxCpuCount>
+  </RunConfiguration>
+  <DataCollectionRunSettings>
+    <DataCollectors>
+      <DataCollector friendlyName="Code Coverage" uri="datacollector://Microsoft/CodeCoverage/2.0" assemblyQualifiedName="Microsoft.VisualStudio.Coverage.DynamicCoverageDataCollector, Microsoft.VisualStudio.TraceCollector, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+        <Configuration>
+          <CodeCoverage>
+            <!-- Match assembly file paths: -->
+            <ModulePaths>
+              <Include>
+                <ModulePath>.*\Flanderijn.Microservices.DossierDeterminator*.dll$</ModulePath>
+              </Include>
+              <Exclude>
+                <ModulePath>.*moq.dll</ModulePath>
+                <ModulePath>.*Tests*.dll</ModulePath>
+                <ModulePath>.*Functions.Common.dll</ModulePath>
+                <ModulePath>.*CPPUnitTestFramework.*</ModulePath>
+                <ModulePath>.*.Tests.Support.*</ModulePath>
+                <ModulePath>.*TestAdapter.*</ModulePath>
+                <ModulePath>.*windowsazure.*</ModulePath>
+              </Exclude>
+            </ModulePaths>
+            <Sources>
+              <Exclude>
+                <Source>.*\\*Startup.*</Source>
+                <Source>.*\\*Program.*</Source>
+                <Source>.*Legacy.*</Source>
+              </Exclude>
+            </Sources>
+          </CodeCoverage>
+        </Configuration>
+      </DataCollector>
+    </DataCollectors>
+  </DataCollectionRunSettings>
+</RunSettings>
