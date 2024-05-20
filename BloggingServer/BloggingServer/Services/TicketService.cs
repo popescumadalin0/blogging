@@ -4,8 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using BloggingServer.Repositories.Interfaces;
 using BloggingServer.Services.Interfaces;
-using DataBaseLayout.Models;
-using Models.Request;
 
 namespace BloggingServer.Services;
 

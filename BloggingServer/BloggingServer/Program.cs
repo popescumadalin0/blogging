@@ -10,7 +10,6 @@ using DataBaseLayout.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -28,13 +27,11 @@ builder.Services.AddAuthorization();
 
 builder.Services.Configure<IdentityOptions>(options =>
 {
-    //todo: to be configured
     options.SignIn.RequireConfirmedEmail = false;
     options.Password.RequireDigit = true;
     options.Password.RequireLowercase = true;
     options.Password.RequireUppercase = true;
     options.Password.RequiredLength = 8;
-    //todo: to be configured
     options.SignIn.RequireConfirmedPhoneNumber = false;
     options.Stores.ProtectPersonalData = true;
     options.User.RequireUniqueEmail = true;
@@ -54,8 +51,6 @@ builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy(Roles.User, policy => policy.Requirements.Add(new AuthorizationRequirement(Roles.User)));
     options.AddPolicy(Roles.Admin, policy => policy.Requirements.Add(new AuthorizationRequirement(Roles.Admin)));
-    options.AddPolicy(Roles.Employee, policy => policy.Requirements.Add(new AuthorizationRequirement(Roles.Employee)));
-
 });
 
 var app = builder.Build();
@@ -68,7 +63,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapIdentityApi<User>();
+//app.MapIdentityApi<User>();
 
 app.UseAuthorization();
 
@@ -101,21 +96,6 @@ async Task DefaultDataAsync()
         }
     }
 
-    var employeeRole = await roleManager.Roles.FirstOrDefaultAsync(x => x.Id == Roles.Employee);
-    if (employeeRole == null)
-    {
-        var result = await roleManager.CreateAsync(
-            new Role()
-            {
-                Id = Roles.Employee,
-                Name = Roles.Employee
-            });
-        if (!result.Succeeded)
-        {
-            throw new Exception(result.Errors.First().Description);
-        }
-    }
-
     var adminRole = await roleManager.Roles.FirstOrDefaultAsync(x => x.Id == Roles.Admin);
     if (adminRole == null)
     {
@@ -139,10 +119,6 @@ async Task DefaultDataAsync()
             Id = "admin",
             UserName = "admin",
             Email = "admin@admin.ro",
-            CNP = "admin",
-            FirstName = "admin",
-            LastName = "admin",
-            Document = Array.Empty<byte>(),
             EmailConfirmed = true,
             PhoneNumber = "0111111111",
             PhoneNumberConfirmed = true,
@@ -156,7 +132,7 @@ async Task DefaultDataAsync()
             throw new Exception(result.Errors.First().Description);
         }
 
-        result = await userManager.AddToRolesAsync(user, new List<string>() { Roles.User, Roles.Employee, Roles.Admin });
+        result = await userManager.AddToRolesAsync(user, new List<string>() { Roles.User, Roles.Admin });
 
         if (!result.Succeeded)
         {

@@ -8,12 +8,11 @@ namespace DataBaseLayout.DbContext;
 
 public class Context : IdentityDbContext<User, Role, string>, IContext
 {
-    public DbSet<Booking> Bookings { get; set; }
-    public DbSet<PlaneSeat> PlaneSeats { get; set; }
-    public DbSet<PlaneFacility> PlaneFacilities { get; set; }
-    public DbSet<Layover> Layovers { get; set; }
-    public DbSet<Company> Companies { get; set; }
-    public DbSet<Ticket> Tickets { get; set; }
+    public DbSet<Blog> Blogs { get; set; }
+
+    public DbSet<BlogCategory> BlogCategories { get; set; }
+
+    public DbSet<Comment> Comments { get; set; }
 
     public Context(DbContextOptions<Context> options)
         : base(options) { }
@@ -56,48 +55,30 @@ public class Context : IdentityDbContext<User, Role, string>, IContext
             entity.ToTable(name: "UserLogins");
         });
 
-        modelBuilder.Entity<Booking>().HasOne(x => x.User)
-            .WithMany(x => x.Bookings).OnDelete(DeleteBehavior.NoAction)
+        modelBuilder.Entity<Blog>().HasOne(x => x.User)
+            .WithMany(x => x.Blogs)
+            .OnDelete(DeleteBehavior.NoAction)
             .HasForeignKey(x => x.UserId);
 
-        modelBuilder.Entity<Layover>().HasOne(x => x.Company)
-            .WithMany(x => x.Layovers).OnDelete(DeleteBehavior.NoAction)
-            .HasForeignKey(x => x.CompanyId);
+        modelBuilder.Entity<Blog>().HasOne(x => x.BlogCategory)
+            .WithMany(x => x.Blogs)
+            .OnDelete(DeleteBehavior.NoAction)
+            .HasForeignKey(x => x.BlogCategoryName);
 
-        modelBuilder.Entity<Layover>().HasOne(x => x.Ticket)
-            .WithMany(x => x.Layovers).OnDelete(DeleteBehavior.NoAction)
-            .HasForeignKey(x => x.TicketId);
+        modelBuilder.Entity<Comment>().HasOne(x => x.Blog)
+            .WithMany(x => x.Comments)
+            .OnDelete(DeleteBehavior.NoAction)
+            .HasForeignKey(x => x.BlogId);
 
-        modelBuilder.Entity<PlaneSeat>().HasOne(x => x.Layover)
-            .WithMany(x => x.PlaneSeats).OnDelete(DeleteBehavior.NoAction)
-            .HasForeignKey(x => x.LayoverId);
+        modelBuilder.Entity<Comment>().HasOne(x => x.User)
+            .WithMany(x => x.Comments)
+            .OnDelete(DeleteBehavior.NoAction)
+            .HasForeignKey(x => x.UserId);
 
-        modelBuilder.Entity<PlaneSeat>().HasOne(x => x.Layover)
-            .WithMany(x => x.PlaneSeats).OnDelete(DeleteBehavior.NoAction)
-            .HasForeignKey(x => x.LayoverId);
+        modelBuilder.Entity<Blog>().Navigation(t => t.Comments).AutoInclude();
 
-        modelBuilder.Entity<Ticket>().Navigation(t => t.Layovers).AutoInclude();
+        modelBuilder.Entity<User>().Navigation(t => t.Blogs).AutoInclude();
 
-        modelBuilder.Entity<Layover>().Navigation(t => t.PlaneFacilities).AutoInclude();
-
-        modelBuilder.Entity<Layover>().Navigation(t => t.PlaneSeats).AutoInclude();
-
-        modelBuilder.Entity<Layover>().Navigation(t => t.Company).AutoInclude();
-
-        // modelBuilder.Entity<Ticket>()
-        //     .Navigation(a => a.Layovers)
-        //     .AutoInclude();
-        //
-        //     base.OnModelCreating(modelBuilder);
-        //
-        //     foreach (var entityType in modelBuilder.Model.GetEntityTypes())
-        //     {
-        //         foreach (var navigation in entityType.GetNavigations())
-        //         {
-        //             modelBuilder.Entity(entityType.ClrType)
-        //                 .Navigation(navigation.Name)
-        //                 .AutoInclude();
-        //         }
-        //     }
+        modelBuilder.Entity<BlogCategory>().Navigation(t => t.Blogs).AutoInclude();
     }
 }

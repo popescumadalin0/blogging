@@ -7,10 +7,7 @@ using System;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Models;
 using Models.Constants;
-using Models.Request;
-using Models.Response;
 
 namespace BloggingServer.Controllers;
 

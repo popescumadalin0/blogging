@@ -5,10 +5,7 @@ using System.Threading.Tasks;
 using BloggingServer.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Models;
 using Models.Constants;
-using Models.Request;
-using Models.Response;
 
 namespace BloggingServer.Services;
 

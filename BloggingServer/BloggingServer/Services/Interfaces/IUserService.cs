@@ -1,9 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
-using Models;
-using Models.Request;
-using Models.Response;
 
 namespace BloggingServer.Services.Interfaces;
 

@@ -6,11 +6,11 @@ namespace DataBaseLayout.DbContext;
 
 public interface IContext
 {
-    DbSet<Booking> Bookings { get; set; }
-    DbSet<PlaneSeat> PlaneSeats { get; set; }
-    DbSet<PlaneFacility> PlaneFacilities { get; set; }
-    DbSet<Layover> Layovers { get; set; }
-    DbSet<Company> Companies { get; set; }
-    DbSet<Ticket> Tickets { get; set; }
+    DbSet<Blog> Blogs { get; set; }
+
+    DbSet<BlogCategory> BlogCategories { get; set; }
+
+    DbSet<Comment> Comments { get; set; }
+
     Task<int> SaveChangesAsync();
 }

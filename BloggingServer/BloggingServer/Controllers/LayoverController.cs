@@ -6,7 +6,6 @@ using BloggingServer.ResponseModels;
 using BloggingServer.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Models;
 using Models.Constants;
 
 namespace BloggingServer.Controllers;

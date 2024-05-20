@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using BloggingServer.Repositories.Interfaces;
 using DataBaseLayout.DbContext;
-using DataBaseLayout.Models;
-using Microsoft.EntityFrameworkCore;
-
 
 namespace BloggingServer.Repositories;
 
