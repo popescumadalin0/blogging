@@ -1,10 +1,11 @@
-using BloggingServer.ResponseModels;
+/*using BloggingServer.ResponseModels;
 using BloggingServer.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System;
 using System.Linq;
+using DataBaseLayout.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Models.Constants;
@@ -118,4 +119,4 @@ public class UserController : BaseController
             return ApiServiceResponse.ApiServiceResult(new ServiceResponse(ex));
         }
     }
-}
+}*/

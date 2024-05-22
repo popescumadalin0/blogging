@@ -20,7 +20,7 @@ public class Comment
     [Required]
     public User User { get; set; }
 
-    public string BlogId { get; set; }
+    public Guid BlogId { get; set; }
 
     [Required]
     public Blog Blog { get; set; }

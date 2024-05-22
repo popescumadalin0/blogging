@@ -1,5 +1,6 @@
-using System.Collections.Generic;
+/*using System.Collections.Generic;
 using System.Threading.Tasks;
+using DataBaseLayout.Models;
 using Microsoft.AspNetCore.Identity;
 
 namespace BloggingServer.Services.Interfaces;
@@ -38,4 +39,4 @@ public interface IUserService
 
     /// <summary/>
     Task<IdentityResult> DeleteUserAsync(string CNP);
-}
+}*/

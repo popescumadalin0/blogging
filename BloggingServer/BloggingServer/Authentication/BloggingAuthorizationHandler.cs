@@ -5,12 +5,12 @@ using BloggingServer.Services.Interfaces;
 
 namespace BloggingServer.Authentication
 {
-    public class AirAuthorizationHandler : AuthorizationHandler<AuthorizationRequirement>
+    public class BloggingAuthorizationHandler : AuthorizationHandler<AuthorizationRequirement>
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ITokenService _tokenService;
 
-        public AirAuthorizationHandler(IHttpContextAccessor httpContextAccessor, ITokenService tokenService)
+        public BloggingAuthorizationHandler(IHttpContextAccessor httpContextAccessor, ITokenService tokenService)
         {
             _httpContextAccessor = httpContextAccessor;
             _tokenService = tokenService;

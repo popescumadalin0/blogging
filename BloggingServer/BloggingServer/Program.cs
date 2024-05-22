@@ -45,7 +45,7 @@ builder.Services.AddScoped<ILookupProtectorKeyRing, KeyRing>();
 builder.Services.AddScoped<ILookupProtector, LookupProtector>();
 builder.Services.AddScoped<IPersonalDataProtector, PersonalDataProtector>();
 
-builder.Services.AddScoped<IAuthorizationHandler, AirAuthorizationHandler>();
+builder.Services.AddScoped<IAuthorizationHandler, BloggingAuthorizationHandler>();
 
 builder.Services.AddAuthorization(options =>
 {
