@@ -5,8 +5,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using DataBaseLayout.DbContext;
 using Microsoft.EntityFrameworkCore;
+using BloggingServer.Repositories.Interfaces;
 
-namespace BloggingServer.Repositories.Interfaces;
+namespace BloggingServer.Repositories;
 public class RepositoryBase<TEntity> : IRepositoryBase<TEntity> where TEntity : class
 {
     protected readonly Context Context;

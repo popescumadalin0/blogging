@@ -28,6 +28,7 @@ public class TokenService : ITokenService
         _userManager = userManager;
     }
 
+    /// <inheritdoc />
     public async Task<string> GenerateTokenAsync(string username, int durationMin)
     {
         var user = _userManager.Users.FirstOrDefault(u => u.UserName == username);
@@ -49,6 +50,7 @@ public class TokenService : ITokenService
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
 
+    /// <inheritdoc />
     public bool IsValidToken(string token, string role)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
@@ -85,6 +87,7 @@ public class TokenService : ITokenService
         }
     }
 
+    /// <inheritdoc />
     public int GetExpirationTimeFromJwtInMinutes(string token)
     {
         var tokenHandler = new JwtSecurityTokenHandler();

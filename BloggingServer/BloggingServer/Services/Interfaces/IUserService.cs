@@ -1,42 +1,36 @@
-/*using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using DataBaseLayout.Models;
 using Microsoft.AspNetCore.Identity;
+using Models;
 
 namespace BloggingServer.Services.Interfaces;
 
 public interface IUserService
 {
     /// <summary/>
-    Task<UserLoginResponse> SignInAsync(string userName, string password);
-
-    /// <summary/>
-    Task SignOutAsync();
+    Task<LoginResponse> SignInAsync(string userName, string password);
 
     /// <summary/>
     Task<IList<User>> GetUsersAsync();
 
     /// <summary/>
-    Task<User> GetUserByCNPAsync(string CNP);
+    Task<User> GetUserByIdAsync(string id);
 
     /// <summary/>
     Task<User> GetUserByUserNameAsync(string userName);
 
     /// <summary/>
-    Task<IdentityResult> RegisterUserAsync(User model, string password);
+    Task<IdentityResult> RegisterUserAsync(AddUser model);
 
     /// <summary/>
-    Task<IdentityResult> UpdateUserAsync(UserUpdate user);
+    Task<IdentityResult> UpdateUserAsync(UpdateUser user);
 
     /// <summary/>
-    Task<IdentityResult> UpdateUserEmailAsync(UserUpdate user, string token);
+    Task<IdentityResult> UpdateUserEmailAsync(UpdateUser user, string token);
 
     /// <summary/>
-    Task<IdentityResult> UpdateUserPasswordAsync(UserUpdate user);
+    Task<IdentityResult> UpdateUserPasswordAsync(UpdateUser user);
 
     /// <summary/>
-    Task<IdentityResult> UpdateUserPhoneNumberAsync(UserUpdate user, string token);
-
-    /// <summary/>
-    Task<IdentityResult> DeleteUserAsync(string CNP);
-}*/
+    Task<IdentityResult> DeleteUserAsync(string id);
+}

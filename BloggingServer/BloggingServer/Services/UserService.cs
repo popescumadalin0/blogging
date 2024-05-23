@@ -1,11 +1,11 @@
-/*using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BloggingServer.Services.Interfaces;
-using DataBaseLayout.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Models;
 using Models.Constants;
 
 namespace BloggingServer.Services;
@@ -16,7 +16,10 @@ public class UserService : IUserService
     private readonly UserManager<DataBaseLayout.Models.User> _userManager;
     private readonly ITokenService _tokenService;
 
-    public UserService(SignInManager<DataBaseLayout.Models.User> signinManager, UserManager<DataBaseLayout.Models.User> userManager, ITokenService tokenService)
+    public UserService(
+        SignInManager<DataBaseLayout.Models.User> signinManager,
+        UserManager<DataBaseLayout.Models.User> userManager,
+        ITokenService tokenService)
     {
         _signinManager = signinManager;
         _userManager = userManager;
@@ -24,16 +27,18 @@ public class UserService : IUserService
     }
 
     /// <inheritdoc />
-    public async Task<UserLoginResponse> SignInAsync(string userName, string password)
+    public async Task<LoginResponse> SignInAsync(string userName, string password)
     {
-        var isLogged = await _signinManager.PasswordSignInAsync(userName, password, false, false);
+        var user = await _userManager.FindByNameAsync(userName);
+
+        var isLogged = await _signinManager.CheckPasswordSignInAsync(user, password, false);
 
         if (isLogged.Succeeded)
         {
             var token = await _tokenService.GenerateTokenAsync(userName, 2);
             var refreshToken = await _tokenService.GenerateTokenAsync(userName, 8);
 
-            var responseLogin = new UserLoginResponse
+            var responseLogin = new LoginResponse
             {
                 AccessToken = token,
                 RefreshToken = refreshToken
@@ -46,41 +51,65 @@ public class UserService : IUserService
     }
 
     /// <inheritdoc />
-    public async Task SignOutAsync()
-    {
-        await _signinManager.SignOutAsync();
-    }
-
-
-    /// <inheritdoc />
     public async Task<IList<User>> GetUsersAsync()
     {
         var users = await _userManager.Users.ToListAsync();
-        var response = users.Select(ModelToDto).ToList();
+        var response = users.Select(user => new User()
+        {
+            Username = user.UserName,
+            Email = user.Email,
+            Id = user.Id,
+            ProfileImage = Convert.ToBase64String(user.ProfileImage),
+            NumberOfBlogs = user.Blogs.Count,
+        }).ToList();
+
         return response;
     }
 
     /// <inheritdoc />
-    public async Task<User> GetUserByCNPAsync(string CNP)
+    public async Task<User> GetUserByIdAsync(string id)
     {
-        var user = await _userManager.Users.FirstAsync(s => s.Id == CNP && s.CNP == CNP);
+        var user = await _userManager.Users.FirstAsync(s => s.Id == id);
 
-        return ModelToDto(user);
+        return new User()
+        {
+            Username = user.UserName,
+            Email = user.Email,
+            Id = user.Id,
+            ProfileImage = Convert.ToBase64String(user.ProfileImage),
+            NumberOfBlogs = user.Blogs.Count,
+        };
     }
 
+    /// <inheritdoc />
     public async Task<User> GetUserByUserNameAsync(string userName)
     {
         var user = await _userManager.Users.FirstAsync(s => s.UserName == userName);
 
-        return ModelToDto(user);
+        return new User()
+        {
+            Username = user.UserName,
+            Email = user.Email,
+            Id = user.Id,
+            ProfileImage = Convert.ToBase64String(user.ProfileImage),
+            NumberOfBlogs = user.Blogs.Count,
+        };
     }
 
     /// <inheritdoc />
-    public async Task<IdentityResult> RegisterUserAsync(User model, string password)
+    public async Task<IdentityResult> RegisterUserAsync(AddUser model)
     {
-        var user = DtoToModel(model);
+        var user = new DataBaseLayout.Models.User
+        {
+            Id = model.Id,
+            Email = model.Email,
+            ProfileImage = Convert.FromBase64String(model.ProfileImage),
+            EmailConfirmed = true,
+            TwoFactorEnabled = false,
+            UserName = model.Username,
+        };
 
-        var result = await _userManager.CreateAsync(user, password);
+        var result = await _userManager.CreateAsync(user, model.Password);
 
         if (!result.Succeeded)
         {
@@ -93,12 +122,10 @@ public class UserService : IUserService
     }
 
     /// <inheritdoc />
-    public async Task<IdentityResult> UpdateUserAsync(UserUpdate user)
+    public async Task<IdentityResult> UpdateUserAsync(UpdateUser user)
     {
-        var userModel = await _userManager.Users.FirstAsync(s => s.Id == user.CNP && s.CNP == user.CNP);
+        var userModel = await _userManager.Users.FirstAsync(s => s.Id == user.Id);
 
-        userModel.FirstName = user.FirstName;
-        userModel.LastName = user.LastName;
         if (user.ProfileImage != null)
         {
             userModel.ProfileImage = Convert.FromBase64String(user.ProfileImage);
@@ -110,74 +137,27 @@ public class UserService : IUserService
     }
 
     /// <inheritdoc />
-    public async Task<IdentityResult> UpdateUserEmailAsync(UserUpdate user, string token)
+    public async Task<IdentityResult> UpdateUserEmailAsync(UpdateUser user, string token)
     {
-        var userModel = await _userManager.Users.FirstAsync(s => s.Id == user.CNP && s.CNP == user.CNP);
+        var userModel = await _userManager.Users.FirstAsync(s => s.Id == user.Id);
         var result = await _userManager.ChangeEmailAsync(userModel, user.Email, token);
         return result;
     }
 
     /// <inheritdoc />
-    public async Task<IdentityResult> UpdateUserPasswordAsync(UserUpdate user)
+    public async Task<IdentityResult> UpdateUserPasswordAsync(UpdateUser user)
     {
-        var userModel = await _userManager.Users.FirstAsync(s => s.Id == user.CNP && s.CNP == user.CNP);
+        var userModel = await _userManager.Users.FirstAsync(s => s.Id == user.Id);
 
         var result = await _userManager.ChangePasswordAsync(userModel, user.OldPassword, user.NewPassword);
         return result;
     }
 
     /// <inheritdoc />
-    public async Task<IdentityResult> UpdateUserPhoneNumberAsync(UserUpdate user, string token)
+    public async Task<IdentityResult> DeleteUserAsync(string id)
     {
-        var userModel = await _userManager.Users.FirstAsync(s => s.Id == user.CNP && s.CNP == user.CNP);
-        var result = await _userManager.ChangePhoneNumberAsync(userModel, user.PhoneNumber, token);
-        return result;
-    }
-
-    /// <inheritdoc />
-    public async Task<IdentityResult> DeleteUserAsync(string CNP)
-    {
-        var user = await _userManager.Users.FirstAsync(s => s.Id == CNP && s.CNP == CNP);
+        var user = await _userManager.Users.FirstAsync(s => s.Id == id);
 
         return await _userManager.DeleteAsync(user);
     }
-
-    private static DataBaseLayout.Models.User DtoToModel(User model)
-    {
-        var entity = new DataBaseLayout.Models.User
-        {
-            Id = model.CNP,
-            CNP = model.CNP,
-            Document = Convert.FromBase64String(model.Document),
-            Email = model.Email,
-            FirstName = model.FirstName,
-            LastName = model.LastName,
-            PhoneNumber = model.PhoneNumber,
-            ProfileImage = Convert.FromBase64String(model.ProfileImage),
-            EmailConfirmed = false,
-            PhoneNumberConfirmed = false,
-            TwoFactorEnabled = false,
-            UserName = model.UserName,
-        };
-
-        return entity;
-    }
-
-    private static User ModelToDto(DataBaseLayout.Models.User model)
-    {
-        var dto = new User
-        {
-            CNP = model.CNP,
-            Document = Convert.ToBase64String(model.Document),
-            Email = model.Email,
-            FirstName = model.FirstName,
-            LastName = model.LastName,
-            PhoneNumber = model.PhoneNumber,
-            ProfileImage = Convert.ToBase64String(model.ProfileImage),
-            Id = model.Id,
-            UserName = model.UserName,
-        };
-
-        return dto;
-    }
-}*/
+}

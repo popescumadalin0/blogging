@@ -24,6 +24,8 @@ public class Blog
 
     public string Description { get; set; }
 
+    public DateTime CreatedTime { get; set; }
+
     public string UserId { get; set; }
 
     [Required]

@@ -1,13 +1,13 @@
-/*using BloggingServer.ResponseModels;
+using BloggingServer.ResponseModels;
 using BloggingServer.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System;
 using System.Linq;
-using DataBaseLayout.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Models;
 using Models.Constants;
 
 namespace BloggingServer.Controllers;
@@ -37,13 +37,13 @@ public class UserController : BaseController
         }
     }
 
-    [HttpGet("{CNP}")]
+    [HttpGet("{id}")]
     [Authorize(Roles.User)]
-    public async Task<IActionResult> GetUserAsync(string CNP)
+    public async Task<IActionResult> GetUserAsync(string id)
     {
         try
         {
-            var result = await _userService.GetUserByCNPAsync(CNP);
+            var result = await _userService.GetUserByIdAsync(id);
 
             return ApiServiceResponse.ApiServiceResult(new ServiceResponse<User>(result));
 
@@ -55,13 +55,13 @@ public class UserController : BaseController
     }
 
     [HttpPost("login")]
-    public async Task<IActionResult> LoginUserAsync(UserLogin user)
+    public async Task<IActionResult> LoginUserAsync(LoginRequest user)
     {
         try
         {
             var result = await _userService.SignInAsync(user.Email, user.Password);
 
-            return ApiServiceResponse.ApiServiceResult(new ServiceResponse<UserLoginResponse>(result));
+            return ApiServiceResponse.ApiServiceResult(new ServiceResponse<LoginResponse>(result));
 
         }
         catch (Exception ex)
@@ -71,11 +71,11 @@ public class UserController : BaseController
     }
 
     [HttpPost("register")]
-    public async Task<IActionResult> RegisterUserAsync(UserRegister user)
+    public async Task<IActionResult> RegisterUserAsync(AddUser user)
     {
         try
         {
-            var result = await _userService.RegisterUserAsync(user.User, user.Password);
+            var result = await _userService.RegisterUserAsync(user);
 
             return ApiServiceResponse.ApiServiceResult(new ServiceResponse<IdentityResult>(result));
 
@@ -88,14 +88,13 @@ public class UserController : BaseController
 
     [HttpPut]
     [Authorize(Roles.User)]
-    public async Task<IActionResult> UpdateUserAsync(UserUpdate user)
+    public async Task<IActionResult> UpdateUserAsync(UpdateUser user)
     {
         try
         {
             await _userService.UpdateUserAsync(user);
             await _userService.UpdateUserEmailAsync(user, HttpContext.Request.Headers.Authorization.ToString().Replace("Bearer ", string.Empty));
             await _userService.UpdateUserPasswordAsync(user);
-            await _userService.UpdateUserPhoneNumberAsync(user, HttpContext.Request.Headers.Authorization.ToString().Replace("Bearer ", string.Empty));
 
             return ApiServiceResponse.ApiServiceResult(new ServiceResponse());
         }
@@ -105,13 +104,13 @@ public class UserController : BaseController
         }
     }
 
-    [HttpDelete("{CNP}")]
-    [Authorize(Roles.User)]
-    public async Task<IActionResult> DeleteUserAsync(string CNP)
+    [HttpDelete("{id}")]
+    [Authorize(Roles.Admin)]
+    public async Task<IActionResult> DeleteUserAsync(string id)
     {
         try
         {
-            await _userService.DeleteUserAsync(CNP);
+            await _userService.DeleteUserAsync(id);
             return ApiServiceResponse.ApiServiceResult(new ServiceResponse());
         }
         catch (Exception ex)
@@ -119,4 +118,4 @@ public class UserController : BaseController
             return ApiServiceResponse.ApiServiceResult(new ServiceResponse(ex));
         }
     }
-}*/
+}

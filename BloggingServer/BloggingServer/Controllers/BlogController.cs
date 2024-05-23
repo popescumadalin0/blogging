@@ -2,32 +2,29 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using BloggingServer.Repositories;
 using BloggingServer.Repositories.Interfaces;
 using BloggingServer.ResponseModels;
 using BloggingServer.Services.Interfaces;
 using DataBaseLayout.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Models.Constants;
 
 namespace BloggingServer.Controllers;
 
 public class BlogController : BaseController
 {
-    private readonly IRepositoryBase<Blog> _blogRepository;
+    private readonly IBlogService _blogService;
 
-    public BlogController(IRepositoryBase<Blog> blogRepository)
+    public BlogController(IBlogService blogService)
     {
-        _blogRepository = blogRepository;
+        _blogService = blogService;
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetTicketsAsync()
+    public async Task<IActionResult> GetBlogsAsync()
     {
         try
         {
-            var result = await _blogRepository.GetAllAsync();
+            var result = await _blogService.GetAllAsync();
             return ApiServiceResponse.ApiServiceResult(new ServiceResponse<List<Blog>>(result.ToList()));
 
         }

@@ -5,6 +5,7 @@ using BloggingServer.Services.Interfaces;
 using DataBaseLayout;
 using DataBaseLayout.Models;
 using Microsoft.Extensions.Configuration;
+using BloggingServer.Repositories;
 
 namespace BloggingServer;
 
@@ -18,6 +19,10 @@ public static class DependencyInjection
         services.AddScoped<IRepositoryBase<Blog>, RepositoryBase<Blog>>();
 
         services.AddScoped<ITokenService, TokenService>();
+        services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IBlogCategoryService, BlogCategoryService>();
+        services.AddScoped<IBlogService, BlogService>();
+        services.AddScoped<ICommentService, CommentService>();
 
         return services;
     }
