@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Models;
 using Refit;
 
 namespace SDK.Interfaces;
@@ -10,135 +11,66 @@ namespace SDK.Interfaces;
 /// </summary>
 public interface IBloggingApi
 {
-    [Get("/api/User")]
+    [Get("/api/user")]
     [Headers("Authorization: Bearer")]
     Task<List<User>> GetUsersAsync();
 
-    [Get("/api/User/{CNP}")]
+    [Get("/api/user/{id}")]
     [Headers("Authorization: Bearer")]
-    Task<User> GetUserAsync(string CNP);
+    Task<User> GetUserAsync(string id);
 
-    [Delete("/api/User/{CNP}")]
+    [Delete("/api/user/{id}")]
     [Headers("Authorization: Bearer")]
-    Task DeleteUserAsync(string CNP);
+    Task DeleteUserAsync(string id);
 
-    [Post("/api/User/register")]
-    Task RegisterUserAsync(UserRegister user);
+    [Post("/api/user/register")]
+    Task RegisterUserAsync(AddUser user);
 
-    [Post("/api/User/login")]
-    Task<UserLoginResponse> LoginUserAsync(UserLogin user);
+    [Post("/api/user/login")]
+    Task<LoginResponse> LoginUserAsync(LoginRequest request);
 
-    [Put("/api/User")]
+    [Put("/api/user")]
     [Headers("Authorization: Bearer")]
-    Task UpdateUserAsync(UserUpdate user);
+    Task UpdateUserAsync(UpdateUser user);
 
-    [Get("/api/Ticket")]
-    Task<List<Ticket>> GetTicketsAsync();
-
-    [Get("/api/Ticket/{id}")]
-    Task<TicketDetail> GetTicketAsync(Guid id);
-
-    [Post("/api/Ticket")]
+    [Get("/api/blogCategory")]
     [Headers("Authorization: Bearer")]
-    Task CreateTicketAsync(AddTicket ticket);
+    Task<List<BlogCategory>> GetBlogCategoriesAsync();
 
-    [Put("/api/Ticket")]
+    [Post("/api/blogCategory")]
     [Headers("Authorization: Bearer")]
-    Task UpdateTicketAsync(Ticket ticket);
+    Task CreateBlogCategoryAsync(BlogCategory blogCategory);
 
-    [Delete("/api/Ticket/{id}")]
-    Task DeleteTicketAsync(Guid id);
-
-    [Get("/api/Company")]
-    Task<List<Company>> GetCompaniesAsync();
-
-    [Get("/api/Company/{id}")]
-    Task<Company> GetCompanyAsync(Guid id);
-
-    [Post("/api/Company")]
+    [Delete("/api/blogCategory/{name}")]
     [Headers("Authorization: Bearer")]
-    Task CreateCompanyAsync(Company company);
+    Task DeleteBlogCategoryAsync(string name);
 
-    [Put("/api/Company")]
+    [Get("/api/blog")]
     [Headers("Authorization: Bearer")]
-    Task UpdateCompanyAsync(Company company);
+    Task<List<Blog>> GetBlogsAsync();
 
-    [Delete("/api/Company/{id}")]
+    [Get("/api/blog/{id}")]
     [Headers("Authorization: Bearer")]
-    Task DeleteCompanyAsync(Guid id);
+    Task<Blog> GetBlogAsync(string id);
 
-    [Get("/api/Layover")]
-    Task<List<Layover>> GetLayoversAsync();
-
-    [Get("/api/Layover/{id}")]
-    Task<Layover> GetLayoverAsync(Guid id);
-
-    [Post("/api/Layover")]
+    [Post("/api/blog")]
     [Headers("Authorization: Bearer")]
-    Task CreateLayoverAsync(Layover layover);
+    Task CreateBlogAsync(AddBlog blog);
 
-    [Put("/api/Layover")]
+    [Delete("/api/blog/{id}")]
     [Headers("Authorization: Bearer")]
-    Task UpdateLayoverAsync(Layover layover);
+    Task DeleteBlogAsync(string id);
 
-    [Delete("/api/Layover/{id}")]
+    [Get("/api/comment")]
     [Headers("Authorization: Bearer")]
-    Task DeleteLayoverAsync(Guid id);
+    Task<List<Comment>> GetCommentsAsync();
 
-    [Get("/api/PlaneFacility")]
-    Task<List<PlaneFacility>> GetPlaneFacilitiesAsync();
-
-    [Get("/api/PlaneFacility/{id}")]
-    Task<PlaneFacility> GetPlaneFacilityAsync(Guid id);
-
-    [Post("/api/PlaneFacility")]
+    [Post("/api/comment")]
     [Headers("Authorization: Bearer")]
-    Task CreatePlaneFacilityAsync(PlaneFacility planeFacility);
+    Task CreateCommentAsync(Comment comment);
 
-    [Put("/api/PlaneFacility")]
+    [Delete("/api/comment/{id}")]
     [Headers("Authorization: Bearer")]
-    Task UpdatePlaneFacilityAsync(PlaneFacility planeFacility);
-
-    [Delete("/api/PlaneFacility/{id}")]
-    [Headers("Authorization: Bearer")]
-    Task DeletePlaneFacilityAsync(Guid id);
-
-    [Get("/api/PlaneSeat")]
-    Task<List<PlaneSeat>> GetPlaneSeatsAsync();
-
-    [Get("/api/PlaneSeat/{id}")]
-    Task<PlaneSeat> GetPlaneSeatAsync(Guid id);
-
-    [Post("/api/PlaneSeat")]
-    [Headers("Authorization: Bearer")]
-    Task CreatePlaneSeatAsync(PlaneSeat planeSeat);
-
-    [Put("/api/PlaneSeat")]
-    [Headers("Authorization: Bearer")]
-    Task UpdatePlaneSeatAsync(PlaneSeat planeSeat);
-
-    [Delete("/api/PlaneSeat/{id}")]
-    [Headers("Authorization: Bearer")]
-    Task DeletePlaneSeatAsync(Guid id);
-
-    [Get("/api/Booking")]
-    [Headers("Authorization: Bearer")]
-    Task<List<Booking>> GetBookingsAsync();
-
-    [Get("/api/Booking/{id}")]
-    [Headers("Authorization: Bearer")]
-    Task<Booking> GetBookingAsync(Guid id);
-
-    [Post("/api/Booking")]
-    [Headers("Authorization: Bearer")]
-    Task CreateBookingAsync(Booking booking);
-
-    [Put("/api/Booking")]
-    [Headers("Authorization: Bearer")]
-    Task UpdateBookingAsync(Booking booking);
-
-    [Delete("/api/Booking/{id}")]
-    [Headers("Authorization: Bearer")]
-    Task DeleteBookingAsync(Guid id);
+    Task DeleteCommentAsync(string id);
 }
 

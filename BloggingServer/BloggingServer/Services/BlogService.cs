@@ -39,6 +39,24 @@ public class BlogService : IBlogService
     }
 
     /// <inheritdoc />
+    public async Task<Blog> GetBlogAsync(Guid id)
+    {
+        var entity = await _blogRepository.GetAsync(x=> x.Id == id);
+
+        return new Blog()
+        {
+            UserId = entity.UserId,
+            Description = entity.Description,
+            Id = entity.Id,
+            UserName = entity.User.UserName,
+            BlogCategory = entity.BlogCategoryName,
+            Image = Convert.ToBase64String(entity.Image),
+            Title = entity.Title,
+            CreatedDate = entity.CreatedTime
+        };
+    }
+
+    /// <inheritdoc />
     public async Task AddBlogAsync(AddBlog blog)
     {
         var entity = new DataBaseLayout.Models.Blog()

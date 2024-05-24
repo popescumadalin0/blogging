@@ -17,6 +17,8 @@ public static class DependencyInjection
         services.AddDataLayout(config);
 
         services.AddScoped<IRepositoryBase<Blog>, RepositoryBase<Blog>>();
+        services.AddScoped<IRepositoryBase<BlogCategory>, RepositoryBase<BlogCategory>>();
+        services.AddScoped<IRepositoryBase<Comment>, RepositoryBase<Comment>>();
 
         services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<IUserService, UserService>();

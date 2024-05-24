@@ -7,6 +7,7 @@ using System;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.Data;
 using Models;
 using Models.Constants;
 
@@ -55,7 +56,7 @@ public class UserController : BaseController
     }
 
     [HttpPost("login")]
-    public async Task<IActionResult> LoginUserAsync(LoginRequest user)
+    public async Task<IActionResult> LoginUserAsync(BlogLoginRequest user)
     {
         try
         {

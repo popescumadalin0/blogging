@@ -12,23 +12,23 @@ using Models.Constants;
 
 namespace BloggingServer.Controllers;
 
-public class BlogController : BaseController
+public class CommentController : BaseController
 {
-    private readonly IBlogService _blogService;
+    private readonly ICommentService _commentService;
 
-    public BlogController(IBlogService blogService)
+    public CommentController(ICommentService commentService)
     {
-        _blogService = blogService;
+        _commentService = commentService;
     }
 
     [HttpGet]
     [Authorize(Roles.User)]
-    public async Task<IActionResult> GetBlogsAsync()
+    public async Task<IActionResult> GetCommentsAsync()
     {
         try
         {
-            var result = await _blogService.GetBlogsAsync();
-            return ApiServiceResponse.ApiServiceResult(new ServiceResponse<List<Blog>>(result.ToList()));
+            var result = await _commentService.GetCommentsAsync();
+            return ApiServiceResponse.ApiServiceResult(new ServiceResponse<List<Comment>>(result.ToList()));
 
         }
         catch (Exception ex)
@@ -37,30 +37,13 @@ public class BlogController : BaseController
         }
     }
 
-    [HttpGet("{id}")]
-    [Authorize(Roles.User)]
-    public async Task<IActionResult> GetBlogAsync(string id)
-    {
-        try
-        {
-            var result = await _blogService.GetBlogAsync(Guid.Parse(id));
-
-            return ApiServiceResponse.ApiServiceResult(new ServiceResponse<Blog>(result));
-
-        }
-        catch (Exception ex)
-        {
-            return ApiServiceResponse.ApiServiceResult(new ServiceResponse<Blog>(ex));
-        }
-    }
-
     [HttpPost]
     [Authorize(Roles.User)]
-    public async Task<IActionResult> CreateBlogAsync(AddBlog blog)
+    public async Task<IActionResult> CreateCommentAsync(AddComment comment)
     {
         try
         {
-            await _blogService.AddBlogAsync(blog);
+            await _commentService.AddCommentAsync(comment);
             return ApiServiceResponse.ApiServiceResult(new ServiceResponse());
         }
         catch (Exception ex)
@@ -71,11 +54,11 @@ public class BlogController : BaseController
 
     [HttpDelete("{id}")]
     [Authorize(Roles.Admin)]
-    public async Task<IActionResult> DeleteBlogAsync(string id)
+    public async Task<IActionResult> DeleteCommentAsync(string id)
     {
         try
         {
-            await _blogService.DeleteBlogAsync(Guid.Parse(id));
+            await _commentService.DeleteCommentAsync(Guid.Parse(id));
 
             return ApiServiceResponse.ApiServiceResult(new ServiceResponse());
         }

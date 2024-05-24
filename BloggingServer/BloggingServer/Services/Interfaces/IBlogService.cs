@@ -13,6 +13,9 @@ public interface IBlogService
     Task<List<Blog>> GetBlogsAsync();
 
     /// <summary/>
+    Task<Blog> GetBlogAsync(Guid id);
+
+    /// <summary/>
     Task AddBlogAsync(AddBlog blog);
 
     /// <summary/>

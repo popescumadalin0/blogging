@@ -1,6 +1,6 @@
 namespace Models;
 
-public class LoginRequest
+public class BlogLoginRequest
 {
     public string Email { get; set; }
 

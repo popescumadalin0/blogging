@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using Microsoft.Extensions.Logging;
+using Models;
 using SDK.Interfaces;
 using SDK.RefitModels;
 
@@ -37,11 +39,11 @@ public class BloggingApiClient : RefitApiClient<IBloggingApi>, IBloggingApiClien
         }
     }
 
-    public async Task<ApiResponseMessage<User>> GetUserAsync(string CNP)
+    public async Task<ApiResponseMessage<User>> GetUserAsync(string id)
     {
         try
         {
-            var task = _apiClient.GetUserAsync(CNP);
+            var task = _apiClient.GetUserAsync(id);
             var result = await Execute(task);
             return result;
         }
@@ -52,11 +54,11 @@ public class BloggingApiClient : RefitApiClient<IBloggingApi>, IBloggingApiClien
         }
     }
 
-    public async Task<ApiResponseMessage> DeleteUserAsync(string CNP)
+    public async Task<ApiResponseMessage> DeleteUserAsync(string id)
     {
         try
         {
-            var task = _apiClient.DeleteUserAsync(CNP);
+            var task = _apiClient.DeleteUserAsync(id);
             var result = await ExecuteWithNoContentResponse(task);
             return result;
         }
@@ -67,7 +69,7 @@ public class BloggingApiClient : RefitApiClient<IBloggingApi>, IBloggingApiClien
         }
     }
 
-    public async Task<ApiResponseMessage> RegisterUserAsync(UserRegister user)
+    public async Task<ApiResponseMessage> RegisterUserAsync(AddUser user)
     {
         try
         {
@@ -82,22 +84,22 @@ public class BloggingApiClient : RefitApiClient<IBloggingApi>, IBloggingApiClien
         }
     }
 
-    public async Task<ApiResponseMessage<UserLoginResponse>> LoginUserAsync(UserLogin user)
+    public async Task<ApiResponseMessage<LoginResponse>> LoginUserAsync(LoginRequest request)
     {
         try
         {
-            var task = _apiClient.LoginUserAsync(user);
+            var task = _apiClient.LoginUserAsync(request);
             var result = await Execute(task);
             return result;
         }
         catch (Exception e)
         {
-            _logger.LogError(e, $"Error executing {nameof(RegisterUserAsync)}");
+            _logger.LogError(e, $"Error executing {nameof(LoginUserAsync)}");
             throw;
         }
     }
 
-    public async Task<ApiResponseMessage> UpdateUserAsync(UserUpdate user)
+    public async Task<ApiResponseMessage> UpdateUserAsync(UpdateUser user)
     {
         try
         {
@@ -112,453 +114,152 @@ public class BloggingApiClient : RefitApiClient<IBloggingApi>, IBloggingApiClien
         }
     }
 
-    public async Task<ApiResponseMessage<List<Ticket>>> GetTicketsAsync()
+    public async Task<ApiResponseMessage<List<BlogCategory>>> GetBlogCategoriesAsync()
     {
         try
         {
-            var task = _apiClient.GetTicketsAsync();
+            var task = _apiClient.GetBlogCategoriesAsync();
             var result = await Execute(task);
             return result;
         }
         catch (Exception e)
         {
-            _logger.LogError(e, $"Error executing {nameof(GetTicketsAsync)}");
+            _logger.LogError(e, $"Error executing {nameof(GetBlogCategoriesAsync)}");
             throw;
         }
     }
 
-    public async Task<ApiResponseMessage<TicketDetail>> GetTicketAsync(Guid id)
+    public async Task<ApiResponseMessage> CreateBlogCategoryAsync(BlogCategory blogCategory)
     {
         try
         {
-            var task = _apiClient.GetTicketAsync(id);
+            var task = _apiClient.CreateBlogCategoryAsync(blogCategory);
+            var result = await ExecuteWithNoContentResponse(task);
+            return result;
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, $"Error executing {nameof(CreateBlogCategoryAsync)}");
+            throw;
+        }
+    }
+
+    public async Task<ApiResponseMessage> DeleteBlogCategoryAsync(string name)
+    {
+        try
+        {
+            var task = _apiClient.DeleteBlogCategoryAsync(name);
+            var result = await ExecuteWithNoContentResponse(task);
+            return result;
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, $"Error executing {nameof(DeleteBlogCategoryAsync)}");
+            throw;
+        }
+    }
+
+    public async Task<ApiResponseMessage<List<Blog>>> GetBlogsAsync()
+    {
+        try
+        {
+            var task = _apiClient.GetBlogsAsync();
             var result = await Execute(task);
             return result;
         }
         catch (Exception e)
         {
-            _logger.LogError(e, $"Error executing {nameof(GetTicketAsync)}");
+            _logger.LogError(e, $"Error executing {nameof(GetBlogsAsync)}");
             throw;
         }
     }
 
-    public async Task<ApiResponseMessage> CreateTicketAsync(AddTicket ticket)
+    public async Task<ApiResponseMessage<Blog>> GetBlogAsync(string id)
     {
         try
         {
-            var task = _apiClient.CreateTicketAsync(ticket);
-            var result = await ExecuteWithNoContentResponse(task);
-            return result;
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, $"Error executing {nameof(CreateTicketAsync)}");
-            throw;
-        }
-    }
-
-    public async Task<ApiResponseMessage> UpdateTicketAsync(Ticket ticket)
-    {
-        try
-        {
-            var task = _apiClient.UpdateTicketAsync(ticket);
-            var result = await ExecuteWithNoContentResponse(task);
-            return result;
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, $"Error executing {nameof(UpdateTicketAsync)}");
-            throw;
-        }
-    }
-
-    public async Task<ApiResponseMessage> DeleteTicketAsync(Guid id)
-    {
-        try
-        {
-            var task = _apiClient.DeleteTicketAsync(id);
-            var result = await ExecuteWithNoContentResponse(task);
-            return result;
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, $"Error executing {nameof(DeleteTicketAsync)}");
-            throw;
-        }
-    }
-
-    public async Task<ApiResponseMessage<List<Company>>> GetCompaniesAsync()
-    {
-        try
-        {
-            var task = _apiClient.GetCompaniesAsync();
+            var task = _apiClient.GetBlogAsync(id);
             var result = await Execute(task);
             return result;
         }
         catch (Exception e)
         {
-            _logger.LogError(e, $"Error executing {nameof(GetCompaniesAsync)}");
+            _logger.LogError(e, $"Error executing {nameof(GetBlogAsync)}");
             throw;
         }
     }
 
-    public async Task<ApiResponseMessage<Company>> GetCompanyAsync(Guid id)
+    public async Task<ApiResponseMessage> CreateBlogAsync(AddBlog blog)
     {
         try
         {
-            var task = _apiClient.GetCompanyAsync(id);
+            var task = _apiClient.CreateBlogAsync(blog);
+            var result = await ExecuteWithNoContentResponse(task);
+            return result;
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, $"Error executing {nameof(CreateBlogAsync)}");
+            throw;
+        }
+    }
+
+    public async Task<ApiResponseMessage> DeleteBlogAsync(string id)
+    {
+        try
+        {
+            var task = _apiClient.DeleteBlogAsync(id);
+            var result = await ExecuteWithNoContentResponse(task);
+            return result;
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, $"Error executing {nameof(DeleteBlogAsync)}");
+            throw;
+        }
+    }
+
+    public async Task<ApiResponseMessage<List<Comment>>> GetCommentsAsync()
+    {
+        try
+        {
+            var task = _apiClient.GetCommentsAsync();
             var result = await Execute(task);
             return result;
         }
         catch (Exception e)
         {
-            _logger.LogError(e, $"Error executing {nameof(GetCompanyAsync)}");
+            _logger.LogError(e, $"Error executing {nameof(GetCommentsAsync)}");
             throw;
         }
     }
 
-    public async Task<ApiResponseMessage> CreateCompanyAsync(Company company)
+    public async Task<ApiResponseMessage> CreateCommentAsync(Comment comment)
     {
         try
         {
-            var task = _apiClient.CreateCompanyAsync(company);
+            var task = _apiClient.CreateCommentAsync(comment);
             var result = await ExecuteWithNoContentResponse(task);
             return result;
         }
         catch (Exception e)
         {
-            _logger.LogError(e, $"Error executing {nameof(CreateCompanyAsync)}");
+            _logger.LogError(e, $"Error executing {nameof(CreateCommentAsync)}");
             throw;
         }
     }
 
-    public async Task<ApiResponseMessage> UpdateCompanyAsync(Company company)
+    public async Task<ApiResponseMessage> DeleteCommentAsync(string id)
     {
         try
         {
-            var task = _apiClient.UpdateCompanyAsync(company);
+            var task = _apiClient.DeleteCommentAsync(id);
             var result = await ExecuteWithNoContentResponse(task);
             return result;
         }
         catch (Exception e)
         {
-            _logger.LogError(e, $"Error executing {nameof(UpdateCompanyAsync)}");
-            throw;
-        }
-    }
-
-    public async Task<ApiResponseMessage> DeleteCompanyAsync(Guid id)
-    {
-        try
-        {
-            var task = _apiClient.DeleteCompanyAsync(id);
-            var result = await ExecuteWithNoContentResponse(task);
-            return result;
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, $"Error executing {nameof(DeleteCompanyAsync)}");
-            throw;
-        }
-    }
-
-    public async Task<ApiResponseMessage<List<Layover>>> GetLayoversAsync()
-    {
-        try
-        {
-            var task = _apiClient.GetLayoversAsync();
-            var result = await Execute(task);
-            return result;
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, $"Error executing {nameof(GetLayoversAsync)}");
-            throw;
-        }
-    }
-
-    public async Task<ApiResponseMessage<Layover>> GetLayoverAsync(Guid id)
-    {
-        try
-        {
-            var task = _apiClient.GetLayoverAsync(id);
-            var result = await Execute(task);
-            return result;
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, $"Error executing {nameof(GetLayoverAsync)}");
-            throw;
-        }
-    }
-
-    public async Task<ApiResponseMessage> CreateLayoverAsync(Layover layover)
-    {
-        try
-        {
-            var task = _apiClient.CreateLayoverAsync(layover);
-            var result = await ExecuteWithNoContentResponse(task);
-            return result;
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, $"Error executing {nameof(CreateLayoverAsync)}");
-            throw;
-        }
-    }
-
-    public async Task<ApiResponseMessage> UpdateLayoverAsync(Layover layover)
-    {
-        try
-        {
-            var task = _apiClient.UpdateLayoverAsync(layover);
-            var result = await ExecuteWithNoContentResponse(task);
-            return result;
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, $"Error executing {nameof(UpdateLayoverAsync)}");
-            throw;
-        }
-    }
-
-    public async Task<ApiResponseMessage> DeleteLayoverAsync(Guid id)
-    {
-        try
-        {
-            var task = _apiClient.DeleteLayoverAsync(id);
-            var result = await ExecuteWithNoContentResponse(task);
-            return result;
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, $"Error executing {nameof(DeleteLayoverAsync)}");
-            throw;
-        }
-    }
-
-    public async Task<ApiResponseMessage<List<PlaneFacility>>> GetPlaneFacilitiesAsync()
-    {
-        try
-        {
-            var task = _apiClient.GetPlaneFacilitiesAsync();
-            var result = await Execute(task);
-            return result;
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, $"Error executing {nameof(GetPlaneFacilitiesAsync)}");
-            throw;
-        }
-    }
-
-    public async Task<ApiResponseMessage<PlaneFacility>> GetPlaneFacilityAsync(Guid id)
-    {
-        try
-        {
-            var task = _apiClient.GetPlaneFacilityAsync(id);
-            var result = await Execute(task);
-            return result;
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, $"Error executing {nameof(GetPlaneFacilityAsync)}");
-            throw;
-        }
-    }
-
-    public async Task<ApiResponseMessage> CreatePlaneFacilityAsync(PlaneFacility planeFacility)
-    {
-        try
-        {
-            var task = _apiClient.CreatePlaneFacilityAsync(planeFacility);
-            var result = await ExecuteWithNoContentResponse(task);
-            return result;
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, $"Error executing {nameof(CreatePlaneFacilityAsync)}");
-            throw;
-        }
-    }
-
-    public async Task<ApiResponseMessage> UpdatePlaneFacilityAsync(PlaneFacility planeFacility)
-    {
-        try
-        {
-            var task = _apiClient.UpdatePlaneFacilityAsync(planeFacility);
-            var result = await ExecuteWithNoContentResponse(task);
-            return result;
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, $"Error executing {nameof(UpdatePlaneFacilityAsync)}");
-            throw;
-        }
-    }
-
-    public async Task<ApiResponseMessage> DeletePlaneFacilityAsync(Guid id)
-    {
-        try
-        {
-            var task = _apiClient.DeletePlaneFacilityAsync(id);
-            var result = await ExecuteWithNoContentResponse(task);
-            return result;
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, $"Error executing {nameof(DeletePlaneFacilityAsync)}");
-            throw;
-        }
-    }
-
-    public async Task<ApiResponseMessage<List<PlaneSeat>>> GetPlaneSeatsAsync()
-    {
-        try
-        {
-            var task = _apiClient.GetPlaneSeatsAsync();
-            var result = await Execute(task);
-            return result;
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, $"Error executing {nameof(GetPlaneSeatsAsync)}");
-            throw;
-        }
-    }
-
-    public async Task<ApiResponseMessage<PlaneSeat>> GetPlaneSeatAsync(Guid id)
-    {
-        try
-        {
-            var task = _apiClient.GetPlaneSeatAsync(id);
-            var result = await Execute(task);
-            return result;
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, $"Error executing {nameof(GetPlaneFacilityAsync)}");
-            throw;
-        }
-    }
-
-    public async Task<ApiResponseMessage> CreatePlaneSeatAsync(PlaneSeat planeSeat)
-    {
-        try
-        {
-            var task = _apiClient.CreatePlaneSeatAsync(planeSeat);
-            var result = await ExecuteWithNoContentResponse(task);
-            return result;
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, $"Error executing {nameof(CreatePlaneSeatAsync)}");
-            throw;
-        }
-    }
-
-    public async Task<ApiResponseMessage> UpdatePlaneSeatAsync(PlaneSeat planeSeat)
-    {
-
-        try
-        {
-            var task = _apiClient.UpdatePlaneSeatAsync(planeSeat);
-            var result = await ExecuteWithNoContentResponse(task);
-            return result;
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, $"Error executing {nameof(UpdatePlaneSeatAsync)}");
-            throw;
-        }
-    }
-
-    public async Task<ApiResponseMessage> DeletePlaneSeatAsync(Guid id)
-    {
-        try
-        {
-            var task = _apiClient.DeletePlaneSeatAsync(id);
-            var result = await ExecuteWithNoContentResponse(task);
-            return result;
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, $"Error executing {nameof(DeletePlaneSeatAsync)}");
-            throw;
-        }
-    }
-
-    public async Task<ApiResponseMessage<List<Booking>>> GetBookingsAsync()
-    {
-        try
-        {
-            var task = _apiClient.GetBookingsAsync();
-            var result = await Execute(task);
-            return result;
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, $"Error executing {nameof(GetBookingsAsync)}");
-            throw;
-        }
-    }
-
-    public async Task<ApiResponseMessage<Booking>> GetBookingAsync(Guid id)
-    {
-        try
-        {
-            var task = _apiClient.GetBookingAsync(id);
-            var result = await Execute(task);
-            return result;
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, $"Error executing {nameof(GetBookingAsync)}");
-            throw;
-        }
-    }
-
-    public async Task<ApiResponseMessage> CreateBookingAsync(Booking booking)
-    {
-        try
-        {
-            var task = _apiClient.CreateBookingAsync(booking);
-            var result = await ExecuteWithNoContentResponse(task);
-            return result;
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, $"Error executing {nameof(CreateBookingAsync)}");
-            throw;
-        }
-    }
-
-    public async Task<ApiResponseMessage> UpdateBookingAsync(Booking booking)
-    {
-        try
-        {
-            var task = _apiClient.UpdateBookingAsync(booking);
-            var result = await ExecuteWithNoContentResponse(task);
-            return result;
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, $"Error executing {nameof(UpdateBookingAsync)}");
-            throw;
-        }
-    }
-
-    public async Task<ApiResponseMessage> DeleteBookingAsync(Guid id)
-    {
-        try
-        {
-            var task = _apiClient.DeleteBookingAsync(id);
-            var result = await ExecuteWithNoContentResponse(task);
-            return result;
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, $"Error executing {nameof(DeleteBookingAsync)}");
+            _logger.LogError(e, $"Error executing {nameof(DeleteCommentAsync)}");
             throw;
         }
     }
