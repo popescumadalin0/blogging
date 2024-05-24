@@ -1,8 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Models;
-using Refit;
 using SDK.RefitModels;
 
 namespace SDK.Interfaces;
@@ -20,7 +18,7 @@ public interface IBloggingApiClient
 
     Task<ApiResponseMessage> RegisterUserAsync(AddUser user);
 
-    Task<ApiResponseMessage<LoginResponse>> LoginUserAsync(LoginRequest request);
+    Task<ApiResponseMessage<LoginResponse>> LoginUserAsync(BlogLoginRequest request);
 
     Task<ApiResponseMessage> UpdateUserAsync(UpdateUser user);
 

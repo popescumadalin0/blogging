@@ -17,17 +17,15 @@ public static class DependencyInjection
     {
         services.AddCascadingAuthenticationState();
 
-        services.AddAuthorizationCore();
-
         services.AddBlazoredSessionStorage();
         services.AddBlazoredLocalStorage();
 
         services.AddAuthorizationCore();
 
-        services.AddScoped<AuthenticationStateProvider, AirFLightsAuthenticationStateProvider>();
+        services.AddScoped<AuthenticationStateProvider, BloggingAuthenticationStateProvider>();
 
         var authProvider = services.BuildServiceProvider().GetService<AuthenticationStateProvider>();
-        AuthBearerTokenFactory.SetBearerTokenGetterFunc((authProvider as AirFLightsAuthenticationStateProvider)!.GetBearerTokenAsync);
+        AuthBearerTokenFactory.SetBearerTokenGetterFunc((authProvider as BloggingAuthenticationStateProvider)!.GetBearerTokenAsync);
 
         var apiUrl = new Uri(config.GetSection("Api:BaseUrl").Value);
         services.AddBloggingApiClient(apiUrl);

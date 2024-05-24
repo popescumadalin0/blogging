@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Models;
@@ -27,7 +26,7 @@ public interface IBloggingApi
     Task RegisterUserAsync(AddUser user);
 
     [Post("/api/user/login")]
-    Task<LoginResponse> LoginUserAsync(LoginRequest request);
+    Task<LoginResponse> LoginUserAsync(BlogLoginRequest request);
 
     [Put("/api/user")]
     [Headers("Authorization: Bearer")]

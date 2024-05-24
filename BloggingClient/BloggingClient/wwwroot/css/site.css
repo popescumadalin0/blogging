@@ -27,6 +27,6 @@
         content: "An error has occurred."
     }
 
-.selector-for-some-widget {
-    box-sizing: content-box;
+html, body {
+    font-family: "Saira Condensed", sans-serif;
 }

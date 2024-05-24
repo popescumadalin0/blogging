@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 
 namespace BloggingClient.States;
 
-public class AirFLightsAuthenticationStateProvider : AuthenticationStateProvider
+public class BloggingAuthenticationStateProvider : AuthenticationStateProvider
 {
     private readonly ILocalStorageService _localStorage;
     private ClaimsPrincipal _anonymous = new ClaimsPrincipal(new ClaimsIdentity());
@@ -17,7 +17,7 @@ public class AirFLightsAuthenticationStateProvider : AuthenticationStateProvider
     private static string _token;
     private static string _refreshToken;
 
-    public AirFLightsAuthenticationStateProvider(ILocalStorageService localStorage)
+    public BloggingAuthenticationStateProvider(ILocalStorageService localStorage)
     {
         _localStorage = localStorage;
     }

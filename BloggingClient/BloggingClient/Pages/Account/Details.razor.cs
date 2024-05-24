@@ -1,14 +1,12 @@
-using System;
+/*using System;
 using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using BloggingClient.Models;
 using BloggingClient.States;
 using Blazorise;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
-using Models.Request;
 using SDK.Interfaces;
 
 namespace BloggingClient.Pages.Account;
@@ -143,7 +141,7 @@ public partial class Details : ComponentBase, IDisposable
         await LoadingState.ShowAsync();
         await LoadingState.HideAsync();
 
-        var customProvider = (AirFLightsAuthenticationStateProvider)AuthenticationStateProvider;
+        var customProvider = (BloggingAuthenticationStateProvider)AuthenticationStateProvider;
         await customProvider.LogoutUserAsync();
 
         await SnackbarState.PushAsync("Successfully logout!");
@@ -172,4 +170,4 @@ public partial class Details : ComponentBase, IDisposable
 
         NavigationManager.NavigateTo("/login");
     }
-}
+}*/

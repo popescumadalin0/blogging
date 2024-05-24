@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 using Microsoft.Extensions.Logging;
 using Models;
 using SDK.Interfaces;
@@ -84,7 +83,7 @@ public class BloggingApiClient : RefitApiClient<IBloggingApi>, IBloggingApiClien
         }
     }
 
-    public async Task<ApiResponseMessage<LoginResponse>> LoginUserAsync(LoginRequest request)
+    public async Task<ApiResponseMessage<LoginResponse>> LoginUserAsync(BlogLoginRequest request)
     {
         try
         {

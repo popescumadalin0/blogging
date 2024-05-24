@@ -1,10 +1,9 @@
-using System;
+/*using System;
 using System.Threading.Tasks;
 using BloggingClient.Models;
 using BloggingClient.States;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
-using Models.Request;
 using SDK.Interfaces;
 
 namespace BloggingClient.Pages.Account;
@@ -58,10 +57,10 @@ public partial class Login : ComponentBase, IDisposable
 
         if (result.Success)
         {
-            var customProvider = (AirFLightsAuthenticationStateProvider)AuthenticationStateProvider;
+            var customProvider = (BloggingAuthenticationStateProvider)AuthenticationStateProvider;
             await customProvider.AuthenticateUserAsync(result.Response.AccessToken, result.Response.RefreshToken);
 
             NavigationManager.NavigateTo("/");
         }
     }
-}
+}*/

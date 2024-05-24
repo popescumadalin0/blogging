@@ -2,18 +2,14 @@
 
 <PageTitle>Blogging</PageTitle>
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
-
-    <main>
-        <article class="content">
-            @Body
-        </article>
-    </main>
-
-    <div class="sidebar">
-        <Footer />
-    </div>
-</div>
+<Layout Loading="@LoadingState.IsLoading">
+    <LayoutHeader Fixed>
+        <NavMenu></NavMenu>
+    </LayoutHeader>
+    <LayoutContent>
+        @Body
+    </LayoutContent>
+    <LayoutFooter Fixed>
+        <Footer></Footer>
+    </LayoutFooter>
+</Layout>
