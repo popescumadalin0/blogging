@@ -30,3 +30,7 @@
 html, body {
     font-family: "Saira Condensed", sans-serif;
 }
+
+.logo {
+    font-size: 4em;
+}

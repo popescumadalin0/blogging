@@ -1,15 +1,16 @@
 @inherits LayoutComponentBase
 
 <PageTitle>Blogging</PageTitle>
-
-<Layout Loading="@LoadingState.IsLoading">
-    <LayoutHeader Fixed>
-        <NavMenu></NavMenu>
-    </LayoutHeader>
-    <LayoutContent>
-        @Body
-    </LayoutContent>
-    <LayoutFooter Fixed>
-        <Footer></Footer>
-    </LayoutFooter>
-</Layout>
+<div class="bg-black text-light">
+    <div class="container">
+        <header>
+            <NavMenu></NavMenu>
+        </header>
+        <div class="background-grey">
+            @Body
+        </div>
+        <footer>
+            <Footer></Footer>
+        </footer>
+    </div>
+</div>
