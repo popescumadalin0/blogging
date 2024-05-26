@@ -2,6 +2,16 @@
     <div class="container d-flex flex-row flex-aligment-between">
         <Link class="navbar-brand text-light fw-bold logo" To="/">Your Blog</Link>
         <div class="navbar-nav fs-3 fw-bold d-flex flex-row gap-5">
+            <AuthorizeView>
+                <Authorized>
+                    <li class="nav-item">
+                        <Link class="nav-link text-light" To="/write">Write</Link>
+                    </li>
+                    <li class="nav-item">
+                        <Link class="nav-link text-light" To="/search">Search</Link>
+                    </li>
+                </Authorized>
+            </AuthorizeView>
             <li class="nav-item">
                 <Link class="nav-link text-light" To="/about">About</Link>
             </li>
@@ -10,12 +20,21 @@
             </li>
         </div>
         <ul class="navbar-nav d-flex flex-row gap-3">
-            <li class="nav-item">
-                <Button To="/login" Type="ButtonType.Link" Color="Color.Light" TextWeight="TextWeight.Bold" TextColor="TextColor.Dark" TextSize="TextSize.Heading3" Class="rounded-4">Login</Button>
-            </li>
-            <li class="nav-item">
-                <Button To="/register" Type="ButtonType.Link" Color="Color.Light" TextWeight="TextWeight.Bold" TextColor="TextColor.Dark" TextSize="TextSize.Heading3" Class="rounded-4">Register</Button>
-            </li>
+            <AuthorizeView>
+                <Authorized>
+                    <li class="nav-item">
+                        <Button To="/account" Type="ButtonType.Link" Color="Color.Light" TextWeight="TextWeight.Bold" TextColor="TextColor.Dark" TextSize="TextSize.Heading3" Class="rounded-4">My Profile</Button>
+                    </li>
+                </Authorized>
+                <NotAuthorized>
+                    <li class="nav-item">
+                        <Button To="/login" Type="ButtonType.Link" Color="Color.Light" TextWeight="TextWeight.Bold" TextColor="TextColor.Dark" TextSize="TextSize.Heading3" Class="rounded-4">Login</Button>
+                    </li>
+                    <li class="nav-item">
+                        <Button To="/register" Type="ButtonType.Link" Color="Color.Light" TextWeight="TextWeight.Bold" TextColor="TextColor.Dark" TextSize="TextSize.Heading3" Class="rounded-4">Register</Button>
+                    </li>
+                </NotAuthorized>
+            </AuthorizeView>
         </ul>
     </div>
 </nav>
