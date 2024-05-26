@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataBaseLayout.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20240524081302_Initial")]
+    [Migration("20240526095311_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -132,6 +132,9 @@ namespace DataBaseLayout.Migrations
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("AcceptTerms")
+                        .HasColumnType("bit");
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");

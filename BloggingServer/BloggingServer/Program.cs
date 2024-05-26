@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using BloggingServer;
@@ -64,7 +65,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapIdentityApi<User>();
+//app.MapIdentityApi<User>();
 
 app.UseAuthorization();
 
@@ -115,6 +116,7 @@ async Task DefaultDataAsync()
     var adminUser = await userManager.GetUsersInRoleAsync(Roles.Admin);
     if (!adminUser.Any())
     {
+        var profileImage = await File.ReadAllBytesAsync(@"DataBaseLayout/Data/default-image-profile.jpg");
         var user = new User
         {
             Id = "admin",
@@ -124,7 +126,7 @@ async Task DefaultDataAsync()
             PhoneNumber = "0111111111",
             PhoneNumberConfirmed = true,
             TwoFactorEnabled = false,
-            ProfileImage = Array.Empty<byte>(),
+            ProfileImage = profileImage,
         };
         var result = await userManager.CreateAsync(user, "Admin1234!");
 

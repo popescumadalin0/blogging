@@ -4,38 +4,26 @@ namespace BloggingClient.Models;
 
 public class RegisterModel
 {
-    [Required]
-    public string CNP { get; set; }
-
-    [Required]
+    [Required(ErrorMessage = "You must set a password!")]
     [DataType(DataType.Password)]
     [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$", ErrorMessage = "Password must contain at least 8 characters: uppercase letter, lowercase letter, number and a special character [@$!%*?&]")]
     public string Password { get; set; }
 
-    [Required]
+    [Required(ErrorMessage = "You must retype the password!")]
     [DataType(DataType.Password)]
-    [Compare(nameof(Password))]
+    [Compare(nameof(Password), ErrorMessage = "The confirm password must be the same with the password!")]
     public string ConfirmPassword { get; set; }
 
-    [Required]
-    public string PhoneNumber { get; set; }
+    [Required(ErrorMessage = "You must set an email!")]
+    [EmailAddress(ErrorMessage = "Invalid email format!")]
+    public string Email { get; set; }
 
-    [Required]
-    public byte[] Document { get; set; }
+    [Required(ErrorMessage = "You must set an username!")]
+    public string UserName { get; set; }
 
-    [Required]
     public byte[] ProfileImage { get; set; }
 
     [Required]
-    public string FirstName { get; set; }
-
-    [Required]
-    public string LastName { get; set; }
-
-    [Required]
-    [EmailAddress(ErrorMessage = "Invalid email.")]
-    public string Email { get; set; }
-
-    [Required]
-    public string UserName { get; set; }
+    [Range(typeof(bool), "true", "true", ErrorMessage = "You must be agree with our terms & conditions")]
+    public bool AcceptTerms { get; set; }
 }

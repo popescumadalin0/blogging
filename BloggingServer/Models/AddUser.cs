@@ -11,4 +11,6 @@ public class AddUser
     public string ProfileImage { get; set; }
 
     public string Password { get; set; }
+
+    public bool AcceptTerms { get; set; }
 }

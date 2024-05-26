@@ -2,3 +2,7 @@
     background-color: rgb(181, 180, 180);
     color: black;
 }
+
+.background-height {
+    min-height: 74vh;
+}

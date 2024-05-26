@@ -7,6 +7,8 @@ public class User : IdentityUser
 {
     public byte[] ProfileImage { get; set; }
 
+    public bool AcceptTerms { get; set; }
+
     public ICollection<Comment> Comments { get; set; }
 
     public ICollection<Blog> Blogs { get; set; }

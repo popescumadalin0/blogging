@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using BloggingServer.Services.Interfaces;
@@ -99,14 +100,25 @@ public class UserService : IUserService
     /// <inheritdoc />
     public async Task<IdentityResult> RegisterUserAsync(AddUser model)
     {
+        if (!model.AcceptTerms)
+        {
+            throw new Exception("You must accept our terms and conditions!");
+        }
+
+        if (string.IsNullOrEmpty(model.ProfileImage))
+        {
+            model.ProfileImage = await DefaultImageAsync();
+        }
+
         var user = new DataBaseLayout.Models.User
         {
-            Id = model.Id,
+            Id = Guid.NewGuid().ToString(),
             Email = model.Email,
             ProfileImage = Convert.FromBase64String(model.ProfileImage),
             EmailConfirmed = true,
             TwoFactorEnabled = false,
             UserName = model.Username,
+            AcceptTerms = model.AcceptTerms,
         };
 
         var result = await _userManager.CreateAsync(user, model.Password);
@@ -159,5 +171,12 @@ public class UserService : IUserService
         var user = await _userManager.Users.FirstAsync(s => s.Id == id);
 
         return await _userManager.DeleteAsync(user);
+    }
+
+    private static async Task<string> DefaultImageAsync()
+    {
+        var image = await File.ReadAllBytesAsync(@"../DataBaseLayout/Data/default-image-profile.jpg");
+
+        return Convert.ToBase64String(image);
     }
 }
