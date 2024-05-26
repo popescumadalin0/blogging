@@ -1,9 +1,10 @@
-/*using System;
+using System;
 using System.Threading.Tasks;
 using BloggingClient.Models;
 using BloggingClient.States;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using Models;
 using SDK.Interfaces;
 
 namespace BloggingClient.Pages.Account;
@@ -43,7 +44,7 @@ public partial class Login : ComponentBase, IDisposable
     {
         await LoadingState.ShowAsync();
         var result = await BloggingApiClient.LoginUserAsync(
-            new UserLogin
+            new BlogLoginRequest()
             {
                 Password = _loginModel.Password,
                 Email = _loginModel.Username
@@ -63,4 +64,4 @@ public partial class Login : ComponentBase, IDisposable
             NavigationManager.NavigateTo("/");
         }
     }
-}*/
+}

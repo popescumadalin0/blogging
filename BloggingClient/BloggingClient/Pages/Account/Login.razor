@@ -1,53 +1,39 @@
-@*
 @page "/login"
 @inherits ComponentBase
 @implements IDisposable
 
 <PageTitle>Login</PageTitle>
 
-<Div Margin="Margin.IsAuto.OnX" class="login container ">
-    <Heading Size="HeadingSize.Is2" Margin="Margin.Is3.FromBottom" TextAlignment="TextAlignment.Center">
-        Sign into your account
-    </Heading>
-    <br/>
-    <Div class="row">
-        <Div class="col-sm-6">
-            <Image src="../images/blog/contact1.jpg" alt="placeholder" Style="height: 300px; width: 700px; align-content: center"></Image>
-        </Div>
-        <Div class="col-sm-6">
-            <Card Shadow="Shadow.Default">
-                <CardBody>
-                    <Form>
-                        <Field>
-                            <FieldLabel>
-                        Username
-                            </FieldLabel>
-                            <FieldBody>
-                        <TextEdit Placeholder="Enter your username" Role="TextRole.Text" @bind-Text="_loginModel.Username" />
-                            </FieldBody>
-                        </Field>
-                        <Field>
-                            <FieldLabel>
-                                Password
-                            </FieldLabel>
-                            <FieldBody>
-                                <TextEdit Placeholder="********" Role="TextRole.Password" @bind-Text="_loginModel.Password" autocomplete="new-password"/>
-                            </FieldBody>
-                        </Field>
-                        <Field>
-                            <Button Color="Color.Primary" Block Clicked="@SignInAsync">
-                                Sign in
-                            </Button>
-                        </Field>
-                        <Field>
-                            Don’t have an account yet? <Anchor To="/register" TextColor="TextColor.Primary">Sign up</Anchor>
-                        </Field>
-                    </Form>
-                </CardBody>
-            </Card>
-        </Div>
-    </Div>
-</Div>
-*@
+<div class="d-flex flex-row justify-content-between align-items-center p-5 fw-bold">
+    <Form>
+        <Field class="fs-4">
+            Your blogging journey begins now!
+        </Field>
+        <Field>
+            Don't you have an account yet? <Anchor To="/register">Create one!</Anchor>
+        </Field>
+        <Field>
+            <FieldLabel>
+                Username*
+            </FieldLabel>
+            <FieldBody>
+                <TextEdit class="rounded-pill" Placeholder="Enter your username here..." Role="TextRole.Text" @bind-Text="_loginModel.Username">
+                </TextEdit>
+            </FieldBody>
+        </Field>
+        <Field>
+            <FieldLabel>
+                Password*
+            </FieldLabel>
+            <FieldBody>
+                <TextEdit class="rounded-pill" Placeholder="Enter your password here..." Role="TextRole.Password" @bind-Text="_loginModel.Password" autocomplete="new-password">
+                </TextEdit>
+            </FieldBody>
+        </Field>
 
-
+        <Field Class="d-flex justify-content-center mt-4">
+            <Button Color="Color.Light" TextWeight="TextWeight.Bold" Clicked="@SignInAsync" TextColor="TextColor.Dark" TextSize="TextSize.ExtraLarge" Class="rounded-4">Login</Button>
+        </Field>
+    </Form>
+    <Image Height="@Height.Px(359)" Width="@Width.Px(536)" Source="/images/register-background.jpg" Class="object-fit-cover"></Image>
+</div>

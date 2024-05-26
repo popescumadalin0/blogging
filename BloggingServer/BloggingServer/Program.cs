@@ -116,7 +116,7 @@ async Task DefaultDataAsync()
     var adminUser = await userManager.GetUsersInRoleAsync(Roles.Admin);
     if (!adminUser.Any())
     {
-        var profileImage = await File.ReadAllBytesAsync(@"DataBaseLayout/Data/default-image-profile.jpg");
+        var profileImage = await File.ReadAllBytesAsync(@"../DataBaseLayout/Data/default-image-profile.jpg");
         var user = new User
         {
             Id = "admin",
