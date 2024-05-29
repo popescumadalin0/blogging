@@ -1,0 +1,61 @@
+@page "/write"
+@inherits ComponentBase
+@implements IDisposable
+
+<PageTitle>Write</PageTitle>
+
+<Validations @ref="_validations" Mode="ValidationMode.Manual" Model="@_addBlogModel">
+    <Div class="d-flex flex-column justify-content-between align-items-center p-5">
+        <Validation>
+            <Field>
+                <FieldLabel>Title</FieldLabel>
+                <FieldBody>
+                    <TextEdit @bind-Text="_addBlogModel.Title">
+                        <Feedback>
+                            <ValidationError />
+                        </Feedback>
+                    </TextEdit>
+                </FieldBody>
+            </Field>
+
+        </Validation>
+        <Field>
+            <FieldBody>
+                <FilePicker class="rounded-pill" Upload="@OnImageUploaded" ShowMode="FilePickerShowMode.List" Filter="image/*">
+                    <FileTemplate>
+                        @*<Figure Size="FigureSize.Is256x256">
+                            <FigureImage Source="@context?.File?.UploadUrl" AlternateText="empty-256x256" />
+                        </Figure>*@
+                    </FileTemplate>
+                </FilePicker>
+            </FieldBody>
+        </Field>
+        <Validation>
+            <Field>
+                <FieldLabel>Blog category</FieldLabel>
+                <FieldBody>
+                    <SelectList TItem="string"
+                                TValue="string"
+                                Data="@_blogCategories"
+                                TextField="@(item => item)"
+                                ValueField="@(item => item)"
+                                @bind-SelectedValue="@_addBlogModel.BlogCategoryName"
+                                DefaultItemText="Choose blog category">
+                        <Feedback>
+                            <ValidationError />
+                        </Feedback>
+                    </SelectList>
+                </FieldBody>
+            </Field>
+        </Validation>
+        <Field>
+            <FieldLabel>Description</FieldLabel>
+            <FieldBody>
+                <MemoEdit Rows="7" @bind-Text="_addBlogModel.Description" />
+            </FieldBody>
+        </Field>
+        <Field Class="d-flex justify-content-center">
+            <Button Color="Color.Light" TextWeight="TextWeight.Bold" Clicked="@AddBlogAsync" TextColor="TextColor.Dark" TextSize="TextSize.ExtraLarge" Class="rounded-4">Add blog</Button>
+        </Field>
+    </Div>
+</Validations>

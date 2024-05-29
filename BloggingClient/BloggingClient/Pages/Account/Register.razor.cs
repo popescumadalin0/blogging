@@ -29,6 +29,7 @@ public partial class Register : ComponentBase, IDisposable
     private RegisterModel _registerModel = new RegisterModel();
 
     private Validations _validations;
+
     public void Dispose()
     {
         SnackbarState.OnStateChange -= StateHasChanged;
