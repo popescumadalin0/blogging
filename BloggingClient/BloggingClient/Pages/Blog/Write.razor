@@ -2,12 +2,14 @@
 @inherits ComponentBase
 @implements IDisposable
 
+@attribute [Authorize(Roles = Roles.User)]
+
 <PageTitle>Write</PageTitle>
 
 <Validations @ref="_validations" Mode="ValidationMode.Manual" Model="@_addBlogModel">
-    <Div class="d-flex flex-column justify-content-between align-items-center p-5">
+    <Div class="d-flex flex-column p-5">
         <Validation>
-            <Field>
+            <Field Class="mb-3">
                 <FieldLabel>Title</FieldLabel>
                 <FieldBody>
                     <TextEdit @bind-Text="_addBlogModel.Title">
@@ -17,21 +19,36 @@
                     </TextEdit>
                 </FieldBody>
             </Field>
-
         </Validation>
-        <Field>
+        <Field Class="mb-3">
             <FieldBody>
                 <FilePicker class="rounded-pill" Upload="@OnImageUploaded" ShowMode="FilePickerShowMode.List" Filter="image/*">
                     <FileTemplate>
-                        @*<Figure Size="FigureSize.Is256x256">
-                            <FigureImage Source="@context?.File?.UploadUrl" AlternateText="empty-256x256" />
-                        </Figure>*@
+                        @if (_addBlogModel.Image != null)
+                        {
+                            <div class="d-flex justify-content-center align-items-center">
+                                <Figure Size="FigureSize.Is512x512">
+                                    <FigureImage Width="@Width.Px(512)" Height="@Height.Px(512)" Source="@($"data:image/png;base64,{Convert.ToBase64String(_addBlogModel.Image)}")" Rounded></FigureImage>
+                                </Figure>
+                            </div>
+                        }
+                        else
+                        {
+                            <ListGroup Class="b-file-picker-files" Margin="Margin.Is2.OnY">
+                                <ListGroupItem @key="context.File.Id" Class="b-file-picker-file">
+                                    @context.File.Name - @context.File.Status
+                                </ListGroupItem>
+                            </ListGroup>
+                        }
                     </FileTemplate>
+                    @*<ButtonsTemplate>
+                    <CloseButton Clicked="@(() => { _addBlogModel.Image = null; return context.Clear();})"></CloseButton>
+                    </ButtonsTemplate>*@
                 </FilePicker>
             </FieldBody>
         </Field>
         <Validation>
-            <Field>
+            <Field Class="mb-3">
                 <FieldLabel>Blog category</FieldLabel>
                 <FieldBody>
                     <SelectList TItem="string"
@@ -48,7 +65,7 @@
                 </FieldBody>
             </Field>
         </Validation>
-        <Field>
+        <Field Class="mb-3">
             <FieldLabel>Description</FieldLabel>
             <FieldBody>
                 <MemoEdit Rows="7" @bind-Text="_addBlogModel.Description" />
@@ -59,3 +76,32 @@
         </Field>
     </Div>
 </Validations>
+
+<AuthorizeView Roles="@Roles.Admin">
+    <Authorized>
+        <div class="add-button">
+            <Button Color="Color.Secondary" TextColor="TextColor.Light" TextWeight="TextWeight.Bold" Class="rounded-pill" Clicked="@ShowModalAsync">
+                <Blazorise.Icon Name="@FontAwesomeIcons.Plus"/>
+            </Button>
+        </div>
+    </Authorized>
+</AuthorizeView>
+
+<Modal @ref="modalRef">
+    <ModalContent Centered>
+        <ModalHeader>
+            <ModalTitle>Add blog category</ModalTitle>
+            <CloseButton />
+        </ModalHeader>
+        <ModalBody>
+            <Field>
+                <FieldLabel>Blog category</FieldLabel>
+                <TextEdit @bind-Text="@_newBlogCategory" Placeholder="Enter blog category..." />
+            </Field>
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Secondary" Clicked="@HideModalAsync">Close</Button>
+            <Button Color="Color.Primary" Clicked="@AddBlogCategoryAsync">Save</Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>

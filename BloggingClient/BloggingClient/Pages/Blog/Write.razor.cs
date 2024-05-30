@@ -5,8 +5,11 @@ using System.Threading.Tasks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Components;
 using BloggingClient.States;
+using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using SDK.Interfaces;
 using Models;
 
@@ -26,11 +29,24 @@ public partial class Write : ComponentBase, IDisposable
     [Inject]
     private IBloggingApiClient BloggingApiClient { get; set; }
 
+    [CascadingParameter]
+    private Task<AuthenticationState> AuthenticationState { get; set; }
+
     private AddBlogModel _addBlogModel = new();
 
     private Validations _validations;
 
     private List<string> _blogCategories = new();
+
+    private string _newBlogCategory = string.Empty;
+
+    private Modal modalRef;
+
+    public void Dispose()
+    {
+        SnackbarState.OnStateChange -= StateHasChanged;
+        LoadingState.OnStateChange -= StateHasChanged;
+    }
 
     protected override async Task OnInitializedAsync()
     {
@@ -72,17 +88,12 @@ public partial class Write : ComponentBase, IDisposable
         }
     }
 
-    public void Dispose()
-    {
-        SnackbarState.OnStateChange -= StateHasChanged;
-        LoadingState.OnStateChange -= StateHasChanged;
-    }
-
     private async Task AddBlogAsync()
     {
         if (await _validations.ValidateAll())
         {
             await LoadingState.ShowAsync();
+            var authState = await AuthenticationState;
             var result = await BloggingApiClient.CreateBlogAsync(
                 new AddBlog()
                 {
@@ -90,7 +101,7 @@ public partial class Write : ComponentBase, IDisposable
                     BlogCategoryName = _addBlogModel.BlogCategoryName,
                     Image = _addBlogModel.Image != null ? Convert.ToBase64String(_addBlogModel.Image) : string.Empty,
                     Title = _addBlogModel.Title,
-                    UserId = ""//todo
+                    UserId = authState.User.Claims.First(c => c.Type == ClaimTypes.SerialNumber).Value,
                 });
 
             await LoadingState.HideAsync();
@@ -104,5 +115,37 @@ public partial class Write : ComponentBase, IDisposable
                 NavigationManager.NavigateTo("/");
             }
         }
+    }
+
+    private async Task AddBlogCategoryAsync()
+    {
+        await LoadingState.ShowAsync();
+        var result = await BloggingApiClient.CreateBlogCategoryAsync(
+            new BlogCategory()
+            {
+                Name = _newBlogCategory
+            });
+
+        await LoadingState.HideAsync();
+
+        await SnackbarState.PushAsync(
+            result.Success ? "Blog category created!" : result.ResponseMessage,
+            !result.Success);
+
+        if (result.Success)
+        {
+            _newBlogCategory = string.Empty;
+            await HideModalAsync();
+        }
+    }
+
+    private Task ShowModalAsync()
+    {
+        return modalRef.Show();
+    }
+
+    private Task HideModalAsync()
+    {
+        return modalRef.Hide();
     }
 }

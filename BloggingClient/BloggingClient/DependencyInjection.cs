@@ -15,8 +15,6 @@ public static class DependencyInjection
     /// <summary />
     public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration config)
     {
-        services.AddCascadingAuthenticationState();
-
         services.AddBlazoredSessionStorage();
         services.AddBlazoredLocalStorage();
 
@@ -26,6 +24,8 @@ public static class DependencyInjection
 
         var authProvider = services.BuildServiceProvider().GetService<AuthenticationStateProvider>();
         AuthBearerTokenFactory.SetBearerTokenGetterFunc((authProvider as BloggingAuthenticationStateProvider)!.GetBearerTokenAsync);
+
+        services.AddCascadingAuthenticationState();
 
         var apiUrl = new Uri(config.GetSection("Api:BaseUrl").Value);
         services.AddBloggingApiClient(apiUrl);

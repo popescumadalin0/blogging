@@ -20,7 +20,8 @@ public class BlogCategoryController : BaseController
         _blogCategoryService = blogCategoryService;
     }
 
-    [HttpGet(Roles.User)]
+    [HttpGet]
+    [Authorize(Roles.User)]
     public async Task<IActionResult> GetBlogCategoriesAsync()
     {
         try
