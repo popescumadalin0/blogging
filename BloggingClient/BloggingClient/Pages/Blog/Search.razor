@@ -6,9 +6,21 @@
 
 <PageTitle>Blogs</PageTitle>
 
-<div class="d-flex flex-row gap-5x3swx3x3s p-5">
+<Carousel @bind-SelectedSlide="@(_selectedBlogCategory)">
+    @for (var i = 0; i <= _blogCategories.Count; i++)
+    {
+        <CarouselSlide Name = i>
+
+        <Span> _blogCategories[i] </Span>
+
+        </CarouselSlide>
+    }
+</Carousel>
+<div class="d-flex flex-row p-5 flex-wrap w-100">
     @foreach (var blog in _blogs)
     {
-        <BlogCard Item="@blog" ItemClicked="@BlogClickedAsync"></BlogCard>
+        <div class="blog-card">
+            <BlogCard Item="@blog" ItemClicked="@BlogClickedAsync"></BlogCard>
+        </div>
     }
 </div>

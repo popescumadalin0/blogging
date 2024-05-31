@@ -34,6 +34,8 @@ public partial class Search : ComponentBase, IDisposable
 
     private List<string> _blogCategories = new();
 
+    private string _selectedBlogCategory;
+
     private List<global::Models.Blog> _blogs = new();
 
     public void Dispose()
