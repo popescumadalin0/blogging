@@ -77,6 +77,8 @@ public class Context : IdentityDbContext<User, Role, string>, IContext
 
         modelBuilder.Entity<Blog>().Navigation(t => t.Comments).AutoInclude();
 
+        modelBuilder.Entity<Blog>().Navigation(t => t.User).AutoInclude();
+
         modelBuilder.Entity<User>().Navigation(t => t.Blogs).AutoInclude();
 
         modelBuilder.Entity<BlogCategory>().Navigation(t => t.Blogs).AutoInclude();

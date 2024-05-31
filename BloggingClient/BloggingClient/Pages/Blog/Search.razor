@@ -1,0 +1,14 @@
+@page "/search"
+@inherits ComponentBase
+@implements IDisposable
+
+@attribute [Authorize(Roles = Roles.User)]
+
+<PageTitle>Blogs</PageTitle>
+
+<div class="d-flex flex-row gap-5x3swx3x3s p-5">
+    @foreach (var blog in _blogs)
+    {
+        <BlogCard Item="@blog" ItemClicked="@BlogClickedAsync"></BlogCard>
+    }
+</div>

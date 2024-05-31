@@ -1,0 +1,12 @@
+@inherits ComponentBase
+
+<Div Flex="Flex.Column" class="w-25">
+    <Figure Size="FigureSize.Is256x256">
+        <FigureImage Width="@Width.Px(256)" Height="@Height.Px(256)" Source="@($"data:image/png;base64,{Item.Image}")" Rounded></FigureImage>
+    </Figure>
+    <div>
+        <Span class="fs-3 fw-bold text-wrap">@Item.Title</Span> by <u>@Item.UserName</u>
+    </div>
+    @*<Link Clicked="@CellClick" Stretched>
+    </Link>*@
+</Div>

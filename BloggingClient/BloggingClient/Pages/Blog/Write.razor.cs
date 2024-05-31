@@ -53,6 +53,11 @@ public partial class Write : ComponentBase, IDisposable
         SnackbarState.OnStateChange += StateHasChanged;
         LoadingState.OnStateChange += StateHasChanged;
 
+        await GetBlogCategoriesAsync();
+    }
+
+    private async Task GetBlogCategoriesAsync()
+    {
         await LoadingState.ShowAsync();
         var categories = await BloggingApiClient.GetBlogCategoriesAsync();
         if (!categories.Success)
@@ -68,7 +73,6 @@ public partial class Write : ComponentBase, IDisposable
         _blogCategories = categories.Response.Select(bc => bc.Name).ToList();
         await LoadingState.HideAsync();
     }
-
     private async Task OnImageUploaded(FileUploadEventArgs e)
     {
         try
@@ -112,7 +116,7 @@ public partial class Write : ComponentBase, IDisposable
 
             if (result.Success)
             {
-                NavigationManager.NavigateTo("/");
+                NavigationManager.NavigateTo("/search");
             }
         }
     }
@@ -137,6 +141,8 @@ public partial class Write : ComponentBase, IDisposable
             _newBlogCategory = string.Empty;
             await HideModalAsync();
         }
+
+        await GetBlogCategoriesAsync();
     }
 
     private Task ShowModalAsync()
