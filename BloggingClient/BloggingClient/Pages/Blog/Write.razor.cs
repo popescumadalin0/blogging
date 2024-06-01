@@ -105,7 +105,7 @@ public partial class Write : ComponentBase, IDisposable
                     BlogCategoryName = _addBlogModel.BlogCategoryName,
                     Image = _addBlogModel.Image != null ? Convert.ToBase64String(_addBlogModel.Image) : string.Empty,
                     Title = _addBlogModel.Title,
-                    UserId = authState.User.Claims.First(c => c.Type == ClaimTypes.SerialNumber).Value,
+                    Username = authState.User.Claims.First(c => c.Type == ClaimTypes.Name).Value,
                 });
 
             await LoadingState.HideAsync();

@@ -14,6 +14,8 @@ public interface IBloggingApiClient
 
     Task<ApiResponseMessage<User>> GetUserAsync(string id);
 
+    Task<ApiResponseMessage<User>> GetUserByUsernameAsync(string username);
+
     Task<ApiResponseMessage> DeleteUserAsync(string id);
 
     Task<ApiResponseMessage> RegisterUserAsync(AddUser user);
@@ -29,6 +31,8 @@ public interface IBloggingApiClient
     Task<ApiResponseMessage> DeleteBlogCategoryAsync(string name);
 
     Task<ApiResponseMessage<List<Blog>>> GetBlogsAsync();
+
+    Task<ApiResponseMessage<List<Blog>>> GetBlogsByUserAsync(string username);
 
     Task<ApiResponseMessage<Blog>> GetBlogAsync(string id);
 

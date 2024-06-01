@@ -6,7 +6,13 @@ namespace BloggingClient.Shared;
 
 public partial class NavMenu
 {
+    [CascadingParameter]
+    private Task<AuthenticationState> AuthenticationState { get; set; }
+
+    private AuthenticationState _authState;
+
     protected override async Task OnInitializedAsync()
     {
+        _authState = await AuthenticationState;
     }
 }

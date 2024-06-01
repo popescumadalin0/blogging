@@ -13,6 +13,9 @@ public interface IBlogService
     Task<List<Blog>> GetBlogsAsync();
 
     /// <summary/>
+    Task<List<Blog>> GetBlogsByUserAsync(string username);
+
+    /// <summary/>
     Task<Blog> GetBlogAsync(Guid id);
 
     /// <summary/>

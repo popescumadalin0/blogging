@@ -1,17 +1,12 @@
-using Blazorise;
 using BloggingClient.Models;
-using System.IO;
 using System.Threading.Tasks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using Microsoft.AspNetCore.Components;
 using BloggingClient.States;
 using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using SDK.Interfaces;
-using Models;
 
 namespace BloggingClient.Pages.Blog;
 
@@ -32,9 +27,7 @@ public partial class Search : ComponentBase, IDisposable
     [CascadingParameter]
     private Task<AuthenticationState> AuthenticationState { get; set; }
 
-    private List<string> _blogCategories = new();
-
-    private string _selectedBlogCategory;
+    private List<FilterCheck> _blogCategories = new();
 
     private List<global::Models.Blog> _blogs = new();
 
@@ -49,39 +42,37 @@ public partial class Search : ComponentBase, IDisposable
         SnackbarState.OnStateChange += StateHasChanged;
         LoadingState.OnStateChange += StateHasChanged;
 
+        await LoadingState.ShowAsync();
+
         await GetBlogCategoriesAsync();
 
         await GetBlogsAsync();
+
+        await LoadingState.HideAsync();
     }
 
     private async Task GetBlogCategoriesAsync()
     {
-        await LoadingState.ShowAsync();
         var categories = await BloggingApiClient.GetBlogCategoriesAsync();
         if (!categories.Success)
         {
             await SnackbarState.PushAsync(
                 categories.ResponseMessage,
                 true);
-            await LoadingState.HideAsync();
-
             return;
         }
 
-        _blogCategories = categories.Response.Select(bc => bc.Name).ToList();
-        await LoadingState.HideAsync();
+        _blogCategories = categories.Response.Select(bc => new FilterCheck(bc.Name)).ToList();
     }
 
     private async Task GetBlogsAsync()
     {
-        await LoadingState.ShowAsync();
         var blogs = await BloggingApiClient.GetBlogsAsync();
         if (!blogs.Success)
         {
             await SnackbarState.PushAsync(
                 blogs.ResponseMessage,
                 true);
-            await LoadingState.HideAsync();
 
             return;
         }
@@ -92,12 +83,10 @@ public partial class Search : ComponentBase, IDisposable
             Description = b.Description,
             Title = b.Title,
             UserName = b.UserName,
-            UserId = b.UserId,
             BlogCategory = b.BlogCategory,
             CreatedDate = b.CreatedDate,
             Id = b.Id,
         }).ToList();
-        await LoadingState.HideAsync();
     }
 
     private async Task BlogClickedAsync(Guid id)

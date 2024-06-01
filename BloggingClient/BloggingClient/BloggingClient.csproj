@@ -1,15 +1,8 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
     </PropertyGroup>
-
-    <ItemGroup>
-      <Compile Remove="Services\**" />
-      <Content Remove="Services\**" />
-      <EmbeddedResource Remove="Services\**" />
-      <None Remove="Services\**" />
-    </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="Blazored.SessionStorage" Version="2.4.0" />
@@ -20,8 +13,10 @@
         <PackageReference Include="Blazorise.Components" Version="1.5.2" />
         <PackageReference Include="Blazorise.DataGrid" Version="1.5.2" />
         <PackageReference Include="Blazorise.Icons.FontAwesome" Version="1.5.2" />
+        <PackageReference Include="Blazorise.Animate" Version="1.5.2" />
         <PackageReference Include="Blazorise.LoadingIndicator" Version="1.5.2" />
         <PackageReference Include="Blazorise.Snackbar" Version="1.5.2" />
+        <PackageReference Include="Blazorise.SpinKit" Version="1.5.2" />
         <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="7.5.2" />
         <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
             <PrivateAssets>all</PrivateAssets>

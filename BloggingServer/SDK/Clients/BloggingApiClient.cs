@@ -53,6 +53,21 @@ public class BloggingApiClient : RefitApiClient<IBloggingApi>, IBloggingApiClien
         }
     }
 
+    public async Task<ApiResponseMessage<User>> GetUserByUsernameAsync(string username)
+    {
+        try
+        {
+            var task = _apiClient.GetUserByUsernameAsync(username);
+            var result = await Execute(task);
+            return result;
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, $"Error executing {nameof(GetUserByUsernameAsync)}");
+            throw;
+        }
+    }
+
     public async Task<ApiResponseMessage> DeleteUserAsync(string id)
     {
         try
@@ -169,6 +184,21 @@ public class BloggingApiClient : RefitApiClient<IBloggingApi>, IBloggingApiClien
         catch (Exception e)
         {
             _logger.LogError(e, $"Error executing {nameof(GetBlogsAsync)}");
+            throw;
+        }
+    }
+
+    public async Task<ApiResponseMessage<List<Blog>>> GetBlogsByUserAsync(string username)
+    {
+        try
+        {
+            var task = _apiClient.GetBlogsByUserAsync(username);
+            var result = await Execute(task);
+            return result;
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, $"Error executing {nameof(GetBlogsByUserAsync)}");
             throw;
         }
     }

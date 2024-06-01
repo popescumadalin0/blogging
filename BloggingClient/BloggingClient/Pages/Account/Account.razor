@@ -1,0 +1,40 @@
+@page "/account/{Username}"
+@inherits ComponentBase
+@implements IDisposable
+@attribute [Authorize(Roles = Roles.User)]
+
+<div class="d-flex flex-column align-items-center gap-3 pt-5">
+    <u class="fs-3 fw-bold">My Profile</u>
+    <Figure Size="FigureSize.Is128x128">
+        <FigureImage Source="@($"data:image/png;base64,{_user.ProfileImage}")" class="rounded-pill"></FigureImage>
+    </Figure>
+    <span class="fw-bold fs-3">@_user.Username</span>
+    <Table Borderless class="align-items-center w-25">
+        <TableBody>
+            <TableRow TextAlignment="TextAlignment.Center">
+                <TableRowCell class="fs-5 rounded-top-3 border-bottom">Joined: @_user.JoinedDate.ToString("dd/MM/yyyy")</TableRowCell>
+            </TableRow>
+            <TableRow TextAlignment="TextAlignment.Center">
+                <TableRowCell class="@("fs-5" + " " + (_isMe ? "border-bottom" : "rounded-bottom-3"))">My blogs: @_user.NumberOfBlogs</TableRowCell>
+            </TableRow>
+            @if (_isMe)
+            {
+                <TableRow TextAlignment="TextAlignment.Center">
+                    <TableRowCell class="cursor-pointer fs-5 border-bottom" Clicked="@UserSettingsClicked">User settings</TableRowCell>
+                </TableRow>
+                <TableRow TextAlignment="TextAlignment.Center">
+                    <TableRowCell class="cursor-pointer fw-bold fs-5 rounded-bottom-3" Clicked="@LogoutAsync">Logout</TableRowCell>
+                </TableRow>
+            }
+        </TableBody>
+    </Table>
+    <Divider Shadow="Shadow.Default" Class="w-75 fs-3 fw-bold bg-black" style="height: 2px" />
+    <div class="d-flex flex-row p-5 flex-wrap w-100">
+        @foreach (var blog in _blogs)
+        {
+            <div class="blog-card">
+                <BlogCard Item="@blog" ItemClicked="@BlogClickedAsync"></BlogCard>
+            </div>
+        }
+    </div>
+</div>

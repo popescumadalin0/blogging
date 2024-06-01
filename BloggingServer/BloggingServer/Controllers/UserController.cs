@@ -7,7 +7,6 @@ using System;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.Data;
 using Models;
 using Models.Constants;
 
@@ -45,6 +44,23 @@ public class UserController : BaseController
         try
         {
             var result = await _userService.GetUserByIdAsync(id);
+
+            return ApiServiceResponse.ApiServiceResult(new ServiceResponse<User>(result));
+
+        }
+        catch (Exception ex)
+        {
+            return ApiServiceResponse.ApiServiceResult(new ServiceResponse<User>(ex));
+        }
+    }
+
+    [HttpGet("username/{username}")]
+    [Authorize(Roles.User)]
+    public async Task<IActionResult> GetUserByUsernameAsync(string username)
+    {
+        try
+        {
+            var result = await _userService.GetUserByUserNameAsync(username);
 
             return ApiServiceResponse.ApiServiceResult(new ServiceResponse<User>(result));
 

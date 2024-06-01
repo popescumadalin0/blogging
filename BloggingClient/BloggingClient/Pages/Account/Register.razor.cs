@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Components;
 using Models;
 using SDK.Interfaces;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Components.Authorization;
 
 namespace BloggingClient.Pages.Account;
 
@@ -23,6 +24,9 @@ public partial class Register : ComponentBase, IDisposable
     [Inject]
     private NavigationManager NavigationManager { get; set; }
 
+    [CascadingParameter]
+    private Task<AuthenticationState> AuthenticationState { get; set; }
+
     [Inject]
     private IBloggingApiClient BloggingApiClient { get; set; }
 
@@ -36,8 +40,14 @@ public partial class Register : ComponentBase, IDisposable
         LoadingState.OnStateChange -= StateHasChanged;
     }
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
+        var authState = await AuthenticationState;
+        if (authState.User.Identity.IsAuthenticated)
+        {
+            NavigationManager.NavigateTo("/");
+        }
+
         SnackbarState.OnStateChange += StateHasChanged;
         LoadingState.OnStateChange += StateHasChanged;
     }
@@ -59,14 +69,14 @@ public partial class Register : ComponentBase, IDisposable
 
             await LoadingState.HideAsync();
 
-            await SnackbarState.PushAsync(
-                result.Success ? "User created!" : result.ResponseMessage,
-                !result.Success);
-
             if (result.Success)
             {
                 NavigationManager.NavigateTo("/login");
             }
+
+            await SnackbarState.PushAsync(
+                result.Success ? "User created!" : result.ResponseMessage,
+                !result.Success);
         }
     }
 

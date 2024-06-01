@@ -4,9 +4,10 @@
     right: 50px;
 }
 
-.blog-card {
-    margin-left: 3rem;
-    margin-right: 3rem;
-    margin-top: 1rem;
-    margin-bottom: 1rem;
+.filter-cell {
+    font-weight: bold;
+    padding: 20px 7px;
+    display: flex;
+    flex-direction: row;
+    gap: 4px;
 }

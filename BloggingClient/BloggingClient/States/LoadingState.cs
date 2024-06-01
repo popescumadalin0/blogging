@@ -6,20 +6,20 @@ namespace BloggingClient.States;
 
 public class LoadingState
 {
-    public bool IsLoading { get; private set; }
+    public LoadingIndicator Loading { get; set; }
 
     public event Action OnStateChange;
 
     public async Task ShowAsync()
     {
-        await Task.Run(() => IsLoading = true);
+        await Loading.Show();
 
         NotifyStateChanged();
     }
 
     public async Task HideAsync()
     {
-        await Task.Run(() => IsLoading = false);
+        await Loading.Hide();
 
         NotifyStateChanged();
     }

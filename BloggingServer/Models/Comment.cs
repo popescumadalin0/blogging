@@ -10,8 +10,6 @@ public class Comment
 
     public DateTime CreatedDate { get; set; }
 
-    public string UserId { get; set; }
-
     public string UserName { get; set; }
 
     public string UserImage { get; set; }

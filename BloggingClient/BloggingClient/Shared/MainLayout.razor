@@ -1,16 +1,29 @@
 @inherits LayoutComponentBase
 
 <PageTitle>Blogging</PageTitle>
-<div class="bg-black text-light">
-    <div class="container">
-        <header>
-            <NavMenu></NavMenu>
-        </header>
-        <div class="background-grey background-height ">
-            @Body
+
+<LoadingIndicator @ref="LoadingState.Loading">
+    <ChildContent>
+        <div class="bg-black text-light">
+            <div class="container">
+                <header>
+                    <NavMenu></NavMenu>
+                </header>
+                <div class="background-grey background-height ">
+
+                    @Body
+                </div>
+                <footer>
+                    <Footer></Footer>
+                </footer>
+            </div>
         </div>
-        <footer>
-            <Footer></Footer>
-        </footer>
-    </div>
-</div>
+    </ChildContent>
+    <IndicatorTemplate>
+        <Animate Animation="Animations.ZoomIn" Auto Duration="TimeSpan.FromMilliseconds(700)">
+            <Div>
+                <SpinKit Type="SpinKitType.Circle" Size="100px" />
+            </Div>
+        </Animate>
+    </IndicatorTemplate>
+</LoadingIndicator>

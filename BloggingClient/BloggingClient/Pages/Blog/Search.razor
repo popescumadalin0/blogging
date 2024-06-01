@@ -6,16 +6,19 @@
 
 <PageTitle>Blogs</PageTitle>
 
-<Carousel @bind-SelectedSlide="@(_selectedBlogCategory)">
-    @for (var i = 0; i <= _blogCategories.Count; i++)
-    {
-        <CarouselSlide Name = i>
-
-        <Span> _blogCategories[i] </Span>
-
-        </CarouselSlide>
+@*todo: buttons*@
+<div class="d-flex flex-row flex-nowrap justify-content-start w-100 bg-white">
+    @{
+        foreach (var blogCategory in _blogCategories)
+        {
+            <div class="filter-cell">
+                <span>@blogCategory.Name</span>
+                <Check class="check-box" TValue="bool" Checked="@blogCategory.IsChecked"></Check>
+            </div>
+        }
     }
-</Carousel>
+</div>
+
 <div class="d-flex flex-row p-5 flex-wrap w-100">
     @foreach (var blog in _blogs)
     {

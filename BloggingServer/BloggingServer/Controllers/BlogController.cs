@@ -37,6 +37,23 @@ public class BlogController : BaseController
         }
     }
 
+    [HttpGet("username/{username}")]
+
+    [Authorize(Roles.User)]
+    public async Task<IActionResult> GetBlogsByUserAsync(string username)
+    {
+        try
+        {
+            var result = await _blogService.GetBlogsByUserAsync(username);
+            return ApiServiceResponse.ApiServiceResult(new ServiceResponse<List<Blog>>(result.ToList()));
+
+        }
+        catch (Exception ex)
+        {
+            return ApiServiceResponse.ApiServiceResult(new ServiceResponse<List<Blog>>(ex));
+        }
+    }
+
     [HttpGet("{id}")]
     [Authorize(Roles.User)]
     public async Task<IActionResult> GetBlogAsync(string id)

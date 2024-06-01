@@ -18,6 +18,10 @@ public interface IBloggingApi
     [Headers("Authorization: Bearer")]
     Task<User> GetUserAsync(string id);
 
+    [Get("/api/user/username/{username}")]
+    [Headers("Authorization: Bearer")]
+    Task<User> GetUserByUsernameAsync(string username);
+
     [Delete("/api/user/{id}")]
     [Headers("Authorization: Bearer")]
     Task DeleteUserAsync(string id);
@@ -47,6 +51,10 @@ public interface IBloggingApi
     [Get("/api/blog")]
     [Headers("Authorization: Bearer")]
     Task<List<Blog>> GetBlogsAsync();
+
+    [Get("/api/blog/username/{username}")]
+    [Headers("Authorization: Bearer")]
+    Task<List<Blog>> GetBlogsByUserAsync(string username);
 
     [Get("/api/blog/{id}")]
     [Headers("Authorization: Bearer")]

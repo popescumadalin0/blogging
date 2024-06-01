@@ -60,6 +60,7 @@ public class UserService : IUserService
             Username = user.UserName,
             Email = user.Email,
             Id = user.Id,
+            JoinedDate = user.JoinedDate,
             ProfileImage = Convert.ToBase64String(user.ProfileImage),
             NumberOfBlogs = user.Blogs.Count,
         }).ToList();
@@ -77,6 +78,7 @@ public class UserService : IUserService
             Username = user.UserName,
             Email = user.Email,
             Id = user.Id,
+            JoinedDate = user.JoinedDate,
             ProfileImage = Convert.ToBase64String(user.ProfileImage),
             NumberOfBlogs = user.Blogs.Count,
         };
@@ -119,6 +121,7 @@ public class UserService : IUserService
             TwoFactorEnabled = false,
             UserName = model.Username,
             AcceptTerms = model.AcceptTerms,
+            JoinedDate = DateTime.UtcNow,
         };
 
         var result = await _userManager.CreateAsync(user, model.Password);

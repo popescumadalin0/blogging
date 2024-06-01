@@ -26,6 +26,9 @@ public partial class Login : ComponentBase, IDisposable
     [Inject]
     private IBloggingApiClient BloggingApiClient { get; set; }
 
+    [CascadingParameter]
+    private Task<AuthenticationState> AuthenticationState { get; set; }
+
     private LoginModel _loginModel = new LoginModel();
 
     public void Dispose()
@@ -34,8 +37,14 @@ public partial class Login : ComponentBase, IDisposable
         LoadingState.OnStateChange -= StateHasChanged;
     }
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
+        var authState = await AuthenticationState;
+        if (authState.User.Identity.IsAuthenticated)
+        {
+            NavigationManager.NavigateTo("/");
+        }
+
         SnackbarState.OnStateChange += StateHasChanged;
         LoadingState.OnStateChange += StateHasChanged;
     }
@@ -52,10 +61,6 @@ public partial class Login : ComponentBase, IDisposable
 
         await LoadingState.HideAsync();
 
-        await SnackbarState.PushAsync(
-            result.Success ? "User logged!" : result.ResponseMessage,
-            !result.Success);
-
         if (result.Success)
         {
             var customProvider = (BloggingAuthenticationStateProvider)AuthenticationStateProvider;
@@ -63,5 +68,9 @@ public partial class Login : ComponentBase, IDisposable
 
             NavigationManager.NavigateTo("/");
         }
+
+        await SnackbarState.PushAsync(
+            result.Success ? "User logged!" : result.ResponseMessage,
+            !result.Success);
     }
 }

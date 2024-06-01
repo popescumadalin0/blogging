@@ -43,6 +43,7 @@ namespace DataBaseLayout.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ProfileImage = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
                     AcceptTerms = table.Column<bool>(type: "bit", nullable: false),
+                    JoinedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),

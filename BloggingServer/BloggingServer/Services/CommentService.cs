@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using BloggingServer.Repositories.Interfaces;
 using BloggingServer.Services.Interfaces;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Models;
 
 namespace BloggingServer.Services;
@@ -12,9 +14,12 @@ public class CommentService : ICommentService
 {
     private readonly IRepositoryBase<DataBaseLayout.Models.Comment> _commentRepository;
 
-    public CommentService(IRepositoryBase<DataBaseLayout.Models.Comment> commentRepository)
+    private UserManager<DataBaseLayout.Models.User> _userManager;
+
+    public CommentService(IRepositoryBase<DataBaseLayout.Models.Comment> commentRepository, UserManager<DataBaseLayout.Models.User> userManager)
     {
         _commentRepository = commentRepository;
+        _userManager = userManager;
     }
 
     /// <inheritdoc />
@@ -25,7 +30,6 @@ public class CommentService : ICommentService
         return entities.Select(
                 c => new Comment()
                 {
-                    UserId = c.UserId,
                     CreatedDate = c.CreatedDate,
                     Description = c.Description,
                     Id = c.Id,
@@ -38,16 +42,17 @@ public class CommentService : ICommentService
     /// <inheritdoc />
     public async Task AddCommentAsync(AddComment comment)
     {
+        var user = await _userManager.Users.FirstAsync(u => u.UserName == comment.Username);
         var entity = new DataBaseLayout.Models.Comment()
         {
-            UserId = comment.UserId,
+            UserId = user.Id,
             CreatedDate = DateTime.UtcNow,
             Description = comment.Description,
             Id = Guid.NewGuid(),
             BlogId = comment.BlogId,
         };
 
-        await Task.Run(() => _commentRepository.Add(entity));
+        _commentRepository.Add(entity);
     }
 
     /// <inheritdoc />

@@ -23,7 +23,7 @@
             <AuthorizeView>
                 <Authorized>
                     <li class="nav-item">
-                        <Button To="/account" Type="ButtonType.Link" Color="Color.Light" TextWeight="TextWeight.Bold" TextColor="TextColor.Dark" TextSize="TextSize.Heading3" Class="rounded-4">My Profile</Button>
+                        <Button To="@($"/account/{@_authState.User.Claims.FirstOrDefault(c=> c.Type == ClaimTypes.Name).Value}")" Type="ButtonType.Link" Color="Color.Light" TextWeight="TextWeight.Bold" TextColor="TextColor.Dark" TextSize="TextSize.Heading3" Class="rounded-4">My Profile</Button>
                     </li>
                 </Authorized>
                 <NotAuthorized>
