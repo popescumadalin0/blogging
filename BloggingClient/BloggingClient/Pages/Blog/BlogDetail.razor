@@ -1,0 +1,45 @@
+@page "/blog/{Id}"
+@inherits ComponentBase
+@implements IDisposable
+
+@attribute [Authorize(Roles = Roles.User)]
+
+<PageTitle>Blog</PageTitle>
+
+<div class="d-flex flex-column align-items-center gap-3 pt-5">
+    <span class="text-wrap fw-bold fs-1">@_blog.Title</span>
+    <div class="d-flex flex-row justify-content-evenly container-fluid">
+        <span class="fs-3">by <Anchor Class="text-black" To="@($"/account/{_blog.UserName}")">@_blog.UserName</Anchor></span>
+        <span class="fs-3 fw-bold">Category: @_blog.BlogCategory</span>
+    </div>
+    <Image Width="@Width.Px(400)" Height="@Height.Px(300)" Source="@($"data:image/png;base64,{@_blog.Image}")" class="rounded-5"></Image>
+    <div class="fs-4 fw-bold text-wrap container w-75">
+        @_blog.Description
+    </div>
+
+    <Divider Shadow="Shadow.Default" Class="w-75 fs-3 fw-bold bg-black" style="height: 2px" />
+    <div class="d-flex flex-column container w-75 gap-3 mb-4">
+        <span class="fs-3 fw-bold">Comments</span>
+        <div class="d-flex flex-column overflow-auto h-50 w-100">
+            @foreach (var comment in _comments)
+            {
+                <div class="d-flex flex-row gap-3">
+                    <Image class="rounded-pill" Width="@Width.Px(50)" Height="@Height.Px(50)" Source="@($"data:image/png;base64,{comment.UserImage}")"></Image>
+                    <div class="d-flex flex-column w-100">
+                        <span class="fw-bold">@comment.UserName</span>
+                        <div class="d-flex flex-row rounded-3 bg-white container align-items-start justify-content-start w-100">
+                            <span class="text-wrap fw-bold">@comment.Description</span>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="d-flex flex-row gap-2 align-items-center">
+            <TextEdit class="rounded-pill" Placeholder="Leave a comment..." Role="TextRole.Text" @bind-Text="_comment"></TextEdit>
+            <Button Color="Color.Light" TextWeight="TextWeight.Bold" Clicked="@AddCommentAsync" TextColor="TextColor.Dark" TextSize="TextSize.Default" Class="rounded-4">
+                <Blazorise.Icon Name="@FontAwesomeIcons.PaperPlane"></Blazorise.Icon>
+            </Button>
+        </div>
+    </div>
+</div>
+@*todo: add delete button*@

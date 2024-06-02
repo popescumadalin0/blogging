@@ -37,6 +37,22 @@ public class CommentController : BaseController
         }
     }
 
+    [HttpGet("blog/{id}")]
+    [Authorize(Roles.User)]
+    public async Task<IActionResult> GetCommentsByBlogAsync(string id)
+    {
+        try
+        {
+            var result = await _commentService.GetCommentsByBlogAsync(Guid.Parse(id));
+            return ApiServiceResponse.ApiServiceResult(new ServiceResponse<List<Comment>>(result.ToList()));
+
+        }
+        catch (Exception ex)
+        {
+            return ApiServiceResponse.ApiServiceResult(new ServiceResponse<List<Blog>>(ex));
+        }
+    }
+
     [HttpPost]
     [Authorize(Roles.User)]
     public async Task<IActionResult> CreateCommentAsync(AddComment comment)

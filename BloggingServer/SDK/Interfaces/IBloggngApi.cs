@@ -72,9 +72,13 @@ public interface IBloggingApi
     [Headers("Authorization: Bearer")]
     Task<List<Comment>> GetCommentsAsync();
 
+    [Get("/api/comment/blog/{id}")]
+    [Headers("Authorization: Bearer")]
+    Task<List<Comment>> GetCommentsByBlogAsync(string id);
+
     [Post("/api/comment")]
     [Headers("Authorization: Bearer")]
-    Task CreateCommentAsync(Comment comment);
+    Task CreateCommentAsync(AddComment comment);
 
     [Delete("/api/comment/{id}")]
     [Headers("Authorization: Bearer")]

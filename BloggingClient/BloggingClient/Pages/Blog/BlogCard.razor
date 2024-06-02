@@ -1,10 +1,11 @@
 @inherits ComponentBase
 
-<Div Flex="Flex.Column" Width="Width.Px(300)" Position="Position.Relative">
-    <Image Width="@Width.Px(300)" Height="@Height.Px(300)" Source="@($"data:image/png;base64,{Item.Image}")" class="rounded-5"></Image>
+<Div Flex="Flex.Column" Width="Width.Px(300)" Position="Position.Relative" Gap="Gap.Is3">
+    <Image Width="@Width.Px(300)" Height="@Height.Px(200)" Source="@($"data:image/png;base64,{Item.Image}")" class="rounded-5"></Image>
     <div class="text-wrap">
         <Span class="fs-3 fw-bold text-wrap me-2">@Item.Title</Span><Span class="fs-5">by <u>@Item.UserName</u></Span>
     </div>
+    @*todo: add delete button*@
     <Link Clicked="@CellClick" Stretched class="cursor-pointer">
     </Link>
 </Div>

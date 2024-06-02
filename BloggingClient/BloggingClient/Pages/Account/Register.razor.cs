@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using BloggingClient.Models;
 using BloggingClient.States;
@@ -8,7 +7,6 @@ using Blazorise;
 using Microsoft.AspNetCore.Components;
 using Models;
 using SDK.Interfaces;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Components.Authorization;
 
 namespace BloggingClient.Pages.Account;

@@ -81,7 +81,7 @@
 
             <Validation>
                 <Field>
-                    <Check TValue="bool" @bind-Checked="@_registerModel.AcceptTerms">
+                    <Check class="check-box" TValue="bool" @bind-Checked="@_registerModel.AcceptTerms">
                         <Feedback>
                             <Anchor TextColor="TextColor.Dark" To="/terms-and-conditions">By registering you have accepted the terms and conditions</Anchor>
                             <ValidationError />

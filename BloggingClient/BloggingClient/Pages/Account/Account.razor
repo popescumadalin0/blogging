@@ -3,8 +3,13 @@
 @implements IDisposable
 @attribute [Authorize(Roles = Roles.User)]
 
+<PageTitle>Account</PageTitle>
+
 <div class="d-flex flex-column align-items-center gap-3 pt-5">
-    <u class="fs-3 fw-bold">My Profile</u>
+    @if (_isMe)
+    {
+        <u class="fs-3 fw-bold">My Profile</u>
+    }
     <Figure Size="FigureSize.Is128x128">
         <FigureImage Source="@($"data:image/png;base64,{_user.ProfileImage}")" class="rounded-pill"></FigureImage>
     </Figure>
@@ -15,7 +20,14 @@
                 <TableRowCell class="fs-5 rounded-top-3 border-bottom">Joined: @_user.JoinedDate.ToString("dd/MM/yyyy")</TableRowCell>
             </TableRow>
             <TableRow TextAlignment="TextAlignment.Center">
-                <TableRowCell class="@("fs-5" + " " + (_isMe ? "border-bottom" : "rounded-bottom-3"))">My blogs: @_user.NumberOfBlogs</TableRowCell>
+                @if (_isMe)
+                {
+                    <TableRowCell class="fs-5 border-bottom">My blogs: @_user.NumberOfBlogs</TableRowCell>
+                }
+                else
+                {
+                    <TableRowCell class="fs-5 rounded-bottom-3">Blogs: @_user.NumberOfBlogs</TableRowCell>
+                }
             </TableRow>
             @if (_isMe)
             {
@@ -28,12 +40,12 @@
             }
         </TableBody>
     </Table>
-    <Divider Shadow="Shadow.Default" Class="w-75 fs-3 fw-bold bg-black" style="height: 2px" />
+    <Divider Shadow="Shadow.Default" Class="w-75 fs-3 fw-bold bg-black" style="height: 2px"/>
     <div class="d-flex flex-row p-5 flex-wrap w-100">
         @foreach (var blog in _blogs)
         {
             <div class="blog-card">
-                <BlogCard Item="@blog" ItemClicked="@BlogClickedAsync"></BlogCard>
+                <BlogCard Item="@blog" ItemClicked="@BlogClicked"></BlogCard>
             </div>
         }
     </div>

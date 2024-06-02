@@ -65,8 +65,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-//app.MapIdentityApi<User>();
-
 app.UseAuthorization();
 
 app.MapControllers();
@@ -127,6 +125,8 @@ async Task DefaultDataAsync()
             PhoneNumberConfirmed = true,
             TwoFactorEnabled = false,
             ProfileImage = profileImage,
+            JoinedDate = DateTime.UtcNow,
+            AcceptTerms = true,
         };
         var result = await userManager.CreateAsync(user, "Admin1234!");
 

@@ -42,7 +42,9 @@ public interface IBloggingApiClient
 
     Task<ApiResponseMessage<List<Comment>>> GetCommentsAsync();
 
-    Task<ApiResponseMessage> CreateCommentAsync(Comment comment);
+    Task<ApiResponseMessage<List<Comment>>> GetCommentsByBlogAsync(string id);
+
+    Task<ApiResponseMessage> CreateCommentAsync(AddComment comment);
 
     Task<ApiResponseMessage> DeleteCommentAsync(string id);
 }

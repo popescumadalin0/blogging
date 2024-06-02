@@ -25,7 +25,23 @@ public class CommentService : ICommentService
     /// <inheritdoc />
     public async Task<List<Comment>> GetCommentsAsync()
     {
-        var entities = await _commentRepository.GetAllAsync();
+        var entities = await _commentRepository.GetAllAsync(source => source.Include(c => c.User));
+
+        return entities.Select(
+                c => new Comment()
+                {
+                    CreatedDate = c.CreatedDate,
+                    Description = c.Description,
+                    Id = c.Id,
+                    UserImage = Convert.ToBase64String(c.User.ProfileImage),
+                    UserName = c.User.UserName
+                })
+            .ToList();
+    }
+
+    public async Task<List<Comment>> GetCommentsByBlogAsync(Guid id)
+    {
+        var entities = await _commentRepository.GetListAsync(c => c.BlogId == id, source => source.Include(c => c.User));
 
         return entities.Select(
                 c => new Comment()

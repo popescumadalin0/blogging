@@ -263,7 +263,22 @@ public class BloggingApiClient : RefitApiClient<IBloggingApi>, IBloggingApiClien
         }
     }
 
-    public async Task<ApiResponseMessage> CreateCommentAsync(Comment comment)
+    public async Task<ApiResponseMessage<List<Comment>>> GetCommentsByBlogAsync(string id)
+    {
+        try
+        {
+            var task = _apiClient.GetCommentsByBlogAsync(id);
+            var result = await Execute(task);
+            return result;
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, $"Error executing {nameof(GetCommentsByBlogAsync)}");
+            throw;
+        }
+    }
+
+    public async Task<ApiResponseMessage> CreateCommentAsync(AddComment comment)
     {
         try
         {

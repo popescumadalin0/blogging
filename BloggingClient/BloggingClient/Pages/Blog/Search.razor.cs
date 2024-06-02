@@ -1,10 +1,10 @@
-using BloggingClient.Models;
-using System.Threading.Tasks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.AspNetCore.Components;
+using System.Threading.Tasks;
+using BloggingClient.Models;
 using BloggingClient.States;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using SDK.Interfaces;
 
@@ -89,8 +89,8 @@ public partial class Search : ComponentBase, IDisposable
         }).ToList();
     }
 
-    private async Task BlogClickedAsync(Guid id)
+    private void BlogClicked(Guid id)
     {
-
+        NavigationManager.NavigateTo($"blog/{id.ToString()}");
     }
 }

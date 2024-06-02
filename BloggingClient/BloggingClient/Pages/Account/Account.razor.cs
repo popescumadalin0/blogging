@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Models;
 using SDK.Interfaces;
-using SDK.RefitModels;
 
 namespace BloggingClient.Pages.Account;
 
@@ -41,6 +40,8 @@ public partial class Account : ComponentBase, IDisposable
 
     private bool _isMe = false;
 
+    private string _oldUsername = string.Empty;
+
     public void Dispose()
     {
         SnackbarState.OnStateChange -= StateHasChanged;
@@ -51,47 +52,55 @@ public partial class Account : ComponentBase, IDisposable
     {
         SnackbarState.OnStateChange += StateHasChanged;
         LoadingState.OnStateChange += StateHasChanged;
+    }
 
-        await LoadingState.ShowAsync();
-
-        var authState = await AuthenticationState;
-
-        _isMe = Username == authState.User.Claims.First(uc => uc.Type == ClaimTypes.Name).Value;
-
-        var user = await BloggingApiClient.GetUserByUsernameAsync(
-            Username);
-        if (!user.Success)
+    protected override async Task OnParametersSetAsync()
+    {
+        if (_oldUsername != Username)
         {
-            await SnackbarState.PushAsync(user.ResponseMessage, !user.Success);
+            await LoadingState.ShowAsync();
+
+            var authState = await AuthenticationState;
+
+            _isMe = Username == authState.User.Claims.First(uc => uc.Type == ClaimTypes.Name).Value;
+
+            var user = await BloggingApiClient.GetUserByUsernameAsync(Username);
+
+            if (!user.Success)
+            {
+                await SnackbarState.PushAsync(user.ResponseMessage, !user.Success);
+                await LoadingState.HideAsync();
+                return;
+            }
+
+            _user = user.Response;
+
+            var blogs = await BloggingApiClient.GetBlogsByUserAsync(_user.Username);
+            if (!blogs.Success)
+            {
+                await SnackbarState.PushAsync(
+                    blogs.ResponseMessage,
+                    true);
+                await LoadingState.HideAsync();
+
+                return;
+            }
+
+            _blogs = blogs.Response.Select(
+                    b => new global::Models.Blog()
+                    {
+                        Image = b.Image,
+                        Description = b.Description,
+                        Title = b.Title,
+                        UserName = b.UserName,
+                        BlogCategory = b.BlogCategory,
+                        CreatedDate = b.CreatedDate,
+                        Id = b.Id,
+                    })
+                .ToList();
+
             await LoadingState.HideAsync();
-            return;
         }
-
-        _user = user.Response;
-
-        var blogs = await BloggingApiClient.GetBlogsByUserAsync(_user.Id);
-        if (!blogs.Success)
-        {
-            await SnackbarState.PushAsync(
-                blogs.ResponseMessage,
-                true);
-            await LoadingState.HideAsync();
-
-            return;
-        }
-
-        _blogs = blogs.Response.Select(b => new global::Models.Blog()
-        {
-            Image = b.Image,
-            Description = b.Description,
-            Title = b.Title,
-            UserName = b.UserName,
-            BlogCategory = b.BlogCategory,
-            CreatedDate = b.CreatedDate,
-            Id = b.Id,
-        }).ToList();
-
-        await LoadingState.HideAsync();
     }
 
     private void UserSettingsClicked()
@@ -113,8 +122,8 @@ public partial class Account : ComponentBase, IDisposable
         await LoadingState.HideAsync();
     }
 
-    private async Task BlogClickedAsync(Guid id)
+    private void BlogClicked(Guid id)
     {
-
+        NavigationManager.NavigateTo($"blog/{id.ToString()}");
     }
 }

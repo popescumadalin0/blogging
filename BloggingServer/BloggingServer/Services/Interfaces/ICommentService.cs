@@ -11,6 +11,9 @@ public interface ICommentService
     Task<List<Comment>> GetCommentsAsync();
 
     /// <summary/>
+    Task<List<Comment>> GetCommentsByBlogAsync(Guid id);
+
+    /// <summary/>
     Task AddCommentAsync(AddComment comment);
 
     /// <summary/>
