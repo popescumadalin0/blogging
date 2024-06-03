@@ -58,6 +58,7 @@ public partial class Account : ComponentBase, IDisposable
     {
         if (_oldUsername != Username)
         {
+            _oldUsername = Username;
             await LoadingState.ShowAsync();
 
             var authState = await AuthenticationState;

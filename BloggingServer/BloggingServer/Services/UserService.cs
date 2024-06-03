@@ -96,6 +96,7 @@ public class UserService : IUserService
             Id = user.Id,
             ProfileImage = Convert.ToBase64String(user.ProfileImage),
             NumberOfBlogs = user.Blogs.Count,
+            JoinedDate = user.JoinedDate
         };
     }
 

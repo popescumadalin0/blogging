@@ -11,7 +11,7 @@ public partial class NavMenu
 
     private AuthenticationState _authState;
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnParametersSetAsync()
     {
         _authState = await AuthenticationState;
     }

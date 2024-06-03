@@ -14,7 +14,7 @@
     </div>
     <Image Width="@Width.Px(400)" Height="@Height.Px(300)" Source="@($"data:image/png;base64,{@_blog.Image}")" class="rounded-5"></Image>
     <div class="fs-4 fw-bold text-wrap container w-75">
-        @_blog.Description
+        <pre>@_blog.Description</pre>
     </div>
 
     <Divider Shadow="Shadow.Default" Class="w-75 fs-3 fw-bold bg-black" style="height: 2px" />
@@ -24,7 +24,7 @@
             @foreach (var comment in _comments)
             {
                 <div class="d-flex flex-row gap-3">
-                    <Image class="rounded-pill" Width="@Width.Px(50)" Height="@Height.Px(50)" Source="@($"data:image/png;base64,{comment.UserImage}")"></Image>
+                    <Image class="rounded-circle" Width="@Width.Px(50)" Height="@Height.Px(50)" Source="@($"data:image/png;base64,{comment.UserImage}")"></Image>
                     <div class="d-flex flex-column w-100">
                         <span class="fw-bold">@comment.UserName</span>
                         <div class="d-flex flex-row rounded-3 bg-white container align-items-start justify-content-start w-100">
