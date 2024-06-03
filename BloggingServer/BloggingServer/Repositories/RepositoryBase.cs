@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using DataBaseLayout.DbContext;
 using Microsoft.EntityFrameworkCore;
 using BloggingServer.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace BloggingServer.Repositories;
 public class RepositoryBase<TEntity> : IRepositoryBase<TEntity> where TEntity : class
@@ -32,39 +33,70 @@ public class RepositoryBase<TEntity> : IRepositoryBase<TEntity> where TEntity : 
     }
 
     /// <inheritdoc />
-    public TEntity Get(Expression<Func<TEntity, bool>> predicate)
+    public TEntity Get(Expression<Func<TEntity, bool>> predicate, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null)
     {
-        return Context.Set<TEntity>().FirstOrDefault(predicate);
+        IQueryable<TEntity> query = Context.Set<TEntity>();
+        if (include != null)
+        {
+            query = include(query);
+        }
+
+        return query.FirstOrDefault(predicate);
     }
 
     /// <inheritdoc />
-    public async Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> predicate)
+    public async Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> predicate, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null)
     {
-        return await Context.Set<TEntity>().FirstOrDefaultAsync(predicate);
-    }
-    
-    /// <inheritdoc />
-    public IEnumerable<TEntity> GetList(Expression<Func<TEntity, bool>> predicate)
-    {
-        return Context.Set<TEntity>().Where(predicate).ToList();
-    }
-
-    /// <inheritdoc />
-    public async Task<IEnumerable<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate)
-    {
-        return await Task.Run(() => Context.Set<TEntity>().Where(predicate));
+        IQueryable<TEntity> query = Context.Set<TEntity>();
+        if (include != null)
+        {
+            query = include(query);
+        }
+        return await query.FirstOrDefaultAsync(predicate);
     }
 
     /// <inheritdoc />
-    public IEnumerable<TEntity> GetAll()
+    public IEnumerable<TEntity> GetList(Expression<Func<TEntity, bool>> predicate, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null)
     {
-        return Context.Set<TEntity>().ToList();
+        IQueryable<TEntity> query = Context.Set<TEntity>();
+        if (include != null)
+        {
+            query = include(query);
+        }
+        return query.Where(predicate).ToList();
     }
 
     /// <inheritdoc />
-    public async Task<IEnumerable<TEntity>> GetAllAsync()
+    public async Task<IEnumerable<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null)
     {
-        return await Task.Run(() => Context.Set<TEntity>());
+        IQueryable<TEntity> query = Context.Set<TEntity>();
+        if (include != null)
+        {
+            query = include(query);
+        }
+        return await Task.Run(() => query.Where(predicate));
+    }
+
+    /// <inheritdoc />
+    public IEnumerable<TEntity> GetAll(Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null)
+    {
+        IQueryable<TEntity> query = Context.Set<TEntity>();
+        if (include != null)
+        {
+            query = include(query);
+        }
+        return query.ToList();
+    }
+
+    /// <inheritdoc />
+    public async Task<IEnumerable<TEntity>> GetAllAsync(Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null)
+    {
+        IQueryable<TEntity> query = Context.Set<TEntity>();
+        if (include != null)
+        {
+            query = include(query);
+        }
+        return await Task.Run(() => query);
     }
 
     /// <inheritdoc />
