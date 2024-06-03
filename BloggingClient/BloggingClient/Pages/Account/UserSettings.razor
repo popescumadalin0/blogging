@@ -1,0 +1,99 @@
+@page "/register"
+@inherits ComponentBase
+@implements IDisposable
+
+<PageTitle>Register</PageTitle>
+
+
+<div class="d-flex flex-row justify-content-between align-items-center p-5 fw-bold">
+    <Form>
+        <Validations @ref="_validations" Mode="ValidationMode.Manual" Model="@_registerModel">
+            <Field class="fs-4">
+                Your blogging journey begins now!
+            </Field>
+            <Field>
+                Already have an account? <Anchor To="/login">Login here!</Anchor>
+            </Field>
+            <Validation>
+                <Field>
+                    <FieldLabel>
+                        Email*
+                    </FieldLabel>
+                    <FieldBody>
+                        <TextEdit class="rounded-pill" Placeholder="Enter your e-mail here..." Role="TextRole.Email" @bind-Text="_registerModel.Email">
+                            <Feedback>
+                                <ValidationError />
+                            </Feedback>
+                        </TextEdit>
+                    </FieldBody>
+                </Field>
+            </Validation>
+            <Validation>
+                <Field>
+                    <FieldLabel>
+                        Username*
+                    </FieldLabel>
+                    <FieldBody>
+                        <TextEdit class="rounded-pill" Placeholder="Enter your username here..." Role="TextRole.Text" @bind-Text="_registerModel.UserName">
+                            <Feedback>
+                                <ValidationError />
+                            </Feedback>
+                        </TextEdit>
+                    </FieldBody>
+                </Field>
+            </Validation>
+            <Validation>
+                <Field>
+                    <FieldLabel>
+                        Password*
+                    </FieldLabel>
+                    <FieldBody>
+                        <TextEdit class="rounded-pill" Placeholder="Enter your password here..." Role="TextRole.Password" @bind-Text="_registerModel.Password" autocomplete="new-password">
+                            <Feedback>
+                                <ValidationError />
+                            </Feedback>
+                        </TextEdit>
+                    </FieldBody>
+                </Field>
+            </Validation>
+            <Validation>
+                <Field>
+                    <FieldLabel>
+                        Confirm Password*
+                    </FieldLabel>
+                    <FieldBody>
+                        <TextEdit class="rounded-pill" Placeholder="Retype your password here..." Role="TextRole.Password" @bind-Text="_registerModel.ConfirmPassword" autocomplete="confirm-password">
+                            <Feedback>
+                                <ValidationError />
+                            </Feedback>
+                        </TextEdit>
+                    </FieldBody>
+                </Field>
+            </Validation>
+            <Field>
+                <FieldLabel>
+                    Your profile image
+                </FieldLabel>
+                <FieldBody>
+                    <FilePicker class="rounded-pill" Upload="@OnImageUploaded" ShowMode="FilePickerShowMode.List" Filter="image/*" />
+                </FieldBody>
+            </Field>
+
+            <Validation>
+                <Field>
+                    <Check class="check-box" TValue="bool" @bind-Checked="@_registerModel.AcceptTerms">
+                        <Feedback>
+                            <Anchor TextColor="TextColor.Dark" To="/terms-and-conditions">By registering you have accepted the terms and conditions</Anchor>
+                            <ValidationError />
+                        </Feedback>
+                    </Check>
+                </Field>
+            </Validation>
+
+            <Field Class="d-flex justify-content-center">
+                <Button Color="Color.Light" TextWeight="TextWeight.Bold" Clicked="@RegisterAsync" TextColor="TextColor.Dark" TextSize="TextSize.ExtraLarge" Class="rounded-4">Register</Button>
+            </Field>
+        </Validations>
+    </Form>
+    <Image Height="@Height.Px(359)" Width="@Width.Px(536)" Source="/images/register-background.jpg" Class="object-fit-cover"></Image>
+</div>
