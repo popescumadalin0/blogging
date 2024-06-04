@@ -140,7 +140,7 @@ public class UserService : IUserService
     /// <inheritdoc />
     public async Task<IdentityResult> UpdateUserAsync(UpdateUser user)
     {
-        var userModel = await _userManager.Users.FirstAsync(s => s.Id == user.Id);
+        var userModel = await _userManager.Users.FirstAsync(s => s.UserName == user.Username);
 
         if (user.ProfileImage != null)
         {
@@ -153,19 +153,12 @@ public class UserService : IUserService
     }
 
     /// <inheritdoc />
-    public async Task<IdentityResult> UpdateUserEmailAsync(UpdateUser user, string token)
-    {
-        var userModel = await _userManager.Users.FirstAsync(s => s.Id == user.Id);
-        var result = await _userManager.ChangeEmailAsync(userModel, user.Email, token);
-        return result;
-    }
-
-    /// <inheritdoc />
     public async Task<IdentityResult> UpdateUserPasswordAsync(UpdateUser user)
     {
-        var userModel = await _userManager.Users.FirstAsync(s => s.Id == user.Id);
+        var userModel = await _userManager.Users.FirstAsync(s => s.UserName == user.Username);
 
         var result = await _userManager.ChangePasswordAsync(userModel, user.OldPassword, user.NewPassword);
+
         return result;
     }
 

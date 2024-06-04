@@ -1,5 +1,7 @@
 using System;
 using System.IO;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using BloggingClient.Models;
 using BloggingClient.States;
@@ -28,9 +30,15 @@ public partial class UserSettings : ComponentBase, IDisposable
     [Inject]
     private IBloggingApiClient BloggingApiClient { get; set; }
 
-    private RegisterModel _registerModel = new RegisterModel();
+    private EditUserModel _editModel = new();
 
     private Validations _validations;
+
+    private FilePicker _filePicker = new FilePicker();
+
+    private byte[] _profileImage = null;
+
+    private bool _isSaveClickable = false;
 
     public void Dispose()
     {
@@ -38,44 +46,87 @@ public partial class UserSettings : ComponentBase, IDisposable
         LoadingState.OnStateChange -= StateHasChanged;
     }
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
-        var authState = await AuthenticationState;
-        if (authState.User.Identity.IsAuthenticated)
-        {
-            NavigationManager.NavigateTo("/");
-        }
-
         SnackbarState.OnStateChange += StateHasChanged;
         LoadingState.OnStateChange += StateHasChanged;
     }
 
-    private async Task RegisterAsync()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (await _validations.ValidateAll())
+        if (firstRender)
         {
             await LoadingState.ShowAsync();
-            var result = await BloggingApiClient.RegisterUserAsync(
-                new AddUser()
-                {
-                    Password = _registerModel.Password,
-                    Email = _registerModel.Email,
-                    Username = _registerModel.UserName,
-                    ProfileImage = _registerModel.ProfileImage != null ? Convert.ToBase64String(_registerModel.ProfileImage) : string.Empty,
-                    AcceptTerms = _registerModel.AcceptTerms,
-                });
+
+            await GetUserAsync();
 
             await LoadingState.HideAsync();
+        }
+    }
+
+    private async Task SaveChangesAsync()
+    {
+        var canSave = false;
+
+        if (string.IsNullOrEmpty(_editModel.ConfirmNewPassword) &&
+             string.IsNullOrEmpty(_editModel.NewPassword) &&
+             string.IsNullOrEmpty(_editModel.OldPassword))
+        {
+            canSave = true;
+        }
+        else if (await _validations.ValidateAll())
+        {
+            canSave = true;
+        }
+
+        if (canSave)
+        {
+            await LoadingState.ShowAsync();
+
+            var authState = await AuthenticationState;
+            var result = await BloggingApiClient.UpdateUserAsync(
+                new UpdateUser()
+                {
+                    OldPassword = _editModel.OldPassword,
+                    NewPassword = _editModel.NewPassword,
+                    ProfileImage = _editModel.ProfileImage != null ? Convert.ToBase64String(_editModel.ProfileImage) : string.Empty,
+                    Username = authState.User.Claims.First(c => c.Type == ClaimTypes.Name).Value,
+                });
 
             if (result.Success)
             {
-                NavigationManager.NavigateTo("/login");
+                _isSaveClickable = false;
+                await GetUserAsync();
             }
 
+            await LoadingState.HideAsync();
+
             await SnackbarState.PushAsync(
-                result.Success ? "User created!" : result.ResponseMessage,
+                result.Success ? "User updated!" : result.ResponseMessage,
                 !result.Success);
         }
+    }
+
+    private async Task GetUserAsync()
+    {
+        var authState = await AuthenticationState;
+
+        var username = authState.User.Claims.First(uc => uc.Type == ClaimTypes.Name).Value;
+
+        var user = await BloggingApiClient.GetUserByUsernameAsync(username);
+
+        if (!user.Success)
+        {
+            await SnackbarState.PushAsync(user.ResponseMessage, !user.Success);
+            await LoadingState.HideAsync();
+            return;
+        }
+
+        await _filePicker.Clear();
+
+        _profileImage = Convert.FromBase64String(user.Response.ProfileImage);
+
+        _editModel = new EditUserModel();
     }
 
     private async Task OnImageUploaded(FileUploadEventArgs e)
@@ -85,7 +136,8 @@ public partial class UserSettings : ComponentBase, IDisposable
             using var result = new MemoryStream();
             await e.File.OpenReadStream(long.MaxValue).CopyToAsync(result);
 
-            _registerModel.ProfileImage = result.ToArray();
+            _editModel.ProfileImage = result.ToArray();
+            _isSaveClickable = true;
         }
         catch (Exception exc)
         {

@@ -4,7 +4,6 @@
 
 <PageTitle>Register</PageTitle>
 
-
 <div class="d-flex flex-row justify-content-between align-items-center p-5 fw-bold">
     <Form>
         <Validations @ref="_validations" Mode="ValidationMode.Manual" Model="@_registerModel">
@@ -20,7 +19,10 @@
                         Email*
                     </FieldLabel>
                     <FieldBody>
-                        <TextEdit class="rounded-pill" Placeholder="Enter your e-mail here..." Role="TextRole.Email" @bind-Text="_registerModel.Email">
+                        <TextEdit class="rounded-pill"
+                                  Placeholder="Enter your e-mail here..."
+                                  Role="TextRole.Email"
+                                  @bind-Text="_registerModel.Email">
                             <Feedback>
                                 <ValidationError />
                             </Feedback>
@@ -34,7 +36,10 @@
                         Username*
                     </FieldLabel>
                     <FieldBody>
-                        <TextEdit class="rounded-pill" Placeholder="Enter your username here..." Role="TextRole.Text" @bind-Text="_registerModel.UserName">
+                        <TextEdit class="rounded-pill"
+                                  Placeholder="Enter your username here..."
+                                  Role="TextRole.Text"
+                                  @bind-Text="_registerModel.UserName">
                             <Feedback>
                                 <ValidationError />
                             </Feedback>
@@ -48,7 +53,11 @@
                         Password*
                     </FieldLabel>
                     <FieldBody>
-                        <TextEdit class="rounded-pill" Placeholder="Enter your password here..." Role="TextRole.Password" @bind-Text="_registerModel.Password" autocomplete="new-password">
+                        <TextEdit class="rounded-pill"
+                                  Placeholder="Enter your password here..."
+                                  Role="TextRole.Password"
+                                  @bind-Text="_registerModel.Password"
+                                  autocomplete="new-password">
                             <Feedback>
                                 <ValidationError />
                             </Feedback>
@@ -62,7 +71,11 @@
                         Confirm Password*
                     </FieldLabel>
                     <FieldBody>
-                        <TextEdit class="rounded-pill" Placeholder="Retype your password here..." Role="TextRole.Password" @bind-Text="_registerModel.ConfirmPassword" autocomplete="confirm-password">
+                        <TextEdit class="rounded-pill"
+                                  Placeholder="Retype your password here..."
+                                  Role="TextRole.Password"
+                                  @bind-Text="_registerModel.ConfirmPassword"
+                                  autocomplete="confirm-password">
                             <Feedback>
                                 <ValidationError />
                             </Feedback>
@@ -75,7 +88,27 @@
                     Your profile image
                 </FieldLabel>
                 <FieldBody>
-                    <FilePicker class="rounded-pill" Upload="@OnImageUploaded" ShowMode="FilePickerShowMode.List" Filter="image/*" />
+                    @if (_registerModel.ProfileImage != null)
+                    {
+                        <div class="d-flex justify-content-center align-items-center">
+                            <Figure Size="FigureSize.Is256x256">
+                                <FigureImage Width="@Width.Px(256)"
+                                             Height="@Height.Px(256)"
+                                             Source="@($"data:image/png;base64,{Convert.ToBase64String(_registerModel.ProfileImage)}")"
+                                             Rounded>
+                                </FigureImage>
+                            </Figure>
+                        </div>
+                    }
+                    <FilePicker class="rounded-pill" Upload="@OnImageUploaded" ShowMode="FilePickerShowMode.List" Filter="image/*">
+                        <FileTemplate>
+                            <ListGroup Class="b-file-picker-files" Margin="Margin.Is2.OnY">
+                                <ListGroupItem @key="context.File.Id" Class="b-file-picker-file">
+                                    @context.File.Name - @context.File.Status
+                                </ListGroupItem>
+                            </ListGroup>
+                        </FileTemplate>
+                    </FilePicker>
                 </FieldBody>
             </Field>
 
@@ -83,7 +116,10 @@
                 <Field>
                     <Check class="check-box" TValue="bool" @bind-Checked="@_registerModel.AcceptTerms">
                         <Feedback>
-                            <Anchor TextColor="TextColor.Dark" To="/terms-and-conditions">By registering you have accepted the terms and conditions</Anchor>
+                            <Anchor TextColor="TextColor.Dark"
+                                    To="/terms-and-conditions">
+                                By registering you have accepted the terms and conditions
+                            </Anchor>
                             <ValidationError />
                         </Feedback>
                     </Check>
@@ -91,7 +127,14 @@
             </Validation>
 
             <Field Class="d-flex justify-content-center">
-                <Button Color="Color.Light" TextWeight="TextWeight.Bold" Clicked="@RegisterAsync" TextColor="TextColor.Dark" TextSize="TextSize.ExtraLarge" Class="rounded-4">Register</Button>
+                <Button Color="Color.Light"
+                        TextWeight="TextWeight.Bold"
+                        Clicked="@RegisterAsync"
+                        TextColor="TextColor.Dark"
+                        TextSize="TextSize.ExtraLarge"
+                        Class="rounded-4">
+                    Register
+                </Button>
             </Field>
         </Validations>
     </Form>

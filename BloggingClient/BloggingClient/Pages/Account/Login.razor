@@ -17,7 +17,10 @@
                 Username*
             </FieldLabel>
             <FieldBody>
-                <TextEdit class="rounded-pill" Placeholder="Enter your username here..." Role="TextRole.Text" @bind-Text="_loginModel.Username">
+                <TextEdit class="rounded-pill"
+                          Placeholder="Enter your username here..."
+                          Role="TextRole.Text"
+                          @bind-Text="_loginModel.Username">
                 </TextEdit>
             </FieldBody>
         </Field>
@@ -26,13 +29,25 @@
                 Password*
             </FieldLabel>
             <FieldBody>
-                <TextEdit class="rounded-pill" Placeholder="Enter your password here..." Role="TextRole.Password" @bind-Text="_loginModel.Password" autocomplete="new-password">
+                <TextEdit class="rounded-pill"
+                          Placeholder="Enter your password here..."
+                          Role="TextRole.Password"
+                          @bind-Text="_loginModel.Password"
+                          autocomplete="new-password">
                 </TextEdit>
             </FieldBody>
         </Field>
 
         <Field Class="d-flex justify-content-center mt-4">
-            <Button Color="Color.Light" TextWeight="TextWeight.Bold" Clicked="@SignInAsync" TextColor="TextColor.Dark" TextSize="TextSize.ExtraLarge" Class="rounded-4">Login</Button>
+            <Button
+                Color="Color.Light"
+                TextWeight="TextWeight.Bold"
+                Clicked="@SignInAsync"
+                TextColor="TextColor.Dark"
+                TextSize="TextSize.ExtraLarge"
+                Class="rounded-4">
+                Login
+            </Button>
         </Field>
     </Form>
     <Image Height="@Height.Px(359)" Width="@Width.Px(536)" Source="/images/register-background.jpg" Class="object-fit-cover"></Image>

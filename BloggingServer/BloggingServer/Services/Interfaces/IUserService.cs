@@ -26,9 +26,6 @@ public interface IUserService
     Task<IdentityResult> UpdateUserAsync(UpdateUser user);
 
     /// <summary/>
-    Task<IdentityResult> UpdateUserEmailAsync(UpdateUser user, string token);
-
-    /// <summary/>
     Task<IdentityResult> UpdateUserPasswordAsync(UpdateUser user);
 
     /// <summary/>

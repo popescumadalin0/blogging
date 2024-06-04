@@ -24,7 +24,11 @@
             @foreach (var comment in _comments)
             {
                 <div class="d-flex flex-row gap-3">
-                    <Image class="rounded-circle" Width="@Width.Px(50)" Height="@Height.Px(50)" Source="@($"data:image/png;base64,{comment.UserImage}")"></Image>
+                    <Image class="rounded-circle"
+                           Width="@Width.Px(50)"
+                           Height="@Height.Px(50)"
+                           Source="@($"data:image/png;base64,{comment.UserImage}")">
+                    </Image>
                     <div class="d-flex flex-column w-100">
                         <span class="fw-bold">@comment.UserName</span>
                         <div class="d-flex flex-row rounded-3 bg-white container align-items-start justify-content-start w-100">
@@ -36,7 +40,13 @@
         </div>
         <div class="d-flex flex-row gap-2 align-items-center">
             <TextEdit class="rounded-pill" Placeholder="Leave a comment..." Role="TextRole.Text" @bind-Text="_comment"></TextEdit>
-            <Button Color="Color.Light" TextWeight="TextWeight.Bold" Clicked="@AddCommentAsync" TextColor="TextColor.Dark" TextSize="TextSize.Default" Class="rounded-4">
+            <Button
+                Color="Color.Light"
+                TextWeight="TextWeight.Bold"
+                Clicked="@AddCommentAsync"
+                TextColor="TextColor.Dark"
+                TextSize="TextSize.Default"
+                Class="rounded-4">
                 <Blazorise.Icon Name="@FontAwesomeIcons.PaperPlane"></Blazorise.Icon>
             </Button>
         </div>

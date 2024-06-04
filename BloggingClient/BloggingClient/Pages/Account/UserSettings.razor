@@ -1,26 +1,27 @@
-@page "/register"
+@page "/user-settings"
 @inherits ComponentBase
 @implements IDisposable
 
-<PageTitle>Register</PageTitle>
-
+<PageTitle>UserSettings</PageTitle>
 
 <div class="d-flex flex-row justify-content-between align-items-center p-5 fw-bold">
     <Form>
-        <Validations @ref="_validations" Mode="ValidationMode.Manual" Model="@_registerModel">
+        <Validations @ref="_validations" Mode="ValidationMode.Manual" Model="@_editModel">
             <Field class="fs-4">
-                Your blogging journey begins now!
-            </Field>
-            <Field>
-                Already have an account? <Anchor To="/login">Login here!</Anchor>
+                Edit your profile
             </Field>
             <Validation>
                 <Field>
                     <FieldLabel>
-                        Email*
+                        Old Password*
                     </FieldLabel>
                     <FieldBody>
-                        <TextEdit class="rounded-pill" Placeholder="Enter your e-mail here..." Role="TextRole.Email" @bind-Text="_registerModel.Email">
+                        <TextEdit class="rounded-pill"
+                                  Placeholder="Enter your old password here..."
+                                  Role="TextRole.Password"
+                                  Text="@_editModel.OldPassword"
+                                  TextChanged="@((v) => { _editModel.OldPassword = v; _isSaveClickable = true;})"
+                                  autocomplete="new-password">
                             <Feedback>
                                 <ValidationError />
                             </Feedback>
@@ -31,10 +32,15 @@
             <Validation>
                 <Field>
                     <FieldLabel>
-                        Username*
+                        New Password*
                     </FieldLabel>
                     <FieldBody>
-                        <TextEdit class="rounded-pill" Placeholder="Enter your username here..." Role="TextRole.Text" @bind-Text="_registerModel.UserName">
+                        <TextEdit class="rounded-pill"
+                                  Placeholder="Enter your new password here..."
+                                  Role="TextRole.Password"
+                                  Text="@_editModel.NewPassword"
+                                  TextChanged="@((v) => { _editModel.NewPassword = v; _isSaveClickable = true;})"
+                                  autocomplete="new-password">
                             <Feedback>
                                 <ValidationError />
                             </Feedback>
@@ -45,24 +51,15 @@
             <Validation>
                 <Field>
                     <FieldLabel>
-                        Password*
+                        Confirm New Password*
                     </FieldLabel>
                     <FieldBody>
-                        <TextEdit class="rounded-pill" Placeholder="Enter your password here..." Role="TextRole.Password" @bind-Text="_registerModel.Password" autocomplete="new-password">
-                            <Feedback>
-                                <ValidationError />
-                            </Feedback>
-                        </TextEdit>
-                    </FieldBody>
-                </Field>
-            </Validation>
-            <Validation>
-                <Field>
-                    <FieldLabel>
-                        Confirm Password*
-                    </FieldLabel>
-                    <FieldBody>
-                        <TextEdit class="rounded-pill" Placeholder="Retype your password here..." Role="TextRole.Password" @bind-Text="_registerModel.ConfirmPassword" autocomplete="confirm-password">
+                        <TextEdit class="rounded-pill"
+                                  Placeholder="Retype your new password here..."
+                                  Role="TextRole.Password"
+                                  Text="@_editModel.ConfirmNewPassword"
+                                  TextChanged="@((v) => { _editModel.ConfirmNewPassword = v; _isSaveClickable = true;})"
+                                  autocomplete="confirm-password">
                             <Feedback>
                                 <ValidationError />
                             </Feedback>
@@ -75,25 +72,46 @@
                     Your profile image
                 </FieldLabel>
                 <FieldBody>
-                    <FilePicker class="rounded-pill" Upload="@OnImageUploaded" ShowMode="FilePickerShowMode.List" Filter="image/*" />
+                    @if (_profileImage != null)
+                    {
+                        <div class="d-flex justify-content-center align-items-center">
+                            <Figure Size="FigureSize.Is256x256">
+                                <FigureImage Width="@Width.Px(256)"
+                                             Height="@Height.Px(256)"
+                                             Source="@($"data:image/png;base64,{Convert.ToBase64String(_profileImage)}")"
+                                             Rounded>
+                                </FigureImage>
+                            </Figure>
+                        </div>
+                    }
+                    <FilePicker @ref="_filePicker"
+                                class="rounded-pill"
+                                Upload="@OnImageUploaded"
+                                ShowMode="FilePickerShowMode.List"
+                                Filter="image/*">
+                        <FileTemplate>
+                            <ListGroup Class="b-file-picker-files" Margin="Margin.Is2.OnY">
+                                <ListGroupItem @key="context.File.Id" Class="b-file-picker-file">
+                                    @context.File.Name - @context.File.Status
+                                </ListGroupItem>
+                            </ListGroup>
+                        </FileTemplate>
+                    </FilePicker>
                 </FieldBody>
             </Field>
 
-            <Validation>
-                <Field>
-                    <Check class="check-box" TValue="bool" @bind-Checked="@_registerModel.AcceptTerms">
-                        <Feedback>
-                            <Anchor TextColor="TextColor.Dark" To="/terms-and-conditions">By registering you have accepted the terms and conditions</Anchor>
-                            <ValidationError />
-                        </Feedback>
-                    </Check>
-                </Field>
-            </Validation>
-
-            <Field Class="d-flex justify-content-center">
-                <Button Color="Color.Light" TextWeight="TextWeight.Bold" Clicked="@RegisterAsync" TextColor="TextColor.Dark" TextSize="TextSize.ExtraLarge" Class="rounded-4">Register</Button>
+            <Field Class="d-flex justify-content-center mt-3">
+                <Button Disabled="@(!_isSaveClickable)"
+                        Color="Color.Light"
+                        TextWeight="TextWeight.Bold"
+                        Clicked="@SaveChangesAsync"
+                        TextColor="TextColor.Dark"
+                        TextSize="TextSize.ExtraLarge"
+                        Class="rounded-4">
+                    Save changes
+                </Button>
             </Field>
         </Validations>
     </Form>
-    <Image Height="@Height.Px(359)" Width="@Width.Px(536)" Source="/images/register-background.jpg" Class="object-fit-cover"></Image>
+    <Image Height="@Height.Px(359)" Width="@Width.Px(536)" Source="/images/edit-profile.jpg" Class="object-fit-cover"></Image>
 </div>

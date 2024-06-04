@@ -109,9 +109,27 @@ public class UserController : BaseController
     {
         try
         {
-            await _userService.UpdateUserAsync(user);
-            await _userService.UpdateUserEmailAsync(user, HttpContext.Request.Headers.Authorization.ToString().Replace("Bearer ", string.Empty));
-            await _userService.UpdateUserPasswordAsync(user);
+            var resultUpdate = await _userService.UpdateUserAsync(user);
+            if (!resultUpdate.Succeeded)
+            {
+                throw new Exception(resultUpdate.Errors.FirstOrDefault()?.Description);
+            }
+
+            if (string.IsNullOrEmpty(user.NewPassword))
+            {
+                return ApiServiceResponse.ApiServiceResult(new ServiceResponse());
+            }
+
+            if (string.IsNullOrEmpty(user.OldPassword))
+            {
+                throw new Exception("You need to provide the old password!");
+            }
+
+            var resultPassword = await _userService.UpdateUserPasswordAsync(user);
+            if (!resultPassword.Succeeded)
+            {
+                throw new Exception(resultPassword.Errors.FirstOrDefault()?.Description);
+            }
 
             return ApiServiceResponse.ApiServiceResult(new ServiceResponse());
         }
