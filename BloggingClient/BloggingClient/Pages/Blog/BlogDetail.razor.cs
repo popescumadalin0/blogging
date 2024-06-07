@@ -76,7 +76,7 @@ public partial class BlogDetail : ComponentBase, IDisposable
 
     private async Task GetCommentsAsync()
     {
-        var comments = await BloggingApiClient.GetCommentsAsync();
+        var comments = await BloggingApiClient.GetCommentsByBlogAsync(Id);
 
         if (!comments.Success)
         {
