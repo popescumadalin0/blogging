@@ -8,7 +8,11 @@
                         <Link class="nav-link text-light" To="/write" Clicked="() => { _showSearch = false;}">Write</Link>
                     </li>
                     <li class="nav-item">
-                        <Link class="nav-link text-light" To="/search" Clicked="() => { _showSearch = true;}">Search</Link>
+                        <Link class="nav-link text-light"
+                              To="/search"
+                              Clicked="() => { _showSearch = true; _filter = string.Empty;}">
+                            Search
+                        </Link>
                     </li>
                     @if (_showSearch)
                     {
