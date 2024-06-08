@@ -1,37 +1,72 @@
 <nav class="navbar pt-3">
     <div class="container d-flex flex-row flex-aligment-between">
-        <Link class="navbar-brand text-light fw-bold logo" To="/">Your Blog</Link>
+        <Link class="navbar-brand text-light fw-bold logo" To="/" Clicked="() => { _showSearch = false;}">Your Blog</Link>
         <div class="navbar-nav fs-3 fw-bold d-flex flex-row gap-5">
             <AuthorizeView>
                 <Authorized>
                     <li class="nav-item">
-                        <Link class="nav-link text-light" To="/write">Write</Link>
+                        <Link class="nav-link text-light" To="/write" Clicked="() => { _showSearch = false;}">Write</Link>
                     </li>
                     <li class="nav-item">
-                        <Link class="nav-link text-light" To="/search">Search</Link>
+                        <Link class="nav-link text-light" To="/search" Clicked="() => { _showSearch = true;}">Search</Link>
                     </li>
+                    @if (_showSearch)
+                    {
+                        <li class="nav-item d-flex flex-row align-items-center justify-content-center gap-1">
+                            <TextEdit class="rounded-pill" Placeholder="Search..." Role="TextRole.Text" @bind-Text="_filter"></TextEdit>
+                            <Button Color="Color.Light"
+                                    TextWeight="TextWeight.Bold"
+                                    TextColor="TextColor.Dark"
+                                    Clicked="@SearchBlogs"
+                                    TextSize="TextSize.Default"
+                                    Class="rounded-4">
+                                <Blazorise.Icon Name="@FontAwesomeIcons.Search"></Blazorise.Icon>
+                            </Button>
+                        </li>
+                    }
                 </Authorized>
             </AuthorizeView>
             <li class="nav-item">
-                <Link class="nav-link text-light" To="/about">About</Link>
+                <Link class="nav-link text-light" To="/about" Clicked="() => { _showSearch = false;}">About</Link>
             </li>
             <li class="nav-item">
-                <Link class="nav-link text-light" To="/faq">FAQ</Link>
+                <Link class="nav-link text-light" To="/faq" Clicked="() => { _showSearch = false;}">FAQ</Link>
             </li>
         </div>
         <ul class="navbar-nav d-flex flex-row gap-3">
             <AuthorizeView>
                 <Authorized>
                     <li class="nav-item">
-                        <Button To="@($"/account/{@_authState.User.Claims.FirstOrDefault(c=> c.Type == ClaimTypes.Name).Value}")" Type="ButtonType.Link" Color="Color.Light" TextWeight="TextWeight.Bold" TextColor="TextColor.Dark" TextSize="TextSize.Heading3" Class="rounded-4">My Profile</Button>
+                        <Button To="@($"/account/{@_authState.User.Claims.FirstOrDefault(c=> c.Type == ClaimTypes.Name).Value}")"
+                                Clicked="() => { _showSearch = false;}"
+                                Type="ButtonType.Link"
+                                Color="Color.Light"
+                                TextWeight="TextWeight.Bold"
+                                TextColor="TextColor.Dark"
+                                TextSize="TextSize.Heading3"
+                                Class="rounded-4">My Profile</Button>
                     </li>
                 </Authorized>
                 <NotAuthorized>
                     <li class="nav-item">
-                        <Button To="/login" Type="ButtonType.Link" Color="Color.Light" TextWeight="TextWeight.Bold" TextColor="TextColor.Dark" TextSize="TextSize.Heading3" Class="rounded-4">Login</Button>
+                        <Button To="/login"
+                                Type="ButtonType.Link"
+                                Color="Color.Light"
+                                TextWeight="TextWeight.Bold"
+                                TextColor="TextColor.Dark"
+                                Clicked="() => { _showSearch = false;}"
+                                TextSize="TextSize.Heading3"
+                                Class="rounded-4">Login</Button>
                     </li>
                     <li class="nav-item">
-                        <Button To="/register" Type="ButtonType.Link" Color="Color.Light" TextWeight="TextWeight.Bold" TextColor="TextColor.Dark" TextSize="TextSize.Heading3" Class="rounded-4">Register</Button>
+                        <Button To="/register"
+                                Type="ButtonType.Link"
+                                Color="Color.Light"
+                                TextWeight="TextWeight.Bold"
+                                TextColor="TextColor.Dark"
+                                Clicked="() => { _showSearch = false;}"
+                                TextSize="TextSize.Heading3"
+                                Class="rounded-4">Register</Button>
                     </li>
                 </NotAuthorized>
             </AuthorizeView>

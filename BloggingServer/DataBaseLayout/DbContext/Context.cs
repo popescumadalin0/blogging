@@ -70,6 +70,11 @@ public class Context : IdentityDbContext<User, Role, string>, IContext
             .OnDelete(DeleteBehavior.NoAction)
             .HasForeignKey(x => x.BlogId);
 
+        modelBuilder.Entity<Blog>().HasMany(x => x.Comments)
+            .WithOne(x => x.Blog)
+            .OnDelete(DeleteBehavior.Cascade)
+            .HasForeignKey(x => x.BlogId);
+
         modelBuilder.Entity<Comment>().HasOne(x => x.User)
             .WithMany(x => x.Comments)
             .OnDelete(DeleteBehavior.NoAction)

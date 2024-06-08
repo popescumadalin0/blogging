@@ -29,6 +29,18 @@ public class BlogCategoryService : IBlogCategoryService
             .ToList();
     }
 
+    public async Task<List<BlogCategory>> GetUsedBlogCategoriesAsync()
+    {
+        var entities = await _blogCategoryRepository.GetListAsync(bc => bc.Blogs.Any());
+
+        return entities.Select(
+                e => new BlogCategory()
+                {
+                    Name = e.Name,
+                })
+            .ToList();
+    }
+
     /// <inheritdoc />
     public async Task CreateBlogCategoryAsync(BlogCategory model)
     {

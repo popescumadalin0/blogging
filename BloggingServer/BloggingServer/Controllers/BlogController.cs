@@ -21,13 +21,13 @@ public class BlogController : BaseController
         _blogService = blogService;
     }
 
-    [HttpGet]
+    [HttpPost("filter")]
     [Authorize(Roles.User)]
-    public async Task<IActionResult> GetBlogsAsync()
+    public async Task<IActionResult> GetBlogsAsync(BlogFilter filter = null)
     {
         try
         {
-            var result = await _blogService.GetBlogsAsync();
+            var result = await _blogService.GetBlogsAsync(filter);
             return ApiServiceResponse.ApiServiceResult(new ServiceResponse<List<Blog>>(result.ToList()));
 
         }
@@ -87,7 +87,7 @@ public class BlogController : BaseController
     }
 
     [HttpDelete("{id}")]
-    [Authorize(Roles.Admin)]
+    [Authorize(Roles.User)]
     public async Task<IActionResult> DeleteBlogAsync(string id)
     {
         try

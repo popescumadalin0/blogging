@@ -16,6 +16,7 @@
         <PackageReference Include="Blazorise.Animate" Version="1.5.2" />
         <PackageReference Include="Blazorise.LoadingIndicator" Version="1.5.2" />
         <PackageReference Include="Blazorise.Snackbar" Version="1.5.2" />
+        <PackageReference Include="Blazorise.RichTextEdit" Version="1.5.2" />
         <PackageReference Include="Blazorise.SpinKit" Version="1.5.2" />
         <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="7.5.2" />
         <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">

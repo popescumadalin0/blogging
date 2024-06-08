@@ -26,11 +26,13 @@ public interface IBloggingApiClient
 
     Task<ApiResponseMessage<List<BlogCategory>>> GetBlogCategoriesAsync();
 
+    Task<ApiResponseMessage<List<BlogCategory>>> GetUsedBlogCategoriesAsync();
+
     Task<ApiResponseMessage> CreateBlogCategoryAsync(BlogCategory blogCategory);
 
     Task<ApiResponseMessage> DeleteBlogCategoryAsync(string name);
 
-    Task<ApiResponseMessage<List<Blog>>> GetBlogsAsync();
+    Task<ApiResponseMessage<List<Blog>>> GetBlogsAsync(BlogFilter filter = null);
 
     Task<ApiResponseMessage<List<Blog>>> GetBlogsByUserAsync(string username);
 

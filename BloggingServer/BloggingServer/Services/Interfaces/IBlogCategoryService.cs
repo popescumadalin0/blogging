@@ -10,6 +10,9 @@ public interface IBlogCategoryService
     Task<List<BlogCategory>> GetBlogCategoriesAsync();
 
     /// <summary/>
+    Task<List<BlogCategory>> GetUsedBlogCategoriesAsync();
+
+    /// <summary/>
     Task CreateBlogCategoryAsync(BlogCategory model);
 
     /// <summary/>

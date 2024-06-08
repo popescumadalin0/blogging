@@ -12,9 +12,12 @@
         <span class="fs-3">by <Anchor Class="text-black" To="@($"/account/{_blog.UserName}")">@_blog.UserName</Anchor></span>
         <span class="fs-3 fw-bold">Category: @_blog.BlogCategory</span>
     </div>
-    <Image Width="@Width.Px(400)" Height="@Height.Px(300)" Source="@($"data:image/png;base64,{@_blog.Image}")" class="rounded-5"></Image>
-    <div class="fs-4 fw-bold text-wrap container w-75">
-        <pre>@_blog.Description</pre>
+    @if(!string.IsNullOrEmpty(_blog.Image))
+    {
+        <Image Width="@Width.Px(400)" Height="@Height.Px(300)" Source="@($"data:image/png;base64,{@_blog.Image}")" class="rounded-5"></Image>
+    }
+    <div class="text-wrap container w-75">
+        @((MarkupString)_blog.Description)
     </div>
 
     <Divider Shadow="Shadow.Default" Class="w-75 fs-3 fw-bold bg-black" style="height: 2px" />
@@ -52,4 +55,9 @@
         </div>
     </div>
 </div>
-@*todo: add delete button*@
+@if (_username == _blog.UserName || _isAdmin)
+{
+    <div class="position-absolute delete-button index-up">
+        <Button Background="Background.Light" Clicked="@DeleteBlogAsync" class="border-0"><i class="bi bi-trash-fill fs-5"></i></Button>
+    </div>
+}

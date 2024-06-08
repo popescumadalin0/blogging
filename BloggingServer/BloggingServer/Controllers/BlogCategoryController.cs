@@ -36,6 +36,22 @@ public class BlogCategoryController : BaseController
         }
     }
 
+    [HttpGet("used")]
+    [Authorize(Roles.User)]
+    public async Task<IActionResult> GetUsedBlogCategoriesAsync()
+    {
+        try
+        {
+            var result = await _blogCategoryService.GetUsedBlogCategoriesAsync();
+            return ApiServiceResponse.ApiServiceResult(new ServiceResponse<List<BlogCategory>>(result.ToList()));
+
+        }
+        catch (Exception ex)
+        {
+            return ApiServiceResponse.ApiServiceResult(new ServiceResponse<List<BlogCategory>>(ex));
+        }
+    }
+
     [HttpPost]
     [Authorize(Roles.Admin)]
     public async Task<IActionResult> CreateBlogCategoryAsync(BlogCategory blogCategory)

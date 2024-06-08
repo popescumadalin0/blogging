@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using BloggingServer.Repositories.Interfaces;
@@ -25,9 +26,22 @@ public class BlogService : IBlogService
     }
 
     /// <inheritdoc />
-    public async Task<List<Models.Blog>> GetBlogsAsync()
+    public async Task<List<Models.Blog>> GetBlogsAsync(BlogFilter filter = null)
     {
         var entities = await _blogRepository.GetAllAsync();
+
+        if (filter != null)
+        {
+            if (!string.IsNullOrEmpty(filter.FilterValue))
+            {
+                entities = entities.Where(e => e.User.UserName.Contains(filter.FilterValue) || e.Title.Contains(filter.FilterValue));
+            }
+
+            if (filter.BlogCategories != null && filter.BlogCategories.Any())
+            {
+                entities = entities.Where(e => filter.BlogCategories.Any(bc => bc == e.BlogCategoryName));
+            }
+        }
 
         return entities.Select(
                 c => new Models.Blog()
@@ -87,6 +101,12 @@ public class BlogService : IBlogService
     public async Task AddBlogAsync(AddBlog blog)
     {
         var user = await _userManager.Users.FirstAsync(u => u.UserName == blog.Username);
+
+        if (string.IsNullOrEmpty(blog.Image))
+        {
+            blog.Image = await DefaultImageAsync();
+        }
+
         var entity = new DataBaseLayout.Models.Blog()
         {
             UserId = user.Id,
@@ -109,4 +129,10 @@ public class BlogService : IBlogService
         _blogRepository.Remove(entity);
     }
 
+    private static async Task<string> DefaultImageAsync()
+    {
+        var image = await File.ReadAllBytesAsync(@"../DataBaseLayout/Data/default-blog-image.jpg");
+
+        return Convert.ToBase64String(image);
+    }
 }

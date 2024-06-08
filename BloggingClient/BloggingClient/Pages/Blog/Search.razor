@@ -1,34 +1,35 @@
-@page "/search"
+@page "/search/{Filter?}"
 @inherits ComponentBase
 @implements IDisposable
 
 @attribute [Authorize(Roles = Roles.User)]
 
 <PageTitle>Blogs</PageTitle>
-
-@*todo: buttons*@
-<div class="d-flex flex-row flex-nowrap justify-content-start w-100 bg-white">
+<div class="d-flex flex-row flex-nowrap justify-content-start overflow-auto no-scrollbar w-100 bg-white">
     @foreach (var blogCategory in _blogCategories)
     {
-        <div class="filter-cell">
+        <div class="filter-cell position-relative ml-0 index-up">
             <span class="fs-4">@blogCategory.Name</span>
-            <Check class="check-box" TValue="bool" Checked="@blogCategory.IsChecked"></Check>
+            <Check class="check-box"
+                   TValue="bool"
+                   CheckedChanged="@(async (t) => { blogCategory.IsChecked = t; await FilterBlogsAsync();})"
+                   Checked="@blogCategory.IsChecked"></Check>
         </div>
     }
 </div>
 
 <div class="d-flex flex-row p-5 flex-wrap w-100">
+    @foreach (var blog in _blogs)
+    {
+        <div class="blog-card">
+            <BlogCard Item="@blog" ItemClicked="@BlogClicked"></BlogCard>
+        </div>
+    }
     @if (!_blogs.Any())
     {
         <div class="d-flex flex-column gap-1">
             <div class="fs-1 fw-bold align-items-center">Blogs not found!</div>
             <Anchor class="fs-3 fw-bold text-dark" To="/write">Write something!</Anchor>
-        </div>
-    }
-    @foreach (var blog in _blogs)
-    {
-        <div class="blog-card">
-            <BlogCard Item="@blog" ItemClicked="@BlogClicked"></BlogCard>
         </div>
     }
 </div>

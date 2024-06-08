@@ -1,17 +1,23 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using BloggingClient.Models;
 using BloggingClient.States;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using Models;
+using Models.Constants;
 using SDK.Interfaces;
 
 namespace BloggingClient.Pages.Blog;
 
 public partial class Search : ComponentBase, IDisposable
 {
+    [Parameter]
+    public string Filter { get; set; }
+
     [Inject]
     private SnackbarState SnackbarState { get; set; }
 
@@ -31,6 +37,8 @@ public partial class Search : ComponentBase, IDisposable
 
     private List<global::Models.Blog> _blogs = new();
 
+    private string _oldFilter = string.Empty;
+
     public void Dispose()
     {
         SnackbarState.OnStateChange -= StateHasChanged;
@@ -41,19 +49,27 @@ public partial class Search : ComponentBase, IDisposable
     {
         SnackbarState.OnStateChange += StateHasChanged;
         LoadingState.OnStateChange += StateHasChanged;
+    }
 
-        await LoadingState.ShowAsync();
+    protected override async Task OnParametersSetAsync()
+    {
+        if (_oldFilter != Filter)
+        {
+            _oldFilter = Filter;
 
-        await GetBlogCategoriesAsync();
+            await LoadingState.ShowAsync();
 
-        await GetBlogsAsync();
+            await GetBlogCategoriesAsync();
 
-        await LoadingState.HideAsync();
+            await GetBlogsAsync();
+
+            await LoadingState.HideAsync();
+        }
     }
 
     private async Task GetBlogCategoriesAsync()
     {
-        var categories = await BloggingApiClient.GetBlogCategoriesAsync();
+        var categories = await BloggingApiClient.GetUsedBlogCategoriesAsync();
         if (!categories.Success)
         {
             await SnackbarState.PushAsync(
@@ -65,9 +81,23 @@ public partial class Search : ComponentBase, IDisposable
         _blogCategories = categories.Response.Select(bc => new FilterCheck(bc.Name)).ToList();
     }
 
+    private async Task FilterBlogsAsync()
+    {
+        await LoadingState.ShowAsync();
+
+        await GetBlogsAsync();
+
+        await LoadingState.HideAsync();
+    }
+
     private async Task GetBlogsAsync()
     {
-        var blogs = await BloggingApiClient.GetBlogsAsync();
+        var blogs = await BloggingApiClient.GetBlogsAsync(new BlogFilter()
+        {
+            FilterValue = Filter,
+            BlogCategories = _blogCategories.Where(bc => bc.IsChecked).Select(bc => bc.Name).ToList()
+        });
+
         if (!blogs.Success)
         {
             await SnackbarState.PushAsync(

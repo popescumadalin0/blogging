@@ -143,6 +143,21 @@ public class BloggingApiClient : RefitApiClient<IBloggingApi>, IBloggingApiClien
         }
     }
 
+    public async Task<ApiResponseMessage<List<BlogCategory>>> GetUsedBlogCategoriesAsync()
+    {
+        try
+        {
+            var task = _apiClient.GetUsedBlogCategoriesAsync();
+            var result = await Execute(task);
+            return result;
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, $"Error executing {nameof(GetUsedBlogCategoriesAsync)}");
+            throw;
+        }
+    }
+
     public async Task<ApiResponseMessage> CreateBlogCategoryAsync(BlogCategory blogCategory)
     {
         try
@@ -173,11 +188,11 @@ public class BloggingApiClient : RefitApiClient<IBloggingApi>, IBloggingApiClien
         }
     }
 
-    public async Task<ApiResponseMessage<List<Blog>>> GetBlogsAsync()
+    public async Task<ApiResponseMessage<List<Blog>>> GetBlogsAsync(BlogFilter filter = null)
     {
         try
         {
-            var task = _apiClient.GetBlogsAsync();
+            var task = _apiClient.GetBlogsAsync(filter);
             var result = await Execute(task);
             return result;
         }

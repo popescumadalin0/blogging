@@ -10,7 +10,7 @@ namespace BloggingServer.Services.Interfaces;
 public interface IBlogService
 {
     /// <summary/>
-    Task<List<Blog>> GetBlogsAsync();
+    Task<List<Blog>> GetBlogsAsync(BlogFilter filter = null);
 
     /// <summary/>
     Task<List<Blog>> GetBlogsByUserAsync(string username);

@@ -26,11 +26,10 @@
                 {
                     <div class="d-flex justify-content-center align-items-center">
                         <Figure Size="FigureSize.Is512x512">
-                            <FigureImage
-                                Width="@Width.Px(512)"
-                                Height="@Height.Px(512)"
-                                Source="@($"data:image/png;base64,{Convert.ToBase64String(_addBlogModel.Image)}")"
-                                Rounded>
+                            <FigureImage Width="@Width.Px(512)"
+                                         Height="@Height.Px(512)"
+                                         Source="@($"data:image/png;base64,{Convert.ToBase64String(_addBlogModel.Image)}")"
+                                         Rounded>
                             </FigureImage>
                         </Figure>
                     </div>
@@ -67,17 +66,48 @@
         <Field Class="mb-3">
             <FieldLabel>Description</FieldLabel>
             <FieldBody>
-                <MemoEdit Rows="7" @bind-Text="_addBlogModel.Description" />
+                <RichTextEdit @ref="_richTextEditRef"
+                              Theme="RichTextEditTheme.Snow"
+                              ContentChanged="@OnContentChanged"
+                              PlaceHolder="Type your post here..."
+                              ConfigureQuillJsMethod=""
+                              ReadOnly="false"
+                              SubmitOnEnter="false"
+                              ToolbarPosition="Placement.Bottom"
+                              Background="Background.Light"
+                              TextColor="TextColor.Dark">
+                    <Editor> </Editor>
+                    <Toolbar>
+                        <RichTextEditToolbarGroup>
+                            <RichTextEditToolbarButton Action="RichTextEditAction.Bold" />
+                            <RichTextEditToolbarButton Action="RichTextEditAction.Italic" />
+                            <RichTextEditToolbarButton Action="RichTextEditAction.Underline" />
+                            <RichTextEditToolbarSelect Action="RichTextEditAction.Size">
+                                <RichTextEditToolbarSelectItem Value="small" />
+                                <RichTextEditToolbarSelectItem Selected />
+                                <RichTextEditToolbarSelectItem Value="large" />
+                                <RichTextEditToolbarSelectItem Value="huge" />
+                            </RichTextEditToolbarSelect>
+                            <RichTextEditToolbarButton Action="RichTextEditAction.List" Value="ordered" />
+                            <RichTextEditToolbarButton Action="RichTextEditAction.List" Value="bullet" />
+                            <RichTextEditToolbarSelect Action="RichTextEditAction.Font">
+                                <RichTextEditToolbarSelectItem Value="arial" />
+                                <RichTextEditToolbarSelectItem Selected />
+                                <RichTextEditToolbarSelectItem Value="calibri" />
+                                <RichTextEditToolbarSelectItem Value="times-new-roman" />
+                            </RichTextEditToolbarSelect>
+                        </RichTextEditToolbarGroup>
+                    </Toolbar>
+                </RichTextEdit>
             </FieldBody>
         </Field>
         <Field Class="d-flex justify-content-center">
-            <Button
-                Color="Color.Light"
-                TextWeight="TextWeight.Bold"
-                Clicked="@AddBlogAsync"
-                TextColor="TextColor.Dark"
-                TextSize="TextSize.ExtraLarge"
-                Class="rounded-4">
+            <Button TextWeight="TextWeight.Bold"
+                    Clicked="@AddBlogAsync"
+                    TextColor="TextColor.Dark"
+                    Color="Color.Light"
+                    TextSize="TextSize.ExtraLarge"
+                    Class="rounded-4">
                 Add blog
             </Button>
         </Field>
@@ -92,13 +122,13 @@
                     TextWeight="TextWeight.Bold"
                     Class="rounded-pill"
                     Clicked="@ShowModalAsync">
-                <Blazorise.Icon Name="@FontAwesomeIcons.Plus"/>
+                <Blazorise.Icon Name="@FontAwesomeIcons.Plus" />
             </Button>
         </div>
     </Authorized>
 </AuthorizeView>
 
-<Modal @ref="modalRef">
+<Modal @ref="_modalRef">
     <ModalContent Centered>
         <ModalHeader>
             <ModalTitle>Add blog category</ModalTitle>

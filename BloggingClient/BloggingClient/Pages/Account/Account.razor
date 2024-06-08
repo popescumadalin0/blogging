@@ -11,7 +11,10 @@
         <u class="fs-3 fw-bold">My Profile</u>
     }
     <Figure Size="FigureSize.Is128x128">
-        <FigureImage Source="@($"data:image/png;base64,{_user.ProfileImage}")" class="rounded-circle"></FigureImage>
+        <FigureImage Height="@Height.Px(128)"
+                     Width="@Width.Px(128)"
+                     Source="@($"data:image/png;base64,{_user.ProfileImage}")"
+                     class="rounded-circle"></FigureImage>
     </Figure>
     <span class="fw-bold fs-3">@_user.Username</span>
     <Table Borderless class="align-items-center w-25">
@@ -40,7 +43,7 @@
             }
         </TableBody>
     </Table>
-    <Divider Shadow="Shadow.Default" Class="w-75 fs-3 fw-bold bg-black" style="height: 2px"/>
+    <Divider Shadow="Shadow.Default" Class="w-75 fs-3 fw-bold bg-black" style="height: 2px" />
     <div class="d-flex flex-row p-5 flex-wrap w-100">
         @foreach (var blog in _blogs)
         {

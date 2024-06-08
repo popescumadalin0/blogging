@@ -40,6 +40,10 @@ public interface IBloggingApi
     [Headers("Authorization: Bearer")]
     Task<List<BlogCategory>> GetBlogCategoriesAsync();
 
+    [Get("/api/blogCategory/used")]
+    [Headers("Authorization: Bearer")]
+    Task<List<BlogCategory>> GetUsedBlogCategoriesAsync();
+
     [Post("/api/blogCategory")]
     [Headers("Authorization: Bearer")]
     Task CreateBlogCategoryAsync(BlogCategory blogCategory);
@@ -48,9 +52,9 @@ public interface IBloggingApi
     [Headers("Authorization: Bearer")]
     Task DeleteBlogCategoryAsync(string name);
 
-    [Get("/api/blog")]
+    [Post("/api/blog/filter")]
     [Headers("Authorization: Bearer")]
-    Task<List<Blog>> GetBlogsAsync();
+    Task<List<Blog>> GetBlogsAsync(BlogFilter filter = null);
 
     [Get("/api/blog/username/{username}")]
     [Headers("Authorization: Bearer")]

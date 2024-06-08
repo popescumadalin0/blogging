@@ -7,6 +7,7 @@ using BloggingClient.States;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Models;
+using Models.Constants;
 using SDK.Interfaces;
 
 namespace BloggingClient.Pages.Blog;
@@ -28,6 +29,9 @@ public partial class BlogDetail : ComponentBase, IDisposable
     [CascadingParameter]
     private Task<AuthenticationState> AuthenticationState { get; set; }
 
+    [Inject]
+    private NavigationManager NavigationManager { get; set; }
+
     private global::Models.Blog _blog = new();
 
     private List<Comment> _comments = new();
@@ -35,6 +39,10 @@ public partial class BlogDetail : ComponentBase, IDisposable
     private string _comment = string.Empty;
 
     private string _oldId = string.Empty;
+
+    private string _username = string.Empty;
+
+    private bool _isAdmin = false;
 
     public void Dispose()
     {
@@ -46,6 +54,12 @@ public partial class BlogDetail : ComponentBase, IDisposable
     {
         SnackbarState.OnStateChange += StateHasChanged;
         LoadingState.OnStateChange += StateHasChanged;
+
+        var authState = await AuthenticationState;
+
+        _username = authState.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name).Value;
+
+        _isAdmin = authState.User.Claims.Any(c => c.Type == ClaimTypes.Role && c.Value == Roles.Admin);
     }
 
     protected override async Task OnParametersSetAsync()
@@ -115,6 +129,24 @@ public partial class BlogDetail : ComponentBase, IDisposable
             !response.Success);
 
         await GetCommentsAsync();
+
+        await LoadingState.HideAsync();
+    }
+
+    private async Task DeleteBlogAsync()
+    {
+        await LoadingState.ShowAsync();
+
+        var response = await BloggingApiClient.DeleteBlogAsync(_blog.Id.ToString());
+
+        await SnackbarState.PushAsync(
+            response.Success ? "Blog deleted!" : response.ResponseMessage,
+            !response.Success);
+
+        if (response.Success)
+        {
+            NavigationManager.NavigateTo("/search");
+        }
 
         await LoadingState.HideAsync();
     }

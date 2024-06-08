@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Blazorise;
+using Blazorise.RichTextEdit;
 using BloggingClient.Models;
 using BloggingClient.States;
 using Microsoft.AspNetCore.Components;
@@ -39,7 +40,13 @@ public partial class Write : ComponentBase, IDisposable
 
     private string _newBlogCategory = string.Empty;
 
-    private Modal modalRef;
+    private Modal _modalRef;
+
+    private RichTextEdit _richTextEditRef = new();
+    public async Task OnContentChanged()
+    {
+        _addBlogModel.Description = await _richTextEditRef.GetHtmlAsync();
+    }
 
     public void Dispose()
     {
@@ -115,6 +122,7 @@ public partial class Write : ComponentBase, IDisposable
 
             if (result.Success)
             {
+                // await _richTextEditRef.ClearAsync();
                 NavigationManager.NavigateTo("/search");
             }
         }
@@ -146,11 +154,11 @@ public partial class Write : ComponentBase, IDisposable
 
     private Task ShowModalAsync()
     {
-        return modalRef.Show();
+        return _modalRef.Show();
     }
 
     private Task HideModalAsync()
     {
-        return modalRef.Hide();
+        return _modalRef.Hide();
     }
 }

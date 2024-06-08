@@ -6,6 +6,7 @@ using Blazorise.Icons.FontAwesome;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Blazorise.RichTextEdit;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,15 +15,17 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 
 builder.Services
-    .AddBlazorise(options =>
-    {
-        options.Immediate = true;
-    })
+    .AddBlazorise(
+        options =>
+        {
+            options.Immediate = true;
+        })
     .AddBootstrapProviders()
     .AddBootstrap5Providers()
     .AddBootstrap5Components()
     .AddBootstrapComponents()
-    .AddFontAwesomeIcons();
+    .AddFontAwesomeIcons()
+    .AddBlazoriseRichTextEdit(o => o.UseShowTheme = true);
 
 builder.Services.AddServices(builder.Configuration);
 
