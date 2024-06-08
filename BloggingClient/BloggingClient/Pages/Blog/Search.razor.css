@@ -12,3 +12,20 @@
     gap: 4px;
     align-items: center;
 }
+
+::-webkit-scrollbar {
+    width: 10px;
+    height: 5px
+}
+
+::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px grey;
+}
+
+::-webkit-scrollbar-thumb {
+    background: gray;
+}
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: gray;
+    }
