@@ -3,13 +3,13 @@ using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Blazorise;
 using BloggingClient.Models;
 using BloggingClient.States;
-using Blazorise;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using Models;
 using SDK.Interfaces;
-using Microsoft.AspNetCore.Components.Authorization;
 
 namespace BloggingClient.Pages.Account;
 

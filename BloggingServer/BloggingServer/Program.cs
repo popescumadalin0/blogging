@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Models.Constants;
@@ -117,18 +118,16 @@ async Task DefaultDataAsync()
         var profileImage = await File.ReadAllBytesAsync(@"../DataBaseLayout/Data/default-image-profile.jpg");
         var user = new User
         {
-            Id = "admin",
-            UserName = "admin",
-            Email = "admin@admin.ro",
-            EmailConfirmed = true,
-            PhoneNumber = "0111111111",
-            PhoneNumberConfirmed = true,
-            TwoFactorEnabled = false,
             ProfileImage = profileImage,
             JoinedDate = DateTime.UtcNow,
+            PhoneNumberConfirmed = true,
+            TwoFactorEnabled = false,
             AcceptTerms = true,
+            EmailConfirmed = true
         };
-        var result = await userManager.CreateAsync(user, "Admin1234!");
+        builder.Configuration.GetSection("UserAdmin").Bind(user);
+
+        var result = await userManager.CreateAsync(user, builder.Configuration.GetSection("UserAdmin:Password").Value);
 
         if (!result.Succeeded)
         {

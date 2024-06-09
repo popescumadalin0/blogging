@@ -17,7 +17,12 @@
         <Image Width="@Width.Px(400)" Height="@Height.Px(300)" Source="@($"data:image/png;base64,{@_blog.Image}")" class="rounded-5"></Image>
     }
     <div class="text-wrap container w-75">
-        @((MarkupString)_blog.Description)
+        <RichTextEdit Theme="RichTextEditTheme.Bubble"
+                      ReadOnly="true"
+                      TextColor="TextColor.Dark">
+            <Editor>@((MarkupString)_blog.Description)</Editor>
+            <Toolbar></Toolbar>
+        </RichTextEdit>
     </div>
 
     <Divider Shadow="Shadow.Default" Class="w-75 fs-3 fw-bold bg-black" style="height: 2px" />

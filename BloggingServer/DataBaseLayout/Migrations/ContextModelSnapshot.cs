@@ -329,7 +329,7 @@ namespace DataBaseLayout.Migrations
                     b.HasOne("DataBaseLayout.Models.Blog", "Blog")
                         .WithMany("Comments")
                         .HasForeignKey("BlogId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("DataBaseLayout.Models.User", "User")

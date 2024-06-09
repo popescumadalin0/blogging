@@ -70,8 +70,6 @@
                               Theme="RichTextEditTheme.Snow"
                               ContentChanged="@OnContentChanged"
                               PlaceHolder="Type your post here..."
-                              ConfigureQuillJsMethod=""
-                              ReadOnly="false"
                               SubmitOnEnter="false"
                               ToolbarPosition="Placement.Bottom"
                               Background="Background.Light"
@@ -84,17 +82,16 @@
                             <RichTextEditToolbarButton Action="RichTextEditAction.Underline" />
                             <RichTextEditToolbarSelect Action="RichTextEditAction.Size">
                                 <RichTextEditToolbarSelectItem Value="small" />
-                                <RichTextEditToolbarSelectItem Selected />
+                                <RichTextEditToolbarSelectItem Selected />S
                                 <RichTextEditToolbarSelectItem Value="large" />
                                 <RichTextEditToolbarSelectItem Value="huge" />
                             </RichTextEditToolbarSelect>
                             <RichTextEditToolbarButton Action="RichTextEditAction.List" Value="ordered" />
                             <RichTextEditToolbarButton Action="RichTextEditAction.List" Value="bullet" />
                             <RichTextEditToolbarSelect Action="RichTextEditAction.Font">
-                                <RichTextEditToolbarSelectItem Value="arial" />
-                                <RichTextEditToolbarSelectItem Selected />
-                                <RichTextEditToolbarSelectItem Value="calibri" />
-                                <RichTextEditToolbarSelectItem Value="times-new-roman" />
+                                <RichTextEditToolbarSelectItem />
+                                <RichTextEditToolbarSelectItem Value="serif"/>
+                                <RichTextEditToolbarSelectItem Value="monospace" />
                             </RichTextEditToolbarSelect>
                         </RichTextEditToolbarGroup>
                     </Toolbar>

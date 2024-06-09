@@ -128,6 +128,11 @@ public partial class BlogDetail : ComponentBase, IDisposable
             response.Success ? "Comment added!" : response.ResponseMessage,
             !response.Success);
 
+        if (response.Success)
+        {
+            _comment = string.Empty;
+        }
+
         await GetCommentsAsync();
 
         await LoadingState.HideAsync();
