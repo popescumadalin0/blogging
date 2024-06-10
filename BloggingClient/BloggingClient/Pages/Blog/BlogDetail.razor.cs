@@ -155,4 +155,19 @@ public partial class BlogDetail : ComponentBase, IDisposable
 
         await LoadingState.HideAsync();
     }
+
+    private async Task DeleteCommentAsync(Guid commentId)
+    {
+        await LoadingState.ShowAsync();
+
+        var response = await BloggingApiClient.DeleteCommentAsync(commentId.ToString());
+
+        await SnackbarState.PushAsync(
+            response.Success ? "Comment deleted!" : response.ResponseMessage,
+            !response.Success);
+
+        await GetCommentsAsync();
+
+        await LoadingState.HideAsync();
+    }
 }

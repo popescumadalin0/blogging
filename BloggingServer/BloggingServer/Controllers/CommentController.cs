@@ -69,7 +69,7 @@ public class CommentController : BaseController
     }
 
     [HttpDelete("{id}")]
-    [Authorize(Roles.Admin)]
+    [Authorize(Roles.User)]
     public async Task<IActionResult> DeleteCommentAsync(string id)
     {
         try

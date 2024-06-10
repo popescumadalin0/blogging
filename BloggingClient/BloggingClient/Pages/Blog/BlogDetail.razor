@@ -5,7 +5,10 @@
 @attribute [Authorize(Roles = Roles.User)]
 
 <PageTitle>Blog</PageTitle>
-
+@if (_username == _blog.UserName || _isAdmin)
+{
+    <Button Background="Background.Light" Clicked="@DeleteBlogAsync" class="border-0 position-absolute m-3"><i class="bi bi-trash-fill fs-5"></i></Button>
+}
 <div class="d-flex flex-column align-items-center gap-3 pt-5">
     <span class="text-wrap fw-bold fs-1">@_blog.Title</span>
     <div class="d-flex flex-row justify-content-evenly container-fluid">
@@ -31,7 +34,7 @@
         <div class="d-flex flex-column overflow-auto h-50 w-100">
             @foreach (var comment in _comments)
             {
-                <div class="d-flex flex-row gap-3">
+                <div class="d-flex flex-row gap-3 align-items-center">
                     <Image class="rounded-circle"
                            Width="@Width.Px(50)"
                            Height="@Height.Px(50)"
@@ -43,6 +46,17 @@
                             <span class="text-wrap fw-bold">@comment.Description</span>
                         </div>
                     </div>
+                    @if (_username == _blog.UserName || _isAdmin)
+                    {
+                        <Button
+                            Height="Height.Px(40)"
+                            Width="Width.Px(40)"
+                            Background="Background.Light"
+                            Clicked="@(async () => { await DeleteCommentAsync(comment.Id); })"
+                            class="border-0">
+                            <i class="bi bi-trash-fill"></i>
+                        </Button>                        
+                    }
                 </div>
             }
         </div>
@@ -60,9 +74,3 @@
         </div>
     </div>
 </div>
-@if (_username == _blog.UserName || _isAdmin)
-{
-    <div class="position-absolute delete-button index-up">
-        <Button Background="Background.Light" Clicked="@DeleteBlogAsync" class="border-0"><i class="bi bi-trash-fill fs-5"></i></Button>
-    </div>
-}
