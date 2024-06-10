@@ -58,8 +58,7 @@ public class TokenService : ITokenService
         var validationParameters = new TokenValidationParameters
         {
             ValidateIssuerSigningKey = true,
-            //todo: change this to true when you implement the refresh token
-            ValidateLifetime = false,
+            ValidateLifetime = true,
             IssuerSigningKey = key,
             ValidateIssuer = false,
             ValidateAudience = false,
