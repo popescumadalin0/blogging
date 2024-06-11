@@ -36,8 +36,8 @@ public class UserService : IUserService
 
         if (isLogged.Succeeded)
         {
-            var token = await _tokenService.GenerateTokenAsync(userName, 2);
-            var refreshToken = await _tokenService.GenerateTokenAsync(userName, 8);
+            var token = await _tokenService.GenerateTokenAsync(userName, 60);
+            var refreshToken = await _tokenService.GenerateTokenAsync(userName, 7*60);
 
             var responseLogin = new LoginResponse
             {
