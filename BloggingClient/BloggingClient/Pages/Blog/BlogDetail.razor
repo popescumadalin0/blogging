@@ -10,7 +10,7 @@
     <Button Background="Background.Light" Clicked="@DeleteBlogAsync" class="border-0 position-absolute m-3"><i class="bi bi-trash-fill fs-5"></i></Button>
 }
 <div class="d-flex flex-column align-items-center gap-3 pt-5">
-    <span class="text-wrap fw-bold fs-1">@_blog.Title</span>
+    <span class="text-wrap fw-bold fs-1 w-75">@_blog.Title</span>
     <div class="d-flex flex-row justify-content-evenly container-fluid">
         <span class="fs-3">by <Anchor Class="text-black" To="@($"/account/{_blog.UserName}")">@_blog.UserName</Anchor></span>
         <span class="fs-3 fw-bold">Category: @_blog.BlogCategory</span>
