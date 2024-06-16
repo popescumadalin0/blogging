@@ -30,4 +30,7 @@ public interface IUserService
 
     /// <summary/>
     Task<IdentityResult> DeleteUserAsync(string id);
+
+    /// <summary/>
+    Task<LoginResponse> RefreshTokenAsync(RefreshTokenRequest request);
 }

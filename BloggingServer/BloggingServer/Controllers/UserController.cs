@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Models;
 using Models.Constants;
+using BloggingServer.Services;
+using Microsoft.AspNetCore.Http;
 
 namespace BloggingServer.Controllers;
 
@@ -83,7 +85,7 @@ public class UserController : BaseController
         }
         catch (Exception ex)
         {
-            return ApiServiceResponse.ApiServiceResult(new ServiceResponse(ex));
+            return ApiServiceResponse.ApiServiceResult(new ServiceResponse<IdentityResult>(ex));
         }
     }
 
@@ -99,7 +101,7 @@ public class UserController : BaseController
         }
         catch (Exception ex)
         {
-            return ApiServiceResponse.ApiServiceResult(new ServiceResponse(ex));
+            return ApiServiceResponse.ApiServiceResult(new ServiceResponse<IdentityResult>(ex));
         }
     }
 
@@ -151,6 +153,21 @@ public class UserController : BaseController
         catch (Exception ex)
         {
             return ApiServiceResponse.ApiServiceResult(new ServiceResponse(ex));
+        }
+    }
+
+    [HttpPost("refresh-token")]
+    public async Task<IActionResult> RefreshTokenAsync(RefreshTokenRequest request)
+    {
+        try
+        {
+            var result = await _userService.RefreshTokenAsync(request);
+
+            return ApiServiceResponse.ApiServiceResult(new ServiceResponse<LoginResponse>(result));
+        }
+        catch (Exception ex)
+        {
+            return Unauthorized(ex);
         }
     }
 }

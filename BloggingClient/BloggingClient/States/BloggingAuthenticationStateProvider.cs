@@ -2,45 +2,37 @@ using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
-using System.Threading;
 using System.Threading.Tasks;
-using Blazored.LocalStorage;
+using BloggingClient.Authentication;
 using Microsoft.AspNetCore.Components.Authorization;
+using Models;
 
 namespace BloggingClient.States;
 
 public class BloggingAuthenticationStateProvider : AuthenticationStateProvider
 {
-    private readonly ILocalStorageService _localStorage;
+    private readonly ISessionStorage _storage;
+
     private ClaimsPrincipal _anonymous = new ClaimsPrincipal(new ClaimsIdentity());
 
-    private static string _token;
-    private static string _refreshToken;
-
-    public BloggingAuthenticationStateProvider(ILocalStorageService localStorage)
+    public BloggingAuthenticationStateProvider(ISessionStorage storage)
     {
-        _localStorage = localStorage;
+        _storage = storage;
     }
 
     public override async Task<AuthenticationState> GetAuthenticationStateAsync()
     {
         try
         {
-            if (string.IsNullOrEmpty(_token))
-            {
-                var token = await _localStorage.GetItemAsync<string>("token");
-                var refreshToken = await _localStorage.GetItemAsync<string>("refreshToken");
-                _token = token;
-                _refreshToken = refreshToken;
-            }
+            var token = _storage.GetItem("token");
 
-            if (string.IsNullOrEmpty(_token))
+            if (string.IsNullOrEmpty(token))
             {
                 return new AuthenticationState(_anonymous);
             }
 
             var handler = new JwtSecurityTokenHandler();
-            var decodedToken = handler.ReadJwtToken(_token);
+            var decodedToken = handler.ReadJwtToken(token);
 
             var identity = new ClaimsIdentity(
                 decodedToken.Claims.ToList(),
@@ -56,29 +48,30 @@ public class BloggingAuthenticationStateProvider : AuthenticationStateProvider
         }
     }
 
-    public Task<string> GetBearerTokenAsync(CancellationToken cancellationToken)
+    public async Task<LoginResponse> GetTokensAsync()
     {
-        return Task.FromResult(_token);
+        var token = _storage.GetItem("token");
+        var refreshToken = _storage.GetItem("refreshToken");
+
+        return new LoginResponse()
+        {
+            AccessToken = token,
+            RefreshToken = refreshToken,
+        };
     }
 
-    public async Task AuthenticateUserAsync(string token, string refreshToken)
+    public async Task AuthenticateOrUpdateUserAsync(string token, string refreshToken)
     {
-        await _localStorage.SetItemAsync("token", token);
-        await _localStorage.SetItemAsync("refreshToken", refreshToken);
-
-        _token = token;
-        _refreshToken = token;
+        _storage.SetItem("token", token);
+        _storage.SetItem("refreshToken", refreshToken);
 
         NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
     }
 
     public async Task LogoutUserAsync()
     {
-        await _localStorage.SetItemAsync("token", string.Empty);
-        await _localStorage.SetItemAsync("refreshToken", string.Empty);
-
-        _token = string.Empty;
-        _refreshToken = string.Empty;
+        _storage.SetItem("token", string.Empty);
+        _storage.SetItem("refreshToken", string.Empty);
 
         NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(_anonymous)));
     }

@@ -1,7 +1,6 @@
 using System;
 using BloggingClient.States;
-using Blazored.LocalStorage;
-using Blazored.SessionStorage;
+using BloggingClient.Authentication;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,15 +14,13 @@ public static class DependencyInjection
     /// <summary />
     public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration config)
     {
-        services.AddBlazoredSessionStorage();
-        services.AddBlazoredLocalStorage();
+        services.AddSingleton<ISessionStorage, SessionStorage>();
 
         services.AddAuthorizationCore();
 
         services.AddScoped<AuthenticationStateProvider, BloggingAuthenticationStateProvider>();
 
-        var authProvider = services.BuildServiceProvider().GetService<AuthenticationStateProvider>();
-        AuthBearerTokenFactory.SetBearerTokenGetterFunc((authProvider as BloggingAuthenticationStateProvider)!.GetBearerTokenAsync);
+        services.AddTransient<IAuthBearerToken, AuthBearerToken>();
 
         services.AddCascadingAuthenticationState();
 

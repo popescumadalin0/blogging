@@ -22,10 +22,14 @@ public class TokenService : ITokenService
 
     private readonly UserManager<User> _userManager;
 
-    public TokenService(IConfiguration configuration, UserManager<User> userManager)
+    public TokenService(
+        IConfiguration configuration,
+        UserManager<User> userManager,
+        ILogger<TokenService> logger)
     {
         _configuration = configuration;
         _userManager = userManager;
+        _logger = logger;
     }
 
     /// <inheritdoc />
@@ -50,7 +54,7 @@ public class TokenService : ITokenService
     }
 
     /// <inheritdoc />
-    public bool IsValidToken(string token, string role)
+    public bool IsValidToken(string token, string role = default)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = new SymmetricSecurityKey(
@@ -71,9 +75,12 @@ public class TokenService : ITokenService
 
             tokenHandler.ValidateToken(token, validationParameters, out _);
 
-            if (!jwtToken.Claims.Any(c => c.Type == ClaimTypes.Role && c.Value == role))
+            if (role != default)
             {
-                throw new Exception($"Unauthorized! You are not {role}");
+                if (!jwtToken.Claims.Any(c => c.Type == ClaimTypes.Role && c.Value == role))
+                {
+                    throw new Exception($"Unauthorized! You are not {role}");
+                }
             }
 
             return true;

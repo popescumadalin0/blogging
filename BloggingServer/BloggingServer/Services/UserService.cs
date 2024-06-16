@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using BloggingServer.Services.Interfaces;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Models;
 using Models.Constants;
@@ -36,8 +38,8 @@ public class UserService : IUserService
 
         if (isLogged.Succeeded)
         {
-            var token = await _tokenService.GenerateTokenAsync(userName, 60);
-            var refreshToken = await _tokenService.GenerateTokenAsync(userName, 7*60);
+            var token = await _tokenService.GenerateTokenAsync(userName, 2);
+            var refreshToken = await _tokenService.GenerateTokenAsync(userName, 2);
 
             var responseLogin = new LoginResponse
             {
@@ -168,6 +170,30 @@ public class UserService : IUserService
         var user = await _userManager.Users.FirstAsync(s => s.Id == id);
 
         return await _userManager.DeleteAsync(user);
+    }
+
+    public async Task<LoginResponse> RefreshTokenAsync(RefreshTokenRequest request)
+    {
+        if (!_tokenService.IsValidToken(request.RefreshToken))
+        {
+            throw new Exception("Your session has expired!");
+        }
+
+        if (_tokenService.IsValidToken(request.AccessToken) != false)
+        {
+            throw new Exception("Your access token is valid!");
+        }
+
+        var newToken = await _tokenService.GenerateTokenAsync(request.Username, 2);
+        var newRefreshToken = await _tokenService.GenerateTokenAsync(
+            request.Username,
+            _tokenService.GetExpirationTimeFromJwtInMinutes(request.RefreshToken));
+
+        return new LoginResponse()
+        {
+            AccessToken = newToken,
+            RefreshToken = newRefreshToken
+        };
     }
 
     private static async Task<string> DefaultImageAsync()

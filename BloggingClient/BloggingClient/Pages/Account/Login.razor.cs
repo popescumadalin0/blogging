@@ -64,7 +64,7 @@ public partial class Login : ComponentBase, IDisposable
         if (result.Success)
         {
             var customProvider = (BloggingAuthenticationStateProvider)AuthenticationStateProvider;
-            await customProvider.AuthenticateUserAsync(result.Response.AccessToken, result.Response.RefreshToken);
+            await customProvider.AuthenticateOrUpdateUserAsync(result.Response.AccessToken, result.Response.RefreshToken);
 
             NavigationManager.NavigateTo("/");
         }

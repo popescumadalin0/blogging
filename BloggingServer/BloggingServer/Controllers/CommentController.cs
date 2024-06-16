@@ -33,7 +33,7 @@ public class CommentController : BaseController
         }
         catch (Exception ex)
         {
-            return ApiServiceResponse.ApiServiceResult(new ServiceResponse<List<Blog>>(ex));
+            return ApiServiceResponse.ApiServiceResult(new ServiceResponse<List<Comment>>(ex));
         }
     }
 
@@ -49,7 +49,7 @@ public class CommentController : BaseController
         }
         catch (Exception ex)
         {
-            return ApiServiceResponse.ApiServiceResult(new ServiceResponse<List<Blog>>(ex));
+            return ApiServiceResponse.ApiServiceResult(new ServiceResponse<List<Comment>>(ex));
         }
     }
 
