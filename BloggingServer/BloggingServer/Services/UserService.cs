@@ -19,6 +19,9 @@ public class UserService : IUserService
     private readonly UserManager<DataBaseLayout.Models.User> _userManager;
     private readonly ITokenService _tokenService;
 
+    private const int _hourInMins = 1440;
+    private const int _weekInMins = 10080;
+
     public UserService(
         SignInManager<DataBaseLayout.Models.User> signinManager,
         UserManager<DataBaseLayout.Models.User> userManager,
@@ -38,8 +41,8 @@ public class UserService : IUserService
 
         if (isLogged.Succeeded)
         {
-            var token = await _tokenService.GenerateTokenAsync(userName, 2);
-            var refreshToken = await _tokenService.GenerateTokenAsync(userName, 2);
+            var token = await _tokenService.GenerateTokenAsync(userName, _hourInMins);
+            var refreshToken = await _tokenService.GenerateTokenAsync(userName, _weekInMins);
 
             var responseLogin = new LoginResponse
             {
@@ -184,7 +187,7 @@ public class UserService : IUserService
             throw new Exception("Your access token is valid!");
         }
 
-        var newToken = await _tokenService.GenerateTokenAsync(request.Username, 2);
+        var newToken = await _tokenService.GenerateTokenAsync(request.Username, _hourInMins);
         var newRefreshToken = await _tokenService.GenerateTokenAsync(
             request.Username,
             _tokenService.GetExpirationTimeFromJwtInMinutes(request.RefreshToken));

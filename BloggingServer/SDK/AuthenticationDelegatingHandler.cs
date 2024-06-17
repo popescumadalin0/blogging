@@ -35,6 +35,10 @@ public class AuthenticationDelegatingHandler : DelegatingHandler
                 request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
                 response = await base.SendAsync(request, cancellationToken);
             }
+            else
+            {
+                return await _bearerToken.LogoutAsync();
+            }
         }
 
         return response;

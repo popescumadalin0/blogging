@@ -43,7 +43,7 @@ public partial class Register : ComponentBase, IDisposable
         var authState = await AuthenticationState;
         if (authState.User.Identity.IsAuthenticated)
         {
-            NavigationManager.NavigateTo("/");
+            NavigationManager.NavigateTo("/", forceLoad: true);
         }
 
         SnackbarState.OnStateChange += StateHasChanged;

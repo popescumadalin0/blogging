@@ -1,10 +1,12 @@
 using System;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using BloggingClient.States;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.Configuration;
 using Models;
@@ -16,13 +18,16 @@ namespace BloggingClient.Authentication;
 public class AuthBearerToken : IAuthBearerToken
 {
     private readonly BloggingAuthenticationStateProvider _authenticationStateProvider;
+    private readonly NavigationManager _navigationManager;
     private readonly IConfiguration _config;
 
     public AuthBearerToken(
         AuthenticationStateProvider authenticationStateProvider,
-        IConfiguration config)
+        IConfiguration config,
+        NavigationManager navigationManager)
     {
         _config = config;
+        _navigationManager = navigationManager;
         _authenticationStateProvider = authenticationStateProvider as BloggingAuthenticationStateProvider;
     }
 
@@ -58,11 +63,7 @@ public class AuthBearerToken : IAuthBearerToken
 
         var response = await client.PostAsync("/api/user/refresh-token", data);
 
-        if (!response.IsSuccessStatusCode)
-        {
-            await _authenticationStateProvider.LogoutUserAsync();
-        }
-        else
+        if (response.IsSuccessStatusCode)
         {
             var refreshResponse = await response.Content.ReadAsStringAsync();
 
@@ -74,8 +75,20 @@ public class AuthBearerToken : IAuthBearerToken
 
             result = refreshTokens.AccessToken;
         }
+
         client.Dispose();
 
         return result;
+    }
+
+    public async Task<HttpResponseMessage> LogoutAsync()
+    {
+        await _authenticationStateProvider.LogoutUserAsync();
+
+        return new HttpResponseMessage()
+        {
+            StatusCode = HttpStatusCode.Unauthorized,
+            Content = new StringContent("Your session has expired!")
+        };
     }
 }
