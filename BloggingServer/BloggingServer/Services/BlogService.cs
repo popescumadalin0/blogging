@@ -34,7 +34,7 @@ public class BlogService : IBlogService
         {
             if (!string.IsNullOrEmpty(filter.FilterValue))
             {
-                entities = entities.Where(e => e.User.UserName.Contains(filter.FilterValue) || e.Title.Contains(filter.FilterValue));
+                entities = entities.Where(e => e.User.UserName.Contains(filter.FilterValue, StringComparison.CurrentCultureIgnoreCase) || e.Title.Contains(filter.FilterValue, StringComparison.CurrentCultureIgnoreCase));
             }
 
             if (filter.BlogCategories != null && filter.BlogCategories.Any())
