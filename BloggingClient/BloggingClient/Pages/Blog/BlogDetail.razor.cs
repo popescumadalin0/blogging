@@ -150,7 +150,10 @@ public partial class BlogDetail : ComponentBase, IDisposable
 
         if (response.Success)
         {
-            NavigationManager.NavigateTo("/search");
+            NavigationManager.NavigateTo("/search", new NavigationOptions()
+            {
+                ForceLoad = true
+            });
         }
 
         await LoadingState.HideAsync();
