@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace BloggingServer.ResponseModels;
 
@@ -21,7 +21,7 @@ public class ServiceResponse<T>
     public ServiceResponse(Exception e = null, string errorMessage = "")
     {
         Exception = e;
-        ErrorMessage = errorMessage;
+        ErrorMessage = !string.IsNullOrEmpty(errorMessage) ? errorMessage : e.Message;
         Success = false;
     }
 
@@ -39,7 +39,7 @@ public class ServiceResponse
     public ServiceResponse(Exception e = null, string errorMessage = "")
     {
         Exception = e;
-        ErrorMessage = errorMessage;
+        ErrorMessage = !string.IsNullOrEmpty(errorMessage) ? errorMessage : e.Message;
         Success = false;
     }
 

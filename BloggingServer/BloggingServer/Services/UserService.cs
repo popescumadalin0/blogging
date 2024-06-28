@@ -37,20 +37,23 @@ public class UserService : IUserService
     {
         var user = await _userManager.FindByNameAsync(userName);
 
-        var isLogged = await _signinManager.CheckPasswordSignInAsync(user, password, false);
-
-        if (isLogged.Succeeded)
+        if (user != null)
         {
-            var token = await _tokenService.GenerateTokenAsync(userName, _hourInMins);
-            var refreshToken = await _tokenService.GenerateTokenAsync(userName, _weekInMins);
+            var isLogged = await _signinManager.CheckPasswordSignInAsync(user, password, false);
 
-            var responseLogin = new LoginResponse
+            if (isLogged.Succeeded)
             {
-                AccessToken = token,
-                RefreshToken = refreshToken
-            };
+                var token = await _tokenService.GenerateTokenAsync(userName, _hourInMins);
+                var refreshToken = await _tokenService.GenerateTokenAsync(userName, _weekInMins);
 
-            return responseLogin;
+                var responseLogin = new LoginResponse
+                {
+                    AccessToken = token,
+                    RefreshToken = refreshToken
+                };
+
+                return responseLogin;
+            }
         }
 
         throw new Exception("Email or password is incorrect!");
@@ -134,7 +137,7 @@ public class UserService : IUserService
 
         if (!result.Succeeded)
         {
-            return result;
+            throw new Exception(result.Errors.First().Description);
         }
 
         result = await _userManager.AddToRoleAsync(user, Roles.User);
@@ -154,6 +157,11 @@ public class UserService : IUserService
 
         var result = await _userManager.UpdateAsync(userModel);
 
+        if (!result.Succeeded)
+        {
+            throw new Exception(result.Errors.First().Description);
+        }
+
         return result;
     }
 
@@ -163,6 +171,11 @@ public class UserService : IUserService
         var userModel = await _userManager.Users.FirstAsync(s => s.UserName == user.Username);
 
         var result = await _userManager.ChangePasswordAsync(userModel, user.OldPassword, user.NewPassword);
+
+        if (!result.Succeeded)
+        {
+            throw new Exception(result.Errors.First().Description);
+        }
 
         return result;
     }
